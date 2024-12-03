@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 
@@ -21,7 +22,8 @@ class AppImage extends StatelessWidget {
   final String? filePath;
   final String? url;
   final BoxFit? fit;
-  final double? width; // >>>>>>>>>>>>>>>>>>>>>> width and height provide by default size when parameter not provide <<<<<<<<<<<<<<<<<<<<<<
+  final double?
+      width; // >>>>>>>>>>>>>>>>>>>>>> width and height provide by default size when parameter not provide <<<<<<<<<<<<<<<<<<<<<<
   final double? height;
   final Color color;
   final Color? iconColor;
@@ -69,10 +71,15 @@ class AppImage extends StatelessWidget {
             width: width,
             height: height,
             color: AppColors.yellow100,
-            child: const SizedBox(
-              width: 50,
-              height: 50,
-              child: CircularProgressIndicator(),
+            child: const Padding(
+              padding: EdgeInsets.all(20),
+              child: SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(
+                  color: Colors.black,
+                ),
+              ),
             ),
           );
         },

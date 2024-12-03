@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
 import 'package:servi_app_camituresso/models/dev_category/dev_category_model.dart';
@@ -199,7 +200,9 @@ class HomeScreenTopWidget extends StatelessWidget {
                       child: AppImageCircular(
                         width: AppSize.width(value: 60),
                         height: AppSize.width(value: 60),
-                        url: controller.profile.value.data?.profile ?? '',
+                        url:
+                            "${AppApiUrl.domaine}${controller.profile.value.data?.profile}",
+                        // url: controller.profile.value.data?.profile ?? '',
                         // controller.profile.value.data!.profile!
                         fit: BoxFit.fill,
                       ),

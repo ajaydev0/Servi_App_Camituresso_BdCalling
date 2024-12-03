@@ -82,10 +82,15 @@ class AppImageCircular extends StatelessWidget {
                 width: width,
                 height: height,
                 color: AppColors.yellow100,
-                child: const SizedBox(
-                  width: 50,
-                  height: 50,
-                  child: CircularProgressIndicator(),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: const SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
             );
