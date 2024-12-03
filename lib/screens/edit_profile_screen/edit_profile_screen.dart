@@ -61,244 +61,295 @@ class EditProfileScreen extends StatelessWidget {
                 ),
               ),
             ),
-            body: SafeArea(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: AppSize.width(value: 20.0)),
-                  width: Get.width,
-                  child: Form(
-                    key: controller.editProfileScreenKey,
-                    child: Column(
-                      children: [
-                        const Gap(height: 10),
-                        ////////////  image
-                        Align(
-                          child: GestureDetector(
-                            onTap: () {
-                              controller.clickImagePic();
-                            },
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Obx(
-                                  () => AppImageCircular(
-                                    width: AppSize.height(value: 160),
-                                    height: AppSize.height(value: 160),
-                                    color: AppColors.fill,
-                                    fit: BoxFit.fill,
-                                    filePath:
-                                        controller.localImagePath.value.isEmpty
-                                            ? null
-                                            : controller.localImagePath.value,
-                                  ),
-                                ),
-                                Positioned(
-                                    bottom: AppSize.height(value: 12.0),
-                                    right: 0,
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: AppColors.imageFill,
-                                      ),
-                                      padding: EdgeInsets.all(
-                                          AppSize.width(value: 8.0)),
-                                      child: AppImage(
-                                        width: AppSize.height(value: 15),
-                                        height: AppSize.height(value: 15),
-                                        path: AssetsIconsPath.addImage,
-                                        iconColor: AppColors.primary,
-                                      ),
-                                    ))
-                              ],
-                            ),
-                          ),
-                        ),
-                        const Gap(height: 20.0),
-                        const AppText(
-                            data: "Update Picture",
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700),
-                        const Gap(height: 20.0),
-                        AppInputWidgetThree(
-                          controller: controller.nameTextEditingController,
-                          title: "Name",
-                          titleColor: AppColors.black900,
-                          fillColor: AppColors.white50,
-                          prefix: Container(
-                            margin: EdgeInsets.all(AppSize.width(value: 12.0)),
-                            child: AppImage(
-                              path: AssetsIconsPath.account,
-                              iconColor: AppColors.primary,
-                              width: AppSize.width(value: 30.0),
-                              height: AppSize.width(value: 30.0),
-                            ),
-                          ),
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: AppColors.border2),
-                              borderRadius: BorderRadius.circular(
-                                AppSize.width(value: 10.0),
-                              )),
-                          errBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColors.warning)),
-                        ),
-                        AppInputWidgetThree(
-                          onTap: () {
-                            AppSnackBar.error("You Can't Edit Email");
-                          },
-                          readOnly: true,
-                          title: "Email",
-                          controller: controller.emailTextEditingController,
-                          // hintText: controller.argData,
-                          fillColor: AppColors.white50,
-                          titleColor: AppColors.black900,
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: AppColors.border2),
-                              borderRadius: BorderRadius.circular(
-                                AppSize.width(value: 10.0),
-                              )),
-                          errBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColors.warning)),
-                          prefix: Container(
-                            margin: EdgeInsets.all(AppSize.width(value: 12.0)),
-                            child: AppImage(
-                              path: AssetsIconsPath.mail,
-                              width: AppSize.width(value: 30.0),
-                              height: AppSize.width(value: 30.0),
-                            ),
-                          ),
-                        ),
-                        AppInputWidgetThree(
-                          controller: controller.contactTextEditingController,
-                          title: "Contact Number",
-                          fillColor: AppColors.white50,
-                          titleColor: AppColors.black900,
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: AppColors.border2),
-                              borderRadius: BorderRadius.circular(
-                                AppSize.width(value: 10.0),
-                              )),
-                          errBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColors.warning)),
-                          prefix: Container(
-                            margin: EdgeInsets.all(AppSize.width(value: 12.0)),
-                            child: AppImage(
-                              path: AssetsIconsPath.call,
-                              width: AppSize.width(value: 30.0),
-                              height: AppSize.width(value: 30.0),
-                            ),
-                          ),
-                        ),
-                        AppInputWidgetThree(
-                          onTap: () {
-                            controller.callDateOfBirthSet();
-                          },
-                          controller:
-                              controller.dateOfBirthTextEditingController,
-                          title: "Date of Birth",
-                          readOnly: true,
-                          fillColor: AppColors.white50,
-                          titleColor: AppColors.black900,
-                          border: OutlineInputBorder(
-                              borderSide:
-                                  const BorderSide(color: AppColors.border2),
-                              borderRadius: BorderRadius.circular(
-                                AppSize.width(value: 10.0),
-                              )),
-                          errBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: AppColors.warning)),
-                          prefix: Container(
-                            margin: EdgeInsets.all(AppSize.width(value: 12.0)),
-                            child: AppImage(
-                              path: AssetsIconsPath.request,
-                              width: AppSize.width(value: 30.0),
-                              height: AppSize.width(value: 30.0),
-                              iconColor: AppColors.primary,
-                            ),
-                          ),
-                        ),
-                        const Gap(height: 15),
-                        const Align(
-                          alignment: Alignment.centerLeft,
-                          child: AppText(
-                            data: "Address",
-                            textAlign: TextAlign.start,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.black900,
-                          ),
-                        ),
-                        const Gap(height: 15),
-
-                        TextFormField(
-                          controller: controller.addressTextEditingController,
-                          onTapOutside: ((ajay) {
-                            FocusScope.of(context).unfocus();
-                          }),
-                          minLines: 5,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 100,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  AppSize.width(value: 10)),
-                              borderSide:
-                                  const BorderSide(color: AppColors.border2),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  AppSize.width(value: 10)),
-                              borderSide:
-                                  const BorderSide(color: AppColors.border2),
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  AppSize.width(value: 10)),
-                              borderSide:
-                                  const BorderSide(color: AppColors.border2),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  AppSize.width(value: 10)),
-                              borderSide:
-                                  const BorderSide(color: AppColors.border2),
-                            ),
-                            fillColor: const Color(0xffffffff),
-                            filled: true,
-                            prefixIcon: Container(
-                              width: AppSize.width(value: 40),
-                              height: AppSize.width(value: 120),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
+            body: Obx(
+              () => SafeArea(
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSize.width(value: 20.0)),
+                    width: Get.width,
+                    child: Form(
+                      key: controller.editProfileScreenKey,
+                      child: Column(
+                        children: [
+                          const Gap(height: 10),
+                          ////////////  image
+                          Align(
+                            child: GestureDetector(
+                              onTap: () {
+                                controller.clickImagePic();
+                              },
+                              child: Stack(
+                                alignment: Alignment.center,
                                 children: [
-                                  AppImage(
-                                    path: AssetsIconsPath.location,
-                                    iconColor: AppColors.primary,
-                                    width: AppSize.width(value: 30.0),
-                                    height: AppSize.width(value: 30.0),
-                                  ),
-                                  Container(),
+                                  if (controller.localImagePath.value.isEmpty)
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.clickImagePic();
+                                      },
+                                      child: Container(
+                                        height: AppSize.height(value: 120),
+                                        width: AppSize.width(value: 120),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: AppColors.white100,
+                                            border: Border.all(
+                                                color:
+                                                    controller.isImgValid.value
+                                                        ? AppColors.primary
+                                                        : AppColors.warning)),
+                                        child: AppImage(
+                                          height: AppSize.size.height * 0.04,
+                                          path: AssetsIconsPath.addImage,
+                                          iconColor: AppColors.primary,
+                                        ),
+                                      ),
+                                    ),
+                                  if (controller
+                                      .localImagePath.value.isNotEmpty)
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(100),
+                                      child: AppImage(
+                                        width: AppSize.height(value: 160),
+                                        height: AppSize.height(value: 160),
+                                        color: AppColors.fill,
+                                        fit: BoxFit.fill,
+                                        filePath:
+                                            controller.localImagePath.value,
+                                      ),
+                                    ),
+
+                                  // Obx(
+                                  //   () => AppImageCircular(
+                                  //     width: AppSize.height(value: 160),
+                                  //     height: AppSize.height(value: 160),
+                                  //     // color: AppColors.fill,
+                                  //     fit: BoxFit.fill,
+                                  //     filePath: controller.localImagePath.value,
+                                  //   ),
+                                  // ),
+                                  Positioned(
+                                      bottom: AppSize.height(value: 12.0),
+                                      right: 0,
+                                      child: Container(
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: AppColors.imageFill,
+                                        ),
+                                        padding: EdgeInsets.all(
+                                            AppSize.width(value: 8.0)),
+                                        child: AppImage(
+                                          width: AppSize.height(value: 15),
+                                          height: AppSize.height(value: 15),
+                                          path: AssetsIconsPath.addImage,
+                                          iconColor: AppColors.primary,
+                                        ),
+                                      ))
                                 ],
                               ),
                             ),
-                            prefixIconConstraints: const BoxConstraints(
-                              minWidth: 35,
-                              minHeight: 0,
+                          ),
+
+                          TextButton(
+                              onPressed: () {
+                                print(controller.localImagePath.value);
+                              },
+                              child: AppText(data: "Check Value")),
+                          const Gap(height: 20.0),
+                          const AppText(
+                              data: "Update Picture",
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700),
+                          const Gap(height: 20.0),
+                          AppInputWidgetThree(
+                            controller: controller.nameTextEditingController,
+                            title: "Name",
+                            titleColor: AppColors.black900,
+                            fillColor: AppColors.white50,
+                            prefix: Container(
+                              margin:
+                                  EdgeInsets.all(AppSize.width(value: 12.0)),
+                              child: AppImage(
+                                path: AssetsIconsPath.account,
+                                iconColor: AppColors.primary,
+                                width: AppSize.width(value: 30.0),
+                                height: AppSize.width(value: 30.0),
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: AppColors.border2),
+                                borderRadius: BorderRadius.circular(
+                                  AppSize.width(value: 10.0),
+                                )),
+                            errBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: AppColors.warning)),
+                          ),
+                          AppInputWidgetThree(
+                            onTap: () {
+                              AppSnackBar.error("You Can't Edit Email");
+                            },
+                            readOnly: true,
+                            title: "Email",
+                            controller: controller.emailTextEditingController,
+                            // hintText: controller.argData,
+                            fillColor: AppColors.white50,
+                            titleColor: AppColors.black900,
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: AppColors.border2),
+                                borderRadius: BorderRadius.circular(
+                                  AppSize.width(value: 10.0),
+                                )),
+                            errBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: AppColors.warning)),
+                            prefix: Container(
+                              margin:
+                                  EdgeInsets.all(AppSize.width(value: 12.0)),
+                              child: AppImage(
+                                path: AssetsIconsPath.mail,
+                                width: AppSize.width(value: 30.0),
+                                height: AppSize.width(value: 30.0),
+                              ),
                             ),
                           ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "This field is required";
-                            }
+                          AppInputWidgetThree(
+                            controller: controller.contactTextEditingController,
+                            title: "Contact Number",
+                            fillColor: AppColors.white50,
+                            titleColor: AppColors.black900,
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: AppColors.border2),
+                                borderRadius: BorderRadius.circular(
+                                  AppSize.width(value: 10.0),
+                                )),
+                            errBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: AppColors.warning)),
+                            prefix: Container(
+                              margin:
+                                  EdgeInsets.all(AppSize.width(value: 12.0)),
+                              child: AppImage(
+                                path: AssetsIconsPath.call,
+                                width: AppSize.width(value: 30.0),
+                                height: AppSize.width(value: 30.0),
+                              ),
+                            ),
+                          ),
+                          AppInputWidgetThree(
+                            onTap: () {
+                              controller.callDateOfBirthSet();
+                            },
+                            controller:
+                                controller.dateOfBirthTextEditingController,
+                            title: "Date of Birth",
+                            readOnly: true,
+                            fillColor: AppColors.white50,
+                            titleColor: AppColors.black900,
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    const BorderSide(color: AppColors.border2),
+                                borderRadius: BorderRadius.circular(
+                                  AppSize.width(value: 10.0),
+                                )),
+                            errBorder: const OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: AppColors.warning)),
+                            prefix: Container(
+                              margin:
+                                  EdgeInsets.all(AppSize.width(value: 12.0)),
+                              child: AppImage(
+                                path: AssetsIconsPath.request,
+                                width: AppSize.width(value: 30.0),
+                                height: AppSize.width(value: 30.0),
+                                iconColor: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                          const Gap(height: 15),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: AppText(
+                              data: "Address",
+                              textAlign: TextAlign.start,
+                              fontWeight: FontWeight.w500,
+                              color: AppColors.black900,
+                            ),
+                          ),
+                          const Gap(height: 15),
 
-                            return null;
-                          },
-                        ),
+                          TextFormField(
+                            controller: controller.addressTextEditingController,
+                            onTapOutside: ((ajay) {
+                              FocusScope.of(context).unfocus();
+                            }),
+                            minLines: 5,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 100,
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    AppSize.width(value: 10)),
+                                borderSide:
+                                    const BorderSide(color: AppColors.border2),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    AppSize.width(value: 10)),
+                                borderSide:
+                                    const BorderSide(color: AppColors.border2),
+                              ),
+                              disabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    AppSize.width(value: 10)),
+                                borderSide:
+                                    const BorderSide(color: AppColors.border2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    AppSize.width(value: 10)),
+                                borderSide:
+                                    const BorderSide(color: AppColors.border2),
+                              ),
+                              fillColor: const Color(0xffffffff),
+                              filled: true,
+                              prefixIcon: Container(
+                                width: AppSize.width(value: 40),
+                                height: AppSize.width(value: 120),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    AppImage(
+                                      path: AssetsIconsPath.location,
+                                      iconColor: AppColors.primary,
+                                      width: AppSize.width(value: 30.0),
+                                      height: AppSize.width(value: 30.0),
+                                    ),
+                                    Container(),
+                                  ],
+                                ),
+                              ),
+                              prefixIconConstraints: const BoxConstraints(
+                                minWidth: 35,
+                                minHeight: 0,
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "This field is required";
+                              }
 
-                        const Gap(height: 50),
-                      ],
+                              return null;
+                            },
+                          ),
+
+                          const Gap(height: 50),
+                        ],
+                      ),
                     ),
                   ),
                 ),

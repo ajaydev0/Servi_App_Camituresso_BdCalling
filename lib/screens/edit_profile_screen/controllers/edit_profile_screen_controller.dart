@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/services/api/services/api_patch_services.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
+import 'package:servi_app_camituresso/services/repository/post_repository.dart';
 import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:servi_app_camituresso/widgets/custom_show_date_picker/custom_show_date_picker.dart';
 import 'package:servi_app_camituresso/widgets/image_user_pic/image_user_pi.dart';
@@ -22,35 +23,12 @@ class EditProfileScreenController extends GetxController {
   DateTime? dateOfBirth;
   var token = AppAuthStorage().box.read("data");
   var argData = Get.arguments;
+  RxBool isImgValid = true.obs;
   RxString localImagePath = RxString("");
 
   clickImagePic() {
     imageUserTake(localImagePath);
   }
-  // Future<void> pickImageGallary() async {
-  //   final XFile? pickedFile =
-  //       await picker.pickImage(source: ImageSource.gallery);
-  //   if (pickedFile != null) {
-  //     localImagePath.value =
-  //         File(pickedFile.path).toString(); // Update the selected image
-  //   }
-  //   print(localImagePath);
-  // }
-
-  // setImageInAPI(imagePath) async {
-  //   FormData formData = FormData(imagePath);
-  //   if (imagePath.isNotEmpty) {
-  //     final file = File(imagePath);
-  //     if (await file.exists()) {
-  //       String fileName = file.path.split('/').last;
-  //       var mimeType = lookupMimeType(file.path);
-  //       formData = FormData.fromMap({
-  //         'image': await MultipartFile.fromFile(file.path,
-  //             filename: fileName, contentType: MediaType.parse(mimeType!)),
-  //       });
-  //     }
-  //   }
-  // }
 
   callDateOfBirthSet() async {
     final pickDateOfBirth = await customShowDatePicker(
@@ -68,32 +46,50 @@ class EditProfileScreenController extends GetxController {
   }
 
   clickSaveChange() async {
-    try {
-      if (editProfileScreenKey.currentState!.validate()) {
-        try {
-          var data = await ApiPatchServices().apiPatchServices(
-              url: AppApiUrl.updateProfileUrl,
-              token: token,
-              body: {
-                "name": nameTextEditingController.text,
-                "contact": contactTextEditingController.text,
-                "dateOfBirth": dateOfBirthTextEditingController.text,
-                "location": addressTextEditingController.text,
-              });
-          if (data != null) {
-            AppSnackBar.success("Profile Updated");
-          } else {
-            return print(data);
-          }
-        } catch (e) {
-          print("$e");
-        }
+    ImageRepository().imageUpdate(
+        imagePath: localImagePath.value,
+        name: nameTextEditingController.text,
+        number: contactTextEditingController.text,
+        dateOfBirth: dateOfBirthTextEditingController.text,
+        address: addressTextEditingController.text);
+    // var data = ApiPatchServices()
+    //     .apiPatchServices(url: AppApiUrl.updateProfileUrl, body: {
+    //   "image":
+    //       "/data/user/0/com.example.servi_app_camituresso/cache/6de437d5-827b-44ac-9cf2-2251cc3ccf76/1000001863.jpg",
+    // });
+    // var data = ImageRepository().profileUpdate(imagePath: localImagePath.value);
+    // print("$data ➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️");
+    // try {
+    //   if (editProfileScreenKey.currentState!.validate()) {
+    //     try {
+    //       var data =
+    //           ImageRepository().profileUpdate(imagePath: localImagePath.value);
+    //       print("$data ➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️");
 
-        Get.back(times: 2);
-      }
-    } catch (e) {
-      log("error form save change: $e");
-    }
+    //       // var data = await ApiPatchServices().apiPatchServices(
+    //       //     url: AppApiUrl.updateProfileUrl,
+    //       //     token: token,
+    //       //     body: {
+    //       //       "name": nameTextEditingController.text,
+    //       //       "contact": contactTextEditingController.text,
+    //       //       "dateOfBirth": dateOfBirthTextEditingController.text,
+    //       //       "location": addressTextEditingController.text,
+    //       //       "images": localImagePath.value,
+    //       //     });
+    //       // if (data != null) {
+    //       //   AppSnackBar.success("Profile Updated");
+    //       // } else {
+    //       //   return print(data);
+    //       // }
+    //     } catch (e) {
+    //       print("$e");
+    //     }
+
+    //     Get.back(times: 2);
+    //   }
+    // } catch (e) {
+    //   log("error form save change: $e");
+    // }
   }
 
   @override

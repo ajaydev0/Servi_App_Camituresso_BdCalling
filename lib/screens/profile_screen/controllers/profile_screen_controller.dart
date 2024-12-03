@@ -12,6 +12,7 @@ class ProfileScreenController extends GetxController {
       isLoading.value = true;
       var profileData = await Repository().getProfileData();
       profile.value = profileData;
+      print("❤️❤️❤️❤️❤️❤️❤️${profile.value.data?.profile}❤️❤️❤️❤️❤️❤️❤️");
     } catch (e) {
       print("Error fetching profile: $e");
     } finally {

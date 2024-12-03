@@ -1,6 +1,5 @@
 import 'package:servi_app_camituresso/const/app_api_url.dart';
-import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
-import 'package:servi_app_camituresso/screens/navigation_screen/model/notification_model.dart';
+
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';

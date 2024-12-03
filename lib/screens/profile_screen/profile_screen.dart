@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
@@ -7,7 +8,6 @@ import 'package:servi_app_camituresso/screens/profile_screen/controllers/profile
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
-import 'package:servi_app_camituresso/widgets/app_image/app_image_circular.dart';
 import 'package:servi_app_camituresso/widgets/inputs/app_input_widget_three.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
@@ -65,12 +65,23 @@ class ProfileScreen extends StatelessWidget {
                     //   height: AppSize.height(value: 140),
                     //   fit: BoxFit.fill,
                     // ),
-                    AppImageCircular(
-                      url: controller.profile.value.data!.profile ?? "",
-                      width: AppSize.height(value: 140),
-                      height: AppSize.height(value: 140),
-                      fit: BoxFit.fill,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: AppImage(
+                        width: AppSize.height(value: 160),
+                        height: AppSize.height(value: 160),
+                        // color: AppColors.fill,
+                        fit: BoxFit.fill,
+                        url:
+                            "${AppApiUrl.domaine}${controller.profile.value.data?.profile}",
+                      ),
                     ),
+                    // AppImageCircular(
+                    //   url: controller.profile.value.data!.profile ?? "",
+                    //   width: AppSize.height(value: 140),
+                    //   height: AppSize.height(value: 140),
+                    //   fit: BoxFit.fill,
+                    // ),
 
                     // : AppImageCircular(
                     //     // path: controller.profile.value.data.profile,

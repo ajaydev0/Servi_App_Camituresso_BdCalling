@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -49,9 +51,7 @@ Future<void> userImagePic(ImageSource source, RxString localImagePath) async {
     }
 
     if (pickedField != null) {
-      localImagePath.value = pickedField.path;
-      print(
-          " Picked Image 😍😍😍😍😍😍😍 ${localImagePath.value} 😍😍😍😍😍😍😍");
+      localImagePath.value = File(pickedField.path).path;
     }
   } catch (e) {
     AppSnackBar.error("Something Was Wrong");
@@ -73,8 +73,7 @@ imageUserTake(RxString localImagePath) {
             alignment: Alignment.topRight,
             child: IconButton(
                 onPressed: () {
-                  // Get.back();
-                  Get.closeAllBottomSheets();
+                  Get.back();
                 },
                 icon: const Icon(Icons.close)),
           ),
@@ -84,7 +83,6 @@ imageUserTake(RxString localImagePath) {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    // Get.back();
                     userImagePic(ImageSource.camera, localImagePath);
                     Get.closeAllBottomSheets();
                   },
@@ -106,7 +104,6 @@ imageUserTake(RxString localImagePath) {
               Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    // Get.back();
                     userImagePic(ImageSource.gallery, localImagePath);
                     Get.closeAllBottomSheets();
                   },
