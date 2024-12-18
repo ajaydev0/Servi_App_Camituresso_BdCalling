@@ -13,8 +13,12 @@ class AppApiUrl {
   static const String profileUrl = "$baseUrl/user/profile";
   static const String updateProfileUrl = "$baseUrl/user";
   static const String createPostUrl = "$baseUrl/post/create";
+  static const String updatePostUrl = "$baseUrl/post/update-post/";
   static const String notificationUrl = "$baseUrl/notification";
   static const String getPostUrl = "$baseUrl/post/my-post";
   static const String getServiceDetailsUrl = "$baseUrl/post/";
   static const String createReviewUrl = "$baseUrl/review";
+  //////////////////////////////////////  chat
+  static const String chat = "$baseUrl/chat";
+  static const String message = "$baseUrl/message";
 }

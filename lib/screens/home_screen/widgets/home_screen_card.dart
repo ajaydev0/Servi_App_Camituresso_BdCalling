@@ -24,12 +24,18 @@ class HomeScreenCard extends StatelessWidget {
       },
       child: Container(
         width: AppSize.height(value: 250),
-        margin: EdgeInsets.symmetric(horizontal: AppSize.width(value: 5.0), vertical: AppSize.width(value: 8.0)),
-        decoration: BoxDecoration(color: AppColors.boxFill, borderRadius: BorderRadius.circular(AppSize.width(value: 10.0))),
+        margin: EdgeInsets.symmetric(
+            horizontal: AppSize.width(value: 5.0),
+            vertical: AppSize.width(value: 8.0)),
+        decoration: BoxDecoration(
+            color: AppColors.boxFill,
+            borderRadius: BorderRadius.circular(AppSize.width(value: 10.0))),
         child: Column(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(AppSize.width(value: 10)), topRight: Radius.circular(AppSize.width(value: 10))),
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(AppSize.width(value: 10)),
+                  topRight: Radius.circular(AppSize.width(value: 10))),
               child: Stack(
                 children: [
                   AppImage(
@@ -70,7 +76,9 @@ class HomeScreenCard extends StatelessWidget {
                         child: AppImage(
                           width: AppSize.width(value: 30),
                           height: AppSize.width(value: 30),
-                          path: snapshot == true ? AssetsIconsPath.savaDed : AssetsIconsPath.notSavaDed,
+                          path: snapshot == true
+                              ? AssetsIconsPath.savaDed
+                              : AssetsIconsPath.notSavaDed,
                         ),
                       ),
                     ),
@@ -79,7 +87,9 @@ class HomeScreenCard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10), vertical: AppSize.width(value: 5)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSize.width(value: 10),
+                  vertical: AppSize.width(value: 5)),
               child: Row(
                 children: [
                   Expanded(

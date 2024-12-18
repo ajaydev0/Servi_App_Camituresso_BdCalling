@@ -36,7 +36,8 @@ class AccountScreen extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.all(AppSize.width(value: 10.0)),
-              child: const AppText(data: "Account", fontWeight: FontWeight.w600, fontSize: 24),
+              child: const AppText(
+                  data: "Account", fontWeight: FontWeight.w600, fontSize: 24),
             ),
             AccountCardWidget(
               title: "Profile",
@@ -49,7 +50,9 @@ class AccountScreen extends StatelessWidget {
               title: "Your Post",
               iconPath: AssetsIconsPath.yourPost,
               onTap: () {
-                Get.toNamed(AppRoutes.listOfViewServicesScreen, arguments: DevCategoryModel(name: "Your Post", id: "id1", imagePath: ""));
+                Get.toNamed(AppRoutes.listOfViewServicesScreen,
+                    arguments: DevCategoryModel(
+                        name: "Your Post", id: "id1", imagePath: ""));
               },
             ),
             AccountCardWidget(
@@ -82,7 +85,8 @@ class AccountScreen extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.all(AppSize.width(value: 10.0)),
-              child: const AppText(data: "More", fontWeight: FontWeight.w600, fontSize: 24),
+              child: const AppText(
+                  data: "More", fontWeight: FontWeight.w600, fontSize: 24),
             ),
             AccountCardWidget(
               title: "About Us",

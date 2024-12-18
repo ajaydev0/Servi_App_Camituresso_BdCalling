@@ -5,7 +5,7 @@ import 'package:servi_app_camituresso/models/dev_services_model/dev_services_mod
 import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
-class ListOffViewServicesController extends GetxController {
+class PopularViewAllController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isError = RxBool(false);
   RxList<DevServicesModel> listOfServices = RxList([]);

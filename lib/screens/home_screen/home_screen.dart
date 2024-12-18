@@ -26,179 +26,184 @@ class HomeScreen extends StatelessWidget {
     return GetBuilder(
       init: HomeScreenController(),
       builder: (controller) {
-        return CustomScrollView(
-          slivers: [
-            ////////////////  top bar
-            SliverToBoxAdapter(
-              child: HomeScreenTopWidget(
-                navigationScreenController: navigationScreenController,
-                controller: controller,
-              ),
-            ),
-            if (controller.listOfBanner.isNotEmpty)
+        return RefreshIndicator(
+          onRefresh: () async {
+            await controller.getProfileData();
+          },
+          child: CustomScrollView(
+            slivers: [
+              ////////////////  top bar
               SliverToBoxAdapter(
-                child: Container(
-                  margin:
-                      EdgeInsets.symmetric(vertical: AppSize.width(value: 10)),
-                  width: Get.width,
-                  height: AppSize.height(value: 200),
-                  child: PageView.builder(
-                    controller: controller.listOfBannerPageViewController,
-                    itemCount: controller.listOfBanner.length,
-                    onPageChanged: controller.onChangeListOfBanner,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: AppSize.width(value: 10)),
-                        child: ClipRRect(
-                          borderRadius:
-                              BorderRadius.circular(AppSize.width(value: 10)),
-                          child: AppImage(
-                            fit: BoxFit.fill,
-                            path: controller.listOfBanner[index],
-                            width: Get.width,
-                            // height: AppSize.height(value: 180),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                child: HomeScreenTopWidget(
+                  navigationScreenController: navigationScreenController,
+                  controller: controller,
                 ),
               ),
-
-            if (controller.listOfBanner.isNotEmpty)
-              SliverToBoxAdapter(
-                child: Obx(
-                  () => Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      controller.listOfBanner.length,
-                      (index) {
-                        bool isActive =
-                            index == controller.selectedListOfBannerIndex.value;
-                        return AnimatedContainer(
-                          duration: const Duration(seconds: 1),
-                          margin: EdgeInsets.symmetric(
-                              horizontal: AppSize.width(value: 4.2)),
-                          width: isActive
-                              ? AppSize.width(value: 30)
-                              : AppSize.width(value: 10),
-                          height: AppSize.width(value: 8),
-                          decoration: BoxDecoration(
-                              color: isActive
-                                  ? AppColors.primary
-                                  : AppColors.bannerBoxFill,
-                              borderRadius: BorderRadius.circular(
-                                  AppSize.width(value: 10))),
+              if (controller.listOfBanner.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                        vertical: AppSize.width(value: 10)),
+                    width: Get.width,
+                    height: AppSize.height(value: 200),
+                    child: PageView.builder(
+                      controller: controller.listOfBannerPageViewController,
+                      itemCount: controller.listOfBanner.length,
+                      onPageChanged: controller.onChangeListOfBanner,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: AppSize.width(value: 10)),
+                          child: ClipRRect(
+                            borderRadius:
+                                BorderRadius.circular(AppSize.width(value: 10)),
+                            child: AppImage(
+                              fit: BoxFit.fill,
+                              path: controller.listOfBanner[index],
+                              width: Get.width,
+                              // height: AppSize.height(value: 180),
+                            ),
+                          ),
                         );
                       },
                     ),
                   ),
                 ),
-              ),
-            //////////////////  category
-            itemTitleOption(
-              name: "Services",
-              onTapCall: () {
-                Get.toNamed(AppRoutes.servicesScreen);
-              },
-            ),
-            itemBuildFunction(
-              dividedValue: 4,
-              padding:
-                  EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
-              items: List.generate(
-                devCategoryData.length,
-                (index) {
-                  var item = devCategoryData[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Get.toNamed(AppRoutes.listOfViewServicesScreen,
-                          arguments: item);
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      width: AppSize.width(value: 100),
-                      padding: EdgeInsets.symmetric(
-                          vertical: AppSize.width(value: 8)),
-                      decoration: BoxDecoration(
-                          color: AppColors.boxFill,
-                          borderRadius:
-                              BorderRadius.circular(AppSize.width(value: 12))),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AppImage(
-                            path: item.imagePath,
-                            height: AppSize.height(value: 40),
-                            width: AppSize.height(value: 40),
-                          ),
-                          Gap(height: 10),
-                          AppText(
-                            data: item.name,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ],
+
+              if (controller.listOfBanner.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        controller.listOfBanner.length,
+                        (index) {
+                          bool isActive = index ==
+                              controller.selectedListOfBannerIndex.value;
+                          return AnimatedContainer(
+                            duration: const Duration(seconds: 1),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: AppSize.width(value: 4.2)),
+                            width: isActive
+                                ? AppSize.width(value: 30)
+                                : AppSize.width(value: 10),
+                            height: AppSize.width(value: 8),
+                            decoration: BoxDecoration(
+                                color: isActive
+                                    ? AppColors.primary
+                                    : AppColors.bannerBoxFill,
+                                borderRadius: BorderRadius.circular(
+                                    AppSize.width(value: 10))),
+                          );
+                        },
                       ),
                     ),
+                  ),
+                ),
+              //////////////////  category
+              itemTitleOption(
+                name: "Services",
+                onTapCall: () {
+                  Get.toNamed(AppRoutes.servicesScreen);
+                },
+              ),
+              itemBuildFunction(
+                dividedValue: 4,
+                padding:
+                    EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
+                items: List.generate(
+                  devCategoryData.length,
+                  (index) {
+                    var item = devCategoryData[index];
+                    return GestureDetector(
+                      onTap: () {
+                        Get.toNamed(AppRoutes.listOfViewServicesScreen,
+                            arguments: item);
+                      },
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: AppSize.width(value: 100),
+                        padding: EdgeInsets.symmetric(
+                            vertical: AppSize.width(value: 8)),
+                        decoration: BoxDecoration(
+                            color: AppColors.boxFill,
+                            borderRadius: BorderRadius.circular(
+                                AppSize.width(value: 12))),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            AppImage(
+                              path: item.imagePath,
+                              height: AppSize.height(value: 40),
+                              width: AppSize.height(value: 40),
+                            ),
+                            Gap(height: 10),
+                            AppText(
+                              data: item.name,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              ////////////////// popular
+              itemTitleOption(
+                name: "Popular",
+                onTapCall: () {
+                  Get.toNamed(
+                    AppRoutes.popularViewAllScreen,
                   );
                 },
               ),
-            ),
 
-            ////////////////// popular
-            itemTitleOption(
-              name: "Popular",
-              onTapCall: () {
-                Get.toNamed(AppRoutes.listOfViewServicesScreen,
-                    arguments: DevCategoryModel(
-                        name: "Popular", imagePath: "", id: "id1"));
-              },
-            ),
+              itemBuildFunction(
+                padding:
+                    EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
+                items: List.generate(
+                  controller.popularListOfData.length,
+                  (index) {
+                    var item = controller.popularListOfData[index];
+                    return HomeScreenCard(
+                      item: item,
+                    );
+                  },
+                ),
+              ),
 
-            itemBuildFunction(
-              padding:
-                  EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
-              items: List.generate(
-                controller.popularListOfData.length,
-                (index) {
-                  var item = controller.popularListOfData[index];
-                  return HomeScreenCard(
-                    item: item,
-                  );
+              ////////////////// Recommendation
+              itemTitleOption(
+                name: "Recommendation",
+                onTapCall: () {
+                  Get.toNamed(AppRoutes.listOfViewServicesScreen,
+                      arguments: DevCategoryModel(
+                          name: "Recommendation", imagePath: "", id: "id10"));
                 },
               ),
-            ),
 
-            ////////////////// Recommendation
-            itemTitleOption(
-              name: "Recommendation",
-              onTapCall: () {
-                Get.toNamed(AppRoutes.listOfViewServicesScreen,
-                    arguments: DevCategoryModel(
-                        name: "Recommendation", imagePath: "", id: "id10"));
-              },
-            ),
-
-            itemBuildFunction(
-              padding:
-                  EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
-              items: List.generate(
-                controller.reCommendationListOfData.length,
-                (index) {
-                  var item = controller.reCommendationListOfData[index];
-                  return HomeScreenCard(
-                    item: item,
-                  );
-                },
+              itemBuildFunction(
+                padding:
+                    EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
+                items: List.generate(
+                  controller.reCommendationListOfData.length,
+                  (index) {
+                    var item = controller.reCommendationListOfData[index];
+                    return HomeScreenCard(
+                      item: item,
+                    );
+                  },
+                ),
               ),
-            ),
 
-            SliverToBoxAdapter(
-              child: Gap(height: 50),
-            )
-          ],
+              SliverToBoxAdapter(
+                child: Gap(height: 50),
+              )
+            ],
+          ),
         );
       },
     );

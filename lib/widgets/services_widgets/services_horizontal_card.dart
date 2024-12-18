@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
-import 'package:servi_app_camituresso/models/dev_services_model/dev_services_model.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
-import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
@@ -22,6 +21,7 @@ class ServicesHorizontalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        // print("${item.image}");
         Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
       },
       child: Container(
@@ -46,7 +46,7 @@ class ServicesHorizontalCard extends StatelessWidget {
                     height: AppSize.height(value: 250),
                   ),
                   AppImage(
-                    path: "assets/dev_images/services_1.jpg",
+                    url: "${AppApiUrl.domaine}${item.image}",
                     height: AppSize.height(value: 250),
                     width: Get.width,
                   ),
@@ -86,25 +86,19 @@ class ServicesHorizontalCard extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AppImage(
-                              width: AppSize.width(value: 20),
-                              height: AppSize.width(value: 20),
-                              path: AssetsIconsPath.location,
-                            ),
-                            const Gap(width: 5),
-                            Expanded(
-                                child: AppText(
-                                    data:
-                                        "2972 Westheimer Rd. Santa Ana, Illinois 85486 ")),
+                            // const Gap(width: 5),
+                            Expanded(child: AppText(data: item.category ?? "")),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  const Gap(width: 10),
-                  const Icon(Icons.star, color: AppColors.primary),
-                  const Gap(width: 5),
-                  AppText(data: "4"),
+                  AppText(
+                    data: "\$${item.price ?? ""}",
+                    fontWeight: FontWeight.w600,
+                    fontSize: 20,
+                    color: Color(0xffD0A933),
+                  ),
                 ],
               ),
             )

@@ -25,19 +25,27 @@ class ServicesScreen extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(AppSize.width(value: 10)),
         child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, crossAxisSpacing: AppSize.width(value: 10.0), mainAxisSpacing: AppSize.width(value: 10.0)),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              crossAxisSpacing: AppSize.width(value: 10.0),
+              mainAxisSpacing: AppSize.width(value: 10.0)),
           itemCount: devCategoryData.length,
           itemBuilder: (context, index) {
             var item = devCategoryData[index];
             return GestureDetector(
               onTap: () {
-                Get.toNamed(AppRoutes.listOfViewServicesScreen, arguments: item);
+                Get.toNamed(AppRoutes.listOfViewServicesScreen,
+                    arguments: item);
               },
               child: Container(
                 alignment: Alignment.center,
                 width: AppSize.width(value: 100),
-                padding: EdgeInsets.symmetric(vertical: AppSize.width(value: 8)),
-                decoration: BoxDecoration(color: AppColors.boxFill, borderRadius: BorderRadius.circular(AppSize.width(value: 12))),
+                padding:
+                    EdgeInsets.symmetric(vertical: AppSize.width(value: 8)),
+                decoration: BoxDecoration(
+                    color: AppColors.boxFill,
+                    borderRadius:
+                        BorderRadius.circular(AppSize.width(value: 12))),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -46,7 +54,7 @@ class ServicesScreen extends StatelessWidget {
                       height: AppSize.height(value: 40),
                       width: AppSize.height(value: 40),
                     ),
-                    Gap(height: 10),
+                    const Gap(height: 10),
                     AppText(
                       data: item.name,
                       fontSize: 12,

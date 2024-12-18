@@ -45,13 +45,37 @@ class EditProfileScreenController extends GetxController {
     }
   }
 
+  refreshFunction() async {
+    try {
+      var data = await ImageRepository().imageUpdate(
+          imagePath: localImagePath.value,
+          name: nameTextEditingController.text,
+          number: contactTextEditingController.text,
+          dateOfBirth: dateOfBirthTextEditingController.text,
+          address: addressTextEditingController.text);
+      if (data != null) {}
+    } catch (e) {
+      print("$e");
+    }
+  }
+
   clickSaveChange() async {
-    ImageRepository().imageUpdate(
-        imagePath: localImagePath.value,
-        name: nameTextEditingController.text,
-        number: contactTextEditingController.text,
-        dateOfBirth: dateOfBirthTextEditingController.text,
-        address: addressTextEditingController.text);
+    try {
+      if (editProfileScreenKey.currentState!.validate()) {
+        var data = await ImageRepository().imageUpdate(
+            imagePath: localImagePath.value,
+            name: nameTextEditingController.text,
+            number: contactTextEditingController.text,
+            dateOfBirth: dateOfBirthTextEditingController.text,
+            address: addressTextEditingController.text);
+        if (data != null) {
+          Get.back(times: 2);
+          AppSnackBar.success("Profile Updated");
+        }
+      }
+    } catch (e) {
+      print("$e");
+    }
     // var data = ApiPatchServices()
     //     .apiPatchServices(url: AppApiUrl.updateProfileUrl, body: {
     //   "image":

@@ -252,8 +252,7 @@ class ServicesDetailsScreen extends StatelessWidget {
                                       Expanded(
                                         child: AppText(
                                           // data: controller.item.title ?? "",
-                                          data: controller.item["title"] ??
-                                              "Title",
+                                          data: "Title",
 
                                           fontSize: 18,
                                           fontWeight: FontWeight.w600,
@@ -261,8 +260,7 @@ class ServicesDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       AppText(
-                                        data:
-                                            "\$${controller.item["price"] ?? "Price"}",
+                                        data: "\$ Price",
                                         // data: "",
                                         fontWeight: FontWeight.w700,
                                         color: AppColors.primary,
@@ -278,15 +276,11 @@ class ServicesDetailsScreen extends StatelessWidget {
                                               CrossAxisAlignment.start,
                                           children: [
                                             AppText(
-                                                data: controller.item["user"]
-                                                        ["name"] ??
-                                                    "",
+                                                data: "user",
                                                 color: AppColors.black400,
                                                 fontWeight: FontWeight.w500),
                                             AppText(
-                                                data: controller
-                                                        .item["category"] ??
-                                                    "",
+                                                data: "category",
                                                 // data: "",
                                                 fontSize: 14,
                                                 color: AppColors.black400,
@@ -333,8 +327,7 @@ class ServicesDetailsScreen extends StatelessWidget {
                                       const Gap(width: 8),
                                       Expanded(
                                           child: AppText(
-                                        data: controller.item["location"] ??
-                                            "Location",
+                                        data: "location",
 
                                         // data: "2972 Westheimer Rd. Santa Ana, Illinois 85486 ",
                                       ))
@@ -369,8 +362,7 @@ class ServicesDetailsScreen extends StatelessWidget {
                                   AppText(
                                     height: 2,
                                     textAlign: TextAlign.justify,
-                                    data: controller.item["description"] ??
-                                        "Description",
+                                    data: "Description",
                                     // data: "",
                                   ),
                                   // data:

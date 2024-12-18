@@ -151,11 +151,6 @@ class EditProfileScreen extends StatelessWidget {
                             ),
                           ),
 
-                          TextButton(
-                              onPressed: () {
-                                print(controller.localImagePath.value);
-                              },
-                              child: AppText(data: "Check Value")),
                           const Gap(height: 20.0),
                           const AppText(
                               data: "Update Picture",

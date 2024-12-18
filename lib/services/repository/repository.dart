@@ -5,6 +5,21 @@ import 'package:servi_app_camituresso/services/api/services/api_get_services.dar
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
 
 class Repository {
+  // Create Post
+  Future<dynamic> createPost({body}) async {
+    try {
+      var data = await ApiPostServices()
+          .apiPostServices(url: AppApiUrl.createPostUrl, body: body);
+
+      if (data != null) {
+        return data;
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
   // Get Profile data
   Future<dynamic> getProfileData() async {
     try {

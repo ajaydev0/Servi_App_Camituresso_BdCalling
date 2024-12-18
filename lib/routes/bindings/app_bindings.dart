@@ -10,8 +10,10 @@ import 'package:servi_app_camituresso/screens/eighteen_plus_warning_screen/contr
 import 'package:servi_app_camituresso/screens/list_off_view_services/controllers/list_off_view_services_controller.dart';
 import 'package:servi_app_camituresso/screens/navigation_screen/controllers/navigation_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/payment_method_screen/controllers/payment_method_screen_controller.dart';
+import 'package:servi_app_camituresso/screens/popular_view_all/controllers/popular_view_all_controller.dart';
 import 'package:servi_app_camituresso/screens/privacy_and_policy_screen/controllers/privacy_and_policy_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/controllers/profile_screen_controller.dart';
+import 'package:servi_app_camituresso/screens/recommendation_view_all/controllers/recommendation_view_all_controller.dart';
 import 'package:servi_app_camituresso/screens/search_screen/controllers/search_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/controllers/services_details_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/services_screen/controllers/services_screen_controller.dart';
@@ -41,5 +43,7 @@ class AppBindings extends BindingsInterface {
     Get.lazyPut(() => ChangePasswordScreenController());
     Get.lazyPut(() => TransactionHistoryScreenController());
     Get.lazyPut(() => EReceiptScreenController());
+    Get.lazyPut(() => PopularViewAllController());
+    Get.lazyPut(() => RecommendationViewAllController());
   }
 }

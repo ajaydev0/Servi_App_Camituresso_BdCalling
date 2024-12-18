@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/services/repository/post_repository.dart';
+import 'package:servi_app_camituresso/services/repository/repository.dart';
+import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
 
 class AddAndEditPostScreenController extends GetxController {
   RxBool isLoading = false.obs;
+  RxBool isLoadingButton = false.obs;
   GlobalKey<FormState> addAndEditPostKey = GlobalKey<FormState>();
   TextEditingController titleController = TextEditingController();
   TextEditingController priceController = TextEditingController();
@@ -28,52 +31,6 @@ class AddAndEditPostScreenController extends GetxController {
     // await ImageRepository().imageUpdate(imagePath);
   }
 
-  // Api Call
-  clickButton() async {
-    //  data2 = await ImageRepository().imageUpdate(userLocalImage.value);
-
-    // try {
-    //   isLoading.value = true;
-    //   var data = await ImageRepository().amniAri(
-    //       titleController,
-    //       priceController,
-    //       pricungBreakdownController,
-    //       descriptionController,
-    //       selectedServicesCategory,
-    //       locationController);
-
-    //   // Api Call
-    //   // var data = await ApiPostServices().apiPostServices(
-    //   //   url: AppApiUrl.createPostUrl,
-    //   //   body: {
-    //   //     "title": titleController.text,
-    //   //     "price": priceController.text,
-    //   //     "price_breakdown": pricungBreakdownController.text,
-    //   //     "description": descriptionController.text,
-    //   //     "category": selectedServicesCategory.value,
-    //   //     "location": locationController.text,
-    //   //     "image": ,
-    //   //   },
-    //   // );
-    //   if (data != null) {
-    //     // Get.toNamed(AppRoutes.otpVerificationScreen,
-    //     //     arguments: {"email": emailTextEditingController.text});
-    //   }
-    //   print("😍😍😍😍😍😍😍😍  😍😍😍😍😍😍😍😍");
-    // } catch (e) {
-    //   log("error form sign up click button $e");
-    // } finally {
-    //   isLoading.value = false;
-    // }
-    // print("${titleController.text}");
-    // print("${priceController.text}");
-    // print("${pricungBreakdownController.text}");
-    // print("${descriptionController.text}");
-    // print("${locationController.text}");
-    // print("${selectedServicesCategory}");
-    // print("${userLocalImage.value}");
-  }
-
   onDataSetFunction() {
     try {
       final argData = Get.arguments;
@@ -83,6 +40,35 @@ class AddAndEditPostScreenController extends GetxController {
     } catch (e) {
       log("error form Add post screen on data set function : $e");
     }
+  }
+
+  addPostLogic() async {
+    try {
+      isLoadingButton.value = true;
+      Map<String, String> body = {
+        "title": titleController.text,
+        "price": priceController.text,
+        "price_breakdown": pricungBreakdownController.text,
+        "description": descriptionController.text,
+        "location": locationController.text,
+        "category": selectedServicesCategory.value,
+      };
+      // Api Call
+      var data = await ImageRepository()
+          .imageUploadWithData(body: body, imagePath: userLocalImage.value);
+      if (data != null) {
+        Get.back();
+        AppSnackBar.success("Create Sucessful");
+      }
+    } catch (e) {
+      print("$e");
+    } finally {
+      isLoadingButton.value = false;
+    }
+  }
+
+  editPostLogic() {
+    AppSnackBar.success("edit Post Logic");
   }
 
   clickAddAndEditButton() {
@@ -100,7 +86,11 @@ class AddAndEditPostScreenController extends GetxController {
       }
       if (addAndEditPostKey.currentState!.validate()) {
         if (!isImageAddCheck.value && !isJobCategoryCheck.value) {
-          Get.toNamed(AppRoutes.addPostSuccessfullyScreen);
+          if (screenTitle.value == "Add Post") {
+            addPostLogic();
+          } else if (screenTitle.value == "Edit Post") {
+            editPostLogic();
+          }
         }
       }
     } catch (e) {
@@ -121,6 +111,8 @@ class AddAndEditPostScreenController extends GetxController {
     descriptionController.dispose();
     pricungBreakdownController.dispose();
     locationController.dispose();
+    selectedServicesCategory.value = "";
+    userLocalImage.value = "";
     super.onClose();
   }
 }

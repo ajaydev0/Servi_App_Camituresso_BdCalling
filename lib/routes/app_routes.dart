@@ -26,4 +26,6 @@ class AppRoutes {
   static const transactionHistoryScreen = "/transaction-history-screen";
   static const eighteenPlusWarningScreen = "/eighteen-plus-warning-screen";
   static const eReceiptScreen = "/e-receipt-screen";
+  static const popularViewAllScreen = "/popular-View-all-screen";
+  static const recommendationViewAllScreen = "/recommendation-view-all-screen";
 }

@@ -67,7 +67,11 @@ class AppImageCircular extends StatelessWidget {
               child: Container(
                 width: width,
                 height: height,
-                color: AppColors.yellow100,
+                decoration: const BoxDecoration(
+                    color: AppColors.yellow100,
+                    image: DecorationImage(
+                        image: NetworkImage(
+                            "https://media.istockphoto.com/id/1087531642/vector/male-face-silhouette-or-icon-man-avatar-profile-unknown-or-anonymous-person-vector.jpg?s=612x612&w=0&k=20&c=FEppaMMfyIYV2HJ6Ty8tLmPL1GX6Tz9u9Y8SCRrkD-o="))),
               ),
             );
           },
