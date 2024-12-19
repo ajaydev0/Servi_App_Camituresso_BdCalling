@@ -28,16 +28,20 @@ class ProfileScreen extends StatelessWidget {
           fontSize: 20,
         ),
         actions: [
-          GestureDetector(
-            onTap: () {
-              Get.toNamed(AppRoutes.editProfileScreen,
-                  arguments: controller.profile.value);
-            },
-            child: AppImage(
-              width: AppSize.width(value: 22),
-              height: AppSize.width(value: 22),
-              path: AssetsIconsPath.actionEdit,
-            ),
+          Obx(
+            () => controller.isLoading.value == false
+                ? GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.editProfileScreen,
+                          arguments: controller.profile.value);
+                    },
+                    child: AppImage(
+                      width: AppSize.width(value: 22),
+                      height: AppSize.width(value: 22),
+                      path: AssetsIconsPath.actionEdit,
+                    ),
+                  )
+                : const SizedBox(),
           ),
           const Gap(width: 20)
         ],

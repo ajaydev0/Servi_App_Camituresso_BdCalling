@@ -22,8 +22,10 @@ import 'package:servi_app_camituresso/screens/list_off_view_services/list_of_vie
 import 'package:servi_app_camituresso/screens/navigation_screen/navigation_screen.dart';
 import 'package:servi_app_camituresso/screens/payment_method_screen/payment_method_screen.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/popular_view_all.dart';
+import 'package:servi_app_camituresso/screens/privacy_and_policy_screen/privacy_and_policy_screen.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/profile_screen.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/recommendation_view_all.dart';
+import 'package:servi_app_camituresso/screens/saved_screen/saved_screen.dart';
 import 'package:servi_app_camituresso/screens/search_screen/search_screen.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/services_details_screen.dart';
 import 'package:servi_app_camituresso/screens/services_screen/services_screen.dart';
@@ -159,7 +161,7 @@ List<GetPage> appRoutesFile = <GetPage>[
   ),
   GetPage(
     name: AppRoutes.privacyAndPolicyScreen,
-    page: () => const TermsAndConditionScreen(),
+    page: () => const PrivacyAndPolicyScreen(),
     middlewares: [InternetCheckMiddleWare()],
   ),
 
@@ -195,6 +197,11 @@ List<GetPage> appRoutesFile = <GetPage>[
   GetPage(
     name: AppRoutes.recommendationViewAllScreen,
     page: () => const RecommendationViewAll(),
+    middlewares: [InternetCheckMiddleWare()],
+  ),
+  GetPage(
+    name: AppRoutes.savedScreen,
+    page: () => const SavedScreen(),
     middlewares: [InternetCheckMiddleWare()],
   ),
 ];

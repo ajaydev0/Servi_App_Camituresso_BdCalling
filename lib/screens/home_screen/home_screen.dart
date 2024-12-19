@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/dev_data/dev_list_of_category.dart';
 import 'package:servi_app_camituresso/models/dev_category/dev_category_model.dart';
@@ -29,6 +30,9 @@ class HomeScreen extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: () async {
             await controller.getProfileData();
+            await controller.getBannarList();
+            await controller.getPopularPostList();
+            await controller.getRecommendedPostList();
           },
           child: CustomScrollView(
             slivers: [
@@ -39,44 +43,50 @@ class HomeScreen extends StatelessWidget {
                   controller: controller,
                 ),
               ),
-              if (controller.listOfBanner.isNotEmpty)
-                SliverToBoxAdapter(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(
-                        vertical: AppSize.width(value: 10)),
-                    width: Get.width,
-                    height: AppSize.height(value: 200),
-                    child: PageView.builder(
-                      controller: controller.listOfBannerPageViewController,
-                      itemCount: controller.listOfBanner.length,
-                      onPageChanged: controller.onChangeListOfBanner,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: AppSize.width(value: 10)),
-                          child: ClipRRect(
-                            borderRadius:
-                                BorderRadius.circular(AppSize.width(value: 10)),
-                            child: AppImage(
-                              fit: BoxFit.fill,
-                              path: controller.listOfBanner[index],
-                              width: Get.width,
-                              // height: AppSize.height(value: 180),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
+              SliverToBoxAdapter(
+                child: controller.isLoadingBannar.value
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ))
+                    : Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: AppSize.width(value: 10)),
+                        width: Get.width,
+                        height: AppSize.height(value: 200),
+                        child: PageView.builder(
+                          controller: controller.listOfBannerPageViewController,
+                          itemCount: controller.bannarList.length,
+                          onPageChanged: controller.onChangeListOfBanner,
+                          itemBuilder: (context, index) {
+                            var item = controller.bannarList[index];
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: AppSize.width(value: 10)),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    AppSize.width(value: 10)),
+                                child: AppImage(
+                                  fit: BoxFit.fill,
+                                  url: "${AppApiUrl.domaine}${item.image}",
 
-              if (controller.listOfBanner.isNotEmpty)
+                                  width: Get.width,
+                                  // height: AppSize.height(value: 180),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+              ),
+
+              if (controller.bannarList.isNotEmpty)
                 SliverToBoxAdapter(
                   child: Obx(
                     () => Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: List.generate(
-                        controller.listOfBanner.length,
+                        controller.bannarList.length,
                         (index) {
                           bool isActive = index ==
                               controller.selectedListOfBannerIndex.value;
@@ -108,13 +118,15 @@ class HomeScreen extends StatelessWidget {
                 },
               ),
               itemBuildFunction(
+                loading: controller.isLoadingCategory,
+                controller: controller,
                 dividedValue: 4,
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
                 items: List.generate(
-                  devCategoryData.length,
+                  controller.categoryList.length,
                   (index) {
-                    var item = devCategoryData[index];
+                    var item = controller.categoryList[index];
                     return GestureDetector(
                       onTap: () {
                         Get.toNamed(AppRoutes.listOfViewServicesScreen,
@@ -133,13 +145,13 @@ class HomeScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             AppImage(
-                              path: item.imagePath,
+                              url: "${AppApiUrl.domaine}${item.image}",
                               height: AppSize.height(value: 40),
                               width: AppSize.height(value: 40),
                             ),
-                            Gap(height: 10),
+                            const Gap(height: 10),
                             AppText(
-                              data: item.name,
+                              data: item.name ?? "",
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
@@ -155,13 +167,13 @@ class HomeScreen extends StatelessWidget {
               itemTitleOption(
                 name: "Popular",
                 onTapCall: () {
-                  Get.toNamed(
-                    AppRoutes.popularViewAllScreen,
-                  );
+                  Get.toNamed(AppRoutes.popularViewAllScreen);
                 },
               ),
 
               itemBuildFunction(
+                controller: controller,
+                loading: controller.isLoadingPopular,
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
                 items: List.generate(
@@ -179,13 +191,16 @@ class HomeScreen extends StatelessWidget {
               itemTitleOption(
                 name: "Recommendation",
                 onTapCall: () {
-                  Get.toNamed(AppRoutes.listOfViewServicesScreen,
-                      arguments: DevCategoryModel(
-                          name: "Recommendation", imagePath: "", id: "id10"));
+                  Get.toNamed(AppRoutes.recommendationViewAllScreen);
+                  // Get.toNamed(AppRoutes.listOfViewServicesScreen,
+                  //     arguments: DevCategoryModel(
+                  //         name: "Recommendation", imagePath: "", id: "id10"));
                 },
               ),
 
               itemBuildFunction(
+                controller: controller,
+                loading: controller.isLoadingRecommended,
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
                 items: List.generate(

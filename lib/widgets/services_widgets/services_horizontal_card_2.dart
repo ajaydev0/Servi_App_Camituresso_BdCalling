@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
@@ -9,8 +11,8 @@ import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
-class ServicesHorizontalCard extends StatelessWidget {
-  const ServicesHorizontalCard(
+class ServicesHorizontalCardTwo extends StatelessWidget {
+  const ServicesHorizontalCardTwo(
       {super.key, required this.item, this.onTap, this.radiusValue = 10.0});
 
   final dynamic item;
@@ -21,8 +23,7 @@ class ServicesHorizontalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // print("${item.image}");
-        Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
+        Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item);
       },
       child: Container(
         // height: AppSize.height(value: 200),
@@ -42,9 +43,6 @@ class ServicesHorizontalCard extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  Container(
-                    height: AppSize.height(value: 250),
-                  ),
                   AppImage(
                     url: "${AppApiUrl.domaine}${item.image}",
                     height: AppSize.height(value: 250),
@@ -53,18 +51,25 @@ class ServicesHorizontalCard extends StatelessWidget {
                   Positioned(
                     right: AppSize.width(value: 20),
                     top: AppSize.width(value: 20),
-                    child: GestureDetector(
-                      onTap: onTap,
-                      child: AppImage(
-                          width: AppSize.width(value: 30),
-                          height: AppSize.width(value: 30),
-                          path:
-                              // item.isSaved
-                              //     ? AssetsIconsPath.savaDed
-                              //     :
-                              AssetsIconsPath.notSavaDed),
-                    ),
-                  )
+                    child: IconButton(
+                        style: ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                                Colors.black.withOpacity(.4))),
+                        onPressed: () {},
+                        icon: const Icon(Icons.bookmark,
+                            color: Color(0xffD0A933))),
+                  ),
+                  // Positioned(
+                  //   right: AppSize.width(value: 20),
+                  //   top: AppSize.width(value: 20),
+                  //   child: GestureDetector(
+                  //     onTap: onTap,
+                  //     child: AppImage(
+                  //         width: AppSize.width(value: 30),
+                  //         height: AppSize.width(value: 30),
+                  //         path: _getImagePath(item.bookmark)),
+                  //   ),
+                  // )
                 ],
               ),
             ),
@@ -86,19 +91,22 @@ class ServicesHorizontalCard extends StatelessWidget {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // const Gap(width: 5),
-                            Expanded(child: AppText(data: item.category ?? "")),
+                            AppImage(
+                              width: AppSize.width(value: 20),
+                              height: AppSize.width(value: 20),
+                              path: AssetsIconsPath.location,
+                            ),
+                            const Gap(width: 5),
+                            Expanded(child: AppText(data: item.location ?? "")),
                           ],
                         ),
                       ],
                     ),
                   ),
-                  AppText(
-                    data: "\$${item.price ?? ""}",
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                    color: const Color(0xffD0A933),
-                  ),
+                  const Gap(width: 10),
+                  const Icon(Icons.star, color: AppColors.primary),
+                  const Gap(width: 5),
+                  AppText(data: "${item.rating}.0")
                 ],
               ),
             )
@@ -106,5 +114,17 @@ class ServicesHorizontalCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getImagePath(bool? bookmark) {
+    try {
+      if (bookmark == null) {
+        return AssetsIconsPath.notSavaDed;
+      }
+      return bookmark ? AssetsIconsPath.savaDed : AssetsIconsPath.notSavaDed;
+    } catch (e) {
+      log("get image path $e");
+      return AssetsIconsPath.notSavaDed;
+    }
   }
 }

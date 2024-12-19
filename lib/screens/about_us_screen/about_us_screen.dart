@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
+import 'package:servi_app_camituresso/screens/about_us_screen/controllers/about_us_screen_controller.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
@@ -9,29 +11,54 @@ class AboutUsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const AppText(
-          data: "About us",
-          fontWeight: FontWeight.w600,
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(2),
-          child: Container(
-            width: Get.width,
-            height: 1,
-            color: AppColors.black50,
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(AppSize.width(value: 10.0)),
-        child: const AppText(
-            data:
-                """Welcome to Servi! We are passionate about connecting people with [the app's core purpose]. Our journey began in [Year], with a simple idea: to make [the key service or benefit the app provides] more accessible and enjoyable for everyone. At Servi, we believe in innovation, simplicity, and putting our users first. Our app is designed to [describe the main function or unique feature of the app]. Whether you're [target audience or user activity], our goal is to provide you with a seamless and engaging experience.
-      """),
-      ),
-    );
+    return GetBuilder(
+        init: AboutUsScreenController(),
+        builder: (controller) {
+          return Scaffold(
+            appBar: AppBar(
+              centerTitle: true,
+              title: const AppText(
+                data: "About us",
+                fontWeight: FontWeight.w600,
+              ),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(2),
+                child: Container(
+                  width: Get.width,
+                  height: 1,
+                  color: AppColors.black50,
+                ),
+              ),
+            ),
+            body: Obx(
+              () => controller.isLoading.value
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                      color: AppColors.primary,
+                    ))
+                  : Padding(
+                      padding: EdgeInsets.all(AppSize.width(value: 20.0)),
+                      child: SingleChildScrollView(
+                        child: SizedBox(
+                          width: AppSize.size.width,
+                          child: HtmlWidget(
+                            controller.aboutUsData.value,
+                            customStylesBuilder: (element) {
+                              if (element.localName == 'span' &&
+                                  element.attributes['style']
+                                          ?.contains('white-space:pre-wrap') ==
+                                      true) {
+                                return {'white-space': 'normal'};
+                              }
+                              return null;
+                            },
+                            textStyle: const TextStyle(
+                                fontSize: 16, color: AppColors.black800),
+                          ),
+                        ),
+                      )),
+            ),
+          );
+        });
   }
 }

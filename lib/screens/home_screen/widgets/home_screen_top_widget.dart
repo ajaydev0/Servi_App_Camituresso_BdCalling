@@ -244,14 +244,15 @@ class HomeScreenTopWidget extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Get.toNamed(
-                          AppRoutes.listOfViewServicesScreen,
-                          arguments: DevCategoryModel(
-                            name: "Saved",
-                            imagePath: "",
-                            id: "id1",
-                          ),
-                        );
+                        Get.toNamed(AppRoutes.savedScreen);
+                        // Get.toNamed(
+                        //   AppRoutes.listOfViewServicesScreen,
+                        //   arguments: DevCategoryModel(
+                        //     name: "Saved",
+                        //     imagePath: "",
+                        //     id: "id1",
+                        //   ),
+                        // );
                       },
                       child: AppImage(
                         path: AssetsImagesPath.savedButton,

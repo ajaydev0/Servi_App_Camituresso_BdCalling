@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
+import 'package:servi_app_camituresso/const/assets_images_path.dart';
 
 class AppImageCircular extends StatelessWidget {
   const AppImageCircular({
@@ -70,8 +71,8 @@ class AppImageCircular extends StatelessWidget {
                 decoration: const BoxDecoration(
                     color: AppColors.yellow100,
                     image: DecorationImage(
-                        image: NetworkImage(
-                            "https://media.istockphoto.com/id/1087531642/vector/male-face-silhouette-or-icon-man-avatar-profile-unknown-or-anonymous-person-vector.jpg?s=612x612&w=0&k=20&c=FEppaMMfyIYV2HJ6Ty8tLmPL1GX6Tz9u9Y8SCRrkD-o="))),
+                        image: AssetImage(AssetsImagesPath.nullImage),
+                        fit: BoxFit.fill)),
               ),
             );
           },

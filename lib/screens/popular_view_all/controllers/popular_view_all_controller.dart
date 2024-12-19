@@ -1,8 +1,7 @@
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/dev_data/dev_list_of_services_data.dart';
 import 'package:servi_app_camituresso/models/dev_category/dev_category_model.dart';
 import 'package:servi_app_camituresso/models/dev_services_model/dev_services_model.dart';
-import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
+import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class PopularViewAllController extends GetxController {
@@ -18,38 +17,38 @@ class PopularViewAllController extends GetxController {
     update();
   }
 
-  onDataSetFunction() {
-    try {
-      isError.value = false;
-      isLoading.value = true;
-      final argData = Get.arguments;
-      if (argData.runtimeType != Null) {
-        model = argData;
-        listOfServices.clear();
-        for (var element in devListOfServicedData) {
-          if (element.category == model?.id) {
-            listOfServices.add(element);
-          }
-        }
-      } else {
-        listOfServices.addAll(devListOfServicedData);
-      }
-      listOfServices.refresh();
-      isLoading.value = false;
-      update();
-    } catch (e) {
-      isError.value = true;
-      isLoading.value = false;
-    }
-  }
+  // onDataSetFunction() {
+  //   try {
+  //     isError.value = false;
+  //     isLoading.value = true;
+  //     final argData = Get.arguments;
+  //     if (argData.runtimeType != Null) {
+  //       model = argData;
+  //       listOfServices.clear();
+  //       for (var element in devListOfServicedData) {
+  //         if (element.category == model?.id) {
+  //           listOfServices.add(element);
+  //         }
+  //       }
+  //     } else {
+  //       listOfServices.addAll(devListOfServicedData);
+  //     }
+  //     listOfServices.refresh();
+  //     isLoading.value = false;
+  //     update();
+  //   } catch (e) {
+  //     isError.value = true;
+  //     isLoading.value = false;
+  //   }
+  // }
 
-  getPostAndInList() async {
+  getPopularPostAndInList() async {
     try {
       isLoading.value = true;
-      var data = await Repository().getPostData();
+      var data = await Repository().getPopularPostData();
       if (data != null) {
         for (var element in data) {
-          postList.add(GetPostModel.fromJson(element));
+          postList.add(PopularPostModel.fromJson(element));
           update();
         }
       }
@@ -63,7 +62,7 @@ class PopularViewAllController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await getPostAndInList();
+    await getPopularPostAndInList();
 
     // onDataSetFunction();
   }

@@ -18,6 +18,16 @@ class AppApiUrl {
   static const String getPostUrl = "$baseUrl/post/my-post";
   static const String getServiceDetailsUrl = "$baseUrl/post/";
   static const String createReviewUrl = "$baseUrl/review";
+  static const String getPopularPostUrl = "$baseUrl/post/popular";
+  static const String getRecommendationPostUrl = "$baseUrl/post/recommended";
+  static const String getCategoryListUrl = "$baseUrl/service";
+  static const String getBannar = "$baseUrl/banner";
+  static const String bookmarkListUrl = "$baseUrl/bookmark";
+  static const String termsAndConditionsUrl =
+      "$baseUrl/rule/terms-and-conditions";
+  static const String aboutUsUrl = "$baseUrl/rule/about";
+  static const String privacyPolicyUrl = "$baseUrl/rule/privacy-policy";
+
   //////////////////////////////////////  chat
   static const String chat = "$baseUrl/chat";
   static const String message = "$baseUrl/message";

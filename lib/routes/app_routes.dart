@@ -28,4 +28,5 @@ class AppRoutes {
   static const eReceiptScreen = "/e-receipt-screen";
   static const popularViewAllScreen = "/popular-View-all-screen";
   static const recommendationViewAllScreen = "/recommendation-view-all-screen";
+  static const savedScreen = "/saved-screen";
 }
