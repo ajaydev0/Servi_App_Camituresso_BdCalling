@@ -4,7 +4,7 @@ class RecommendedPostModel {
   String? title;
   String? location;
   bool? adult;
-  int? rating;
+  dynamic rating;
   bool? bookmark;
 
   RecommendedPostModel(

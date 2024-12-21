@@ -34,7 +34,7 @@ class ConversationScreen extends StatelessWidget {
                     height: AppSize.width(value: 40),
                     path: controller.chatDataModel?.imageUrl,
                   ),
-                  Gap(width: 10),
+                  const Gap(width: 10),
                   Expanded(
                       child: AppText(
                           data: controller.argData["user"]["name"] ?? "",
@@ -47,11 +47,11 @@ class ConversationScreen extends StatelessWidget {
                     onTap: () {
                       conversationOfferDialog(controller);
                     },
-                    child: AppText(
+                    child: const AppText(
                         data: "Offer",
                         color: AppColors.black900,
                         fontWeight: FontWeight.w500)),
-                Gap(width: 20)
+                const Gap(width: 20)
               ],
             ),
             body: Stack(

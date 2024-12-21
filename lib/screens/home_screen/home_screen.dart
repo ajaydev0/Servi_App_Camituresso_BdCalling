@@ -28,6 +28,7 @@ class HomeScreen extends StatelessWidget {
       init: HomeScreenController(),
       builder: (controller) {
         return RefreshIndicator(
+          color: AppColors.primary,
           onRefresh: () async {
             await controller.getProfileData();
             await controller.getBannarList();

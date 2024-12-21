@@ -14,9 +14,7 @@ import 'package:servi_app_camituresso/screens/services_screen/model/category_mod
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class HomeScreenController extends GetxController {
-  // Get Profile Data
   RxBool isLoading = true.obs;
-  Rx<ProfileModel> profile = ProfileModel().obs;
 
   /////////////////////// banner
   Isolate? bannerIsolate;
@@ -118,11 +116,15 @@ class HomeScreenController extends GetxController {
     }
   }
 
+  ProfileModel profileData = ProfileModel();
   getProfileData() async {
     try {
       isLoading.value = true;
-      var profileData = await Repository().getProfileData();
-      profile.value = profileData;
+      var data = await Repository().getProfileData();
+      if (data != null) {
+        profileData = data;
+        update();
+      }
     } catch (e) {
       print("Error fetching profile: $e");
     } finally {
@@ -133,14 +135,14 @@ class HomeScreenController extends GetxController {
   ////////////////////// Get Bannar List
   RxBool isLoadingBannar = false.obs;
   // List<dynamic> bannarList = [].obs;
-  RxList<BannarModel> bannarList = <BannarModel>[].obs;
+  List<BannarModel> bannarList = <BannarModel>[];
   getBannarList() async {
     try {
       isLoadingBannar.value = true;
       var repoResponse = await Repository().getBannarListData();
 
-      bannarList.value = repoResponse;
-      bannarList.refresh();
+      bannarList = repoResponse;
+      update();
     } catch (e) {
       print(e);
     } finally {

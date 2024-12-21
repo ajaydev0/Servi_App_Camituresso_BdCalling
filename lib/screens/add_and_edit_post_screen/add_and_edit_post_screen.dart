@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/screens/add_and_edit_post_screen/controller/add_and_edit_post_screen_controller.dart';
+import 'package:servi_app_camituresso/services/api/services/api.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
@@ -69,6 +71,8 @@ class AddAndEditPostScreen extends StatelessWidget {
                                 alignment: Alignment.center,
                                 children: [
                                   AppImage(
+                                    url:
+                                        "${AppApiUrl.domaine}${controller.serviceDetails.image}",
                                     width: Get.width,
                                     filePath: controller
                                             .userLocalImage.value.isNotEmpty
@@ -310,35 +314,7 @@ class AddAndEditPostScreen extends StatelessWidget {
                         textInputAction: TextInputAction.newline,
                       ),
                       const Gap(height: 50),
-                      Obx(
-                        () => GestureDetector(
-                          onTap: () {
-                            print(
-                                "❤️❤️❤️❤️ Token :  ${AppAuthStorage().getToken()}");
-                          },
-                          child: Container(
-                            width: Get.width,
-                            height: AppSize.height(value: 50),
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(
-                                    AppSize.width(value: 8.0))),
-                            child: controller.isLoadingButton.value
-                                ? const Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : const AppText(
-                                    data: "Value Check",
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: AppColors.white50,
-                                  ),
-                          ),
-                        ),
-                      ),
+
                       Obx(
                         () => GestureDetector(
                           onTap: () {

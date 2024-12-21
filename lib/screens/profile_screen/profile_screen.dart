@@ -33,7 +33,7 @@ class ProfileScreen extends StatelessWidget {
                 ? GestureDetector(
                     onTap: () {
                       Get.toNamed(AppRoutes.editProfileScreen,
-                          arguments: controller.profile.value);
+                          arguments: controller.profileData);
                     },
                     child: AppImage(
                       width: AppSize.width(value: 22),
@@ -69,15 +69,20 @@ class ProfileScreen extends StatelessWidget {
                     //   height: AppSize.height(value: 140),
                     //   fit: BoxFit.fill,
                     // ),
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: AppImage(
-                        width: AppSize.height(value: 160),
-                        height: AppSize.height(value: 160),
-                        // color: AppColors.fill,
-                        fit: BoxFit.fill,
-                        url:
-                            "${AppApiUrl.domaine}${controller.profile.value.data?.profile}",
+                    GestureDetector(
+                      onTap: () {
+                        print("Image Value ${controller.profileData.name}");
+                      },
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(100),
+                        child: AppImage(
+                          width: AppSize.height(value: 160),
+                          height: AppSize.height(value: 160),
+                          // color: AppColors.fill,
+                          fit: BoxFit.fill,
+                          url:
+                              "${AppApiUrl.domaine}${controller.profileData.profile}",
+                        ),
                       ),
                     ),
                     // AppImageCircular(
@@ -98,9 +103,9 @@ class ProfileScreen extends StatelessWidget {
                     //   ),
                     AppInputWidgetThree(
                       title: "Name",
-                      hintText: controller.profile.value.data!.name == ""
+                      hintText: controller.profileData.name == ""
                           ? "Empty...."
-                          : controller.profile.value.data!.name ?? "",
+                          : controller.profileData.name ?? "",
                       elevation: 3,
                       readOnly: true,
                       titleColor: AppColors.black900,
@@ -118,9 +123,9 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     AppInputWidgetThree(
                       title: "Email",
-                      hintText: controller.profile.value.data!.email == ""
+                      hintText: controller.profileData.email == ""
                           ? "Empty...."
-                          : controller.profile.value.data!.email ?? "",
+                          : controller.profileData.email ?? "",
                       elevation: 3,
                       readOnly: true,
                       titleColor: AppColors.black900,
@@ -137,9 +142,9 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     AppInputWidgetThree(
                       title: "Contact Number",
-                      hintText: controller.profile.value.data!.contact == ""
+                      hintText: controller.profileData.contact == ""
                           ? "Empty...."
-                          : controller.profile.value.data!.contact ?? "",
+                          : controller.profileData.contact ?? "",
                       elevation: 3,
                       titleColor: AppColors.black900,
                       elevationColor: AppColors.black50,
@@ -156,9 +161,9 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     AppInputWidgetThree(
                       title: "Date of Birth",
-                      hintText: controller.profile.value.data!.dateOfBirth == ""
+                      hintText: controller.profileData.dateOfBirth == ""
                           ? "Empty...."
-                          : controller.profile.value.data!.dateOfBirth ?? "",
+                          : controller.profileData.dateOfBirth ?? "",
                       elevation: 3,
                       readOnly: true,
                       titleColor: AppColors.black900,
@@ -223,10 +228,9 @@ class ProfileScreen extends StatelessWidget {
                               disabledBorder: InputBorder.none,
                               enabledBorder: InputBorder.none,
                               errorBorder: InputBorder.none,
-                              hintText:
-                                  controller.profile.value.data!.location == ""
-                                      ? "Empty...."
-                                      : controller.profile.value.data!.location,
+                              hintText: controller.profileData.location == ""
+                                  ? "Empty...."
+                                  : controller.profileData.location,
                               hintStyle: Theme.of(context)
                                   .textTheme
                                   .titleSmall

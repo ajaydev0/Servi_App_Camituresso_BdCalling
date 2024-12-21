@@ -167,146 +167,141 @@ class HomeScreenTopWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Container(
-        width: Get.width,
-        decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage(AssetsImagesPath.backGround),
-            fit: BoxFit.fill,
-          ),
-          borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(AppSize.width(value: 25.0)),
-            bottomLeft: Radius.circular(AppSize.width(value: 25.0)),
-          ),
+    return Container(
+      width: Get.width,
+      decoration: BoxDecoration(
+        image: const DecorationImage(
+          image: AssetImage(AssetsImagesPath.backGround),
+          fit: BoxFit.fill,
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppSize.width(value: 20.0),
-              vertical: AppSize.width(value: 20.0),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(height: 20),
-                Row(
-                  children: [
-                    /// Profile Image
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.profileScreen);
-                      },
-                      child: AppImageCircular(
-                        width: AppSize.width(value: 60),
-                        height: AppSize.width(value: 60),
-                        url:
-                            "${AppApiUrl.domaine}${controller.profile.value.data?.profile}",
-                        // url: controller.profile.value.data?.profile ?? '',
-                        // controller.profile.value.data!.profile!
-                        fit: BoxFit.fill,
-                      ),
+        borderRadius: BorderRadius.only(
+          bottomRight: Radius.circular(AppSize.width(value: 25.0)),
+          bottomLeft: Radius.circular(AppSize.width(value: 25.0)),
+        ),
+      ),
+      child: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: AppSize.width(value: 20.0),
+            vertical: AppSize.width(value: 20.0),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(height: 20),
+              Row(
+                children: [
+                  /// Profile Image
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.profileScreen);
+                    },
+                    child: AppImageCircular(
+                      width: AppSize.width(value: 60),
+                      height: AppSize.width(value: 60),
+                      url:
+                          "${AppApiUrl.domaine}${controller.profileData.profile}",
+                      // url: controller.profile.value.data?.profile ?? '',
+                      // controller.profile.value.data!.profile!
+                      fit: BoxFit.fill,
                     ),
-                    const Gap(width: 10),
+                  ),
 
-                    /// User Name & Address
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          AppText(
-                            data:
-                                controller.profile.value.data?.name?.isEmpty ??
-                                        true
-                                    ? "Name...."
-                                    : controller.profile.value.data!.name!,
-                            color: AppColors.black50,
-                            fontWeight: FontWeight.w700,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const Gap(height: 10),
-                          AppText(
-                            data: controller.profile.value.data?.location
-                                        ?.isEmpty ??
-                                    true
-                                ? "Location...."
-                                : controller.profile.value.data!.location!,
-                            color: AppColors.white600,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.savedScreen);
-                        // Get.toNamed(
-                        //   AppRoutes.listOfViewServicesScreen,
-                        //   arguments: DevCategoryModel(
-                        //     name: "Saved",
-                        //     imagePath: "",
-                        //     id: "id1",
-                        //   ),
-                        // );
-                      },
-                      child: AppImage(
-                        path: AssetsImagesPath.savedButton,
-                        width: AppSize.width(value: 30),
-                        height: AppSize.width(value: 30),
-                      ),
-                    ),
-                    const Gap(width: 10),
-                    GestureDetector(
-                      onTap: () {
-                        navigationScreenController.callNotification();
-                      },
-                      child: AppImage(
-                        path: AssetsImagesPath.notificationButton,
-                        width: AppSize.width(value: 30),
-                        height: AppSize.width(value: 30),
-                      ),
-                    ),
-                  ],
-                ),
-                const Gap(height: 30),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.searchScreen);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(AppSize.width(value: 100)),
-                      color: AppColors.primary,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          spreadRadius: 5,
-                          blurRadius: 40,
-                          offset: const Offset(-10, 10),
+                  const Gap(width: 10),
+
+                  /// User Name & Address
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AppText(
+                          data: controller.profileData.name?.isEmpty ?? true
+                              ? "Name...."
+                              : controller.profileData.name!,
+                          color: AppColors.black50,
+                          fontWeight: FontWeight.w700,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          spreadRadius: 5,
-                          blurRadius: 40,
-                          offset: const Offset(10, 20),
+                        const Gap(height: 10),
+                        AppText(
+                          data: controller.profileData.location?.isEmpty ?? true
+                              ? "Location...."
+                              : controller.profileData.location!,
+                          color: AppColors.white600,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.savedScreen);
+                      // Get.toNamed(
+                      //   AppRoutes.listOfViewServicesScreen,
+                      //   arguments: DevCategoryModel(
+                      //     name: "Saved",
+                      //     imagePath: "",
+                      //     id: "id1",
+                      //   ),
+                      // );
+                    },
                     child: AppImage(
-                      path: AssetsImagesPath.searchBar,
-                      width: Get.width,
-                      height: AppSize.width(value: 50),
+                      path: AssetsImagesPath.savedButton,
+                      width: AppSize.width(value: 30),
+                      height: AppSize.width(value: 30),
                     ),
                   ),
+                  const Gap(width: 10),
+                  GestureDetector(
+                    onTap: () {
+                      navigationScreenController.callNotification();
+                    },
+                    child: AppImage(
+                      path: AssetsImagesPath.notificationButton,
+                      width: AppSize.width(value: 30),
+                      height: AppSize.width(value: 30),
+                    ),
+                  ),
+                ],
+              ),
+              const Gap(height: 30),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.searchScreen);
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(AppSize.width(value: 100)),
+                    color: AppColors.primary,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        spreadRadius: 5,
+                        blurRadius: 40,
+                        offset: const Offset(-10, 10),
+                      ),
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.08),
+                        spreadRadius: 5,
+                        blurRadius: 40,
+                        offset: const Offset(10, 20),
+                      ),
+                    ],
+                  ),
+                  child: AppImage(
+                    path: AssetsImagesPath.searchBar,
+                    width: Get.width,
+                    height: AppSize.width(value: 50),
+                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
+import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_patch_services.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/services/repository/post_repository.dart';
@@ -12,6 +13,7 @@ import 'package:servi_app_camituresso/widgets/custom_show_date_picker/custom_sho
 import 'package:servi_app_camituresso/widgets/image_user_pic/image_user_pi.dart';
 
 class EditProfileScreenController extends GetxController {
+  RxBool isLoading = false.obs;
   final ImagePicker picker = ImagePicker();
   TextEditingController nameTextEditingController = TextEditingController();
   TextEditingController emailTextEditingController = TextEditingController();
@@ -25,7 +27,7 @@ class EditProfileScreenController extends GetxController {
   var argData = Get.arguments;
   RxBool isImgValid = true.obs;
   RxString localImagePath = RxString("");
-
+  ProfileModel profileData = ProfileModel();
   clickImagePic() {
     imageUserTake(localImagePath);
   }
@@ -47,82 +49,66 @@ class EditProfileScreenController extends GetxController {
 
   refreshFunction() async {
     try {
-      var data = await ImageRepository().imageUpdate(
+      isLoading.value = true;
+      Map<String, String> body = {
+        "title": nameTextEditingController.text,
+        "price": contactTextEditingController.text,
+        "price_breakdown": dateOfBirthTextEditingController.text,
+        "description": addressTextEditingController.text,
+      };
+      var data = await ImageRepository().profilePatchImageUpdate(
+          url: AppApiUrl.updateProfileUrl,
           imagePath: localImagePath.value,
-          name: nameTextEditingController.text,
-          number: contactTextEditingController.text,
-          dateOfBirth: dateOfBirthTextEditingController.text,
-          address: addressTextEditingController.text);
-      if (data != null) {}
+          body: body);
+      if (data != null) {
+        Get.back(times: 2);
+        AppSnackBar.success("Profile Updated");
+      }
     } catch (e) {
       print("$e");
+    } finally {
+      isLoading.value = false;
     }
   }
 
   clickSaveChange() async {
     try {
-      if (editProfileScreenKey.currentState!.validate()) {
-        var data = await ImageRepository().imageUpdate(
-            imagePath: localImagePath.value,
-            name: nameTextEditingController.text,
-            number: contactTextEditingController.text,
-            dateOfBirth: dateOfBirthTextEditingController.text,
-            address: addressTextEditingController.text);
-        if (data != null) {
-          Get.back(times: 2);
-          AppSnackBar.success("Profile Updated");
-        }
+      isLoading.value = true;
+      Map<String, String> body = {
+        "title": nameTextEditingController.text,
+        "price": contactTextEditingController.text,
+        "price_breakdown": dateOfBirthTextEditingController.text,
+        "description": addressTextEditingController.text,
+      };
+      var data = await ImageRepository().profilePatchImageUpdate(
+          url: AppApiUrl.updateProfileUrl,
+          imagePath: localImagePath.value,
+          body: body);
+      if (data != null) {
+        Get.back(times: 2);
+        AppSnackBar.success("Profile Updated");
       }
     } catch (e) {
       print("$e");
+    } finally {
+      isLoading.value = false;
     }
-    // var data = ApiPatchServices()
-    //     .apiPatchServices(url: AppApiUrl.updateProfileUrl, body: {
-    //   "image":
-    //       "/data/user/0/com.example.servi_app_camituresso/cache/6de437d5-827b-44ac-9cf2-2251cc3ccf76/1000001863.jpg",
-    // });
-    // var data = ImageRepository().profileUpdate(imagePath: localImagePath.value);
-    // print("$data ➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️");
-    // try {
-    //   if (editProfileScreenKey.currentState!.validate()) {
-    //     try {
-    //       var data =
-    //           ImageRepository().profileUpdate(imagePath: localImagePath.value);
-    //       print("$data ➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️➡️");
+  }
 
-    //       // var data = await ApiPatchServices().apiPatchServices(
-    //       //     url: AppApiUrl.updateProfileUrl,
-    //       //     token: token,
-    //       //     body: {
-    //       //       "name": nameTextEditingController.text,
-    //       //       "contact": contactTextEditingController.text,
-    //       //       "dateOfBirth": dateOfBirthTextEditingController.text,
-    //       //       "location": addressTextEditingController.text,
-    //       //       "images": localImagePath.value,
-    //       //     });
-    //       // if (data != null) {
-    //       //   AppSnackBar.success("Profile Updated");
-    //       // } else {
-    //       //   return print(data);
-    //       // }
-    //     } catch (e) {
-    //       print("$e");
-    //     }
-
-    //     Get.back(times: 2);
-    //   }
-    // } catch (e) {
-    //   log("error form save change: $e");
-    // }
+  argSet() {
+    if (Get.arguments.runtimeType != Null) {
+      profileData = Get.arguments;
+      nameTextEditingController.text = profileData.name ?? "";
+      emailTextEditingController.text = profileData.email ?? "";
+      contactTextEditingController.text = profileData.contact ?? "";
+      addressTextEditingController.text = profileData.location ?? "";
+      dateOfBirthTextEditingController.text = profileData.dateOfBirth ?? "";
+    }
   }
 
   @override
   void onInit() {
-    nameTextEditingController.text = argData.data.name;
-    emailTextEditingController.text = argData.data.email;
-    contactTextEditingController.text = argData.data.contact;
-    addressTextEditingController.text = argData.data.location;
-    dateOfBirthTextEditingController.text = argData.data.dateOfBirth;
+    argSet();
 
     super.onInit();
   }

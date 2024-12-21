@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_dev_images.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
@@ -28,47 +29,51 @@ class ServicesDetailsScreen extends StatelessWidget {
         init: ServicesDetailsScreenController(),
         builder: (controller) {
           return Obx(
-            () => controller.isLoading.value
-                ? Container(
-                    height: AppSize.size.height,
-                    width: AppSize.size.width,
-                    color: Colors.white,
-                    child: const Center(
-                        child: CircularProgressIndicator(
-                      color: AppColors.primary,
-                    )),
-                  )
-                : Scaffold(
-                    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Booking button <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> floating position <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    floatingActionButtonLocation:
-                        FloatingActionButtonLocation.centerDocked,
-                    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> button <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    floatingActionButton: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.paymentMethodScreen);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.all(AppSize.width(value: 10)),
-                        width: Get.width,
-                        height: AppSize.height(value: 50),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(
-                                AppSize.width(value: 8.0))),
-                        child: const AppText(
-                          data: "Book Now",
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.white50,
+            () => RefreshIndicator(
+              color: AppColors.primary,
+              onRefresh: () async {
+                await controller.getServiceDetailsData();
+              },
+              child: controller.isLoading.value
+                  ? Container(
+                      height: AppSize.size.height,
+                      width: AppSize.size.width,
+                      color: Colors.white,
+                      child: const Center(
+                          child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      )),
+                    )
+                  : Scaffold(
+                      // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Booking button <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                      // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> floating position <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                      floatingActionButtonLocation:
+                          FloatingActionButtonLocation.centerDocked,
+                      // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> button <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                      floatingActionButton: GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.paymentMethodScreen);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(AppSize.width(value: 10)),
+                          width: Get.width,
+                          height: AppSize.height(value: 50),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(
+                                  AppSize.width(value: 8.0))),
+                          child: const AppText(
+                            data: "Book Now",
+                            fontSize: 18,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.white50,
+                          ),
                         ),
                       ),
-                    ),
-                    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> booking screen body  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                    body: NestedScrollView(
-                      headerSliverBuilder: (context, innerBoxIsScrolled) {
-                        return [
+                      // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> booking screen body  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+                      body: CustomScrollView(
+                        slivers: [
                           // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> booking screen top stack card <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
                           // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> contain image, back button, saved button <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
@@ -89,9 +94,9 @@ class ServicesDetailsScreen extends StatelessWidget {
                                   alignment: Alignment.center,
                                   fit: StackFit.expand,
                                   children: [
-                                    const AppImage(
-                                      // path: controller.item.image,
-                                      path: "assets/dev_images/services_1.jpg",
+                                    AppImage(
+                                      url:
+                                          "${AppApiUrl.domaine}${controller.serviceDetails.image}",
                                     ),
                                     Positioned(
                                       top: AppSize.width(value: 30),
@@ -198,7 +203,8 @@ class ServicesDetailsScreen extends StatelessWidget {
                                                       Get.toNamed(
                                                           AppRoutes
                                                               .addPostAndEditScreen,
-                                                          arguments: false);
+                                                          arguments: controller
+                                                              .serviceDetails);
                                                     },
                                                   ),
                                                   PopupMenuItem(
@@ -252,7 +258,9 @@ class ServicesDetailsScreen extends StatelessWidget {
                                       Expanded(
                                         child: AppText(
                                           // data: controller.item.title ?? "",
-                                          data: "Title",
+                                          data:
+                                              controller.serviceDetails.title ??
+                                                  "",
 
                                           fontSize: 18,
                                           fontWeight: FontWeight.w600,
@@ -260,7 +268,8 @@ class ServicesDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       AppText(
-                                        data: "\$ Price",
+                                        data:
+                                            "\$${controller.serviceDetails.price}",
                                         // data: "",
                                         fontWeight: FontWeight.w700,
                                         color: AppColors.primary,
@@ -271,29 +280,49 @@ class ServicesDetailsScreen extends StatelessWidget {
                                   Row(
                                     children: [
                                       Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                        child: Row(
                                           children: [
-                                            AppText(
-                                                data: "user",
-                                                color: AppColors.black400,
-                                                fontWeight: FontWeight.w500),
-                                            AppText(
-                                                data: "category",
-                                                // data: "",
-                                                fontSize: 14,
-                                                color: AppColors.black400,
-                                                fontWeight: FontWeight.w400),
+                                            AppImageCircular(
+                                              width: AppSize.width(value: 30),
+                                              height: AppSize.width(value: 30),
+                                              url:
+                                                  "${AppApiUrl.domaine}${controller.serviceDetails.user?.profile}",
+                                            ),
+                                            const Gap(width: 8),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                AppText(
+                                                    data: controller
+                                                            .serviceDetails
+                                                            .user
+                                                            ?.name ??
+                                                        "",
+                                                    color: AppColors.black400,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                                AppText(
+                                                    data: controller
+                                                            .serviceDetails
+                                                            .category ??
+                                                        "",
+                                                    // data: "",
+                                                    fontSize: 14,
+                                                    color: AppColors.black400,
+                                                    fontWeight:
+                                                        FontWeight.w400),
+                                              ],
+                                            ),
                                           ],
                                         ),
                                       ),
                                       ///////////////////// goto conversation
                                       GestureDetector(
                                         onTap: () {
-                                          Get.toNamed(
-                                              AppRoutes.conversationScreen,
-                                              arguments: controller.item);
+                                          // Get.toNamed(
+                                          //     AppRoutes.conversationScreen,
+                                          //     arguments: controller.item);
                                           // Get.toNamed(
                                           //   AppRoutes.conversationScreen,
                                           //   arguments: ChatDataModel(
@@ -327,7 +356,9 @@ class ServicesDetailsScreen extends StatelessWidget {
                                       const Gap(width: 8),
                                       Expanded(
                                           child: AppText(
-                                        data: "location",
+                                        data: controller
+                                                .serviceDetails.location ??
+                                            "",
 
                                         // data: "2972 Westheimer Rd. Santa Ana, Illinois 85486 ",
                                       ))
@@ -362,7 +393,9 @@ class ServicesDetailsScreen extends StatelessWidget {
                                   AppText(
                                     height: 2,
                                     textAlign: TextAlign.justify,
-                                    data: "Description",
+                                    data:
+                                        controller.serviceDetails.description ??
+                                            "",
                                     // data: "",
                                   ),
                                   // data:
@@ -450,183 +483,211 @@ class ServicesDetailsScreen extends StatelessWidget {
                               ),
                               const Gap(width: 20)
                             ],
-                          )
-                        ];
-                      },
-                      body: controller.reviewList.isEmpty
-                          ? Container()
-                          : ListView.builder(
-                              itemCount: controller.reviewList.length,
-                              itemBuilder: (context, index) {
-                                bool isLast =
-                                    controller.reviewList.length - 1 == index;
-                                var item = controller.reviewList[index];
+                          ),
+                          SliverAnimatedList(
+                            initialItemCount:
+                                controller.serviceDetails.reviews?.length ?? 0,
+                            itemBuilder: (context, index, animation) {
+                              bool isLast =
+                                  controller.reviewList.length - 1 == index;
+                              var item =
+                                  controller.serviceDetails.reviews?[index];
+                              return Padding(
+                                padding: EdgeInsets.only(
+                                    bottom:
+                                        isLast ? AppSize.width(value: 80) : 0),
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: AppSize.width(value: 10),
+                                      vertical: AppSize.width(value: 5.0)),
+                                  padding: EdgeInsets.all(
+                                      AppSize.width(value: 10.0)),
+                                  decoration: BoxDecoration(
+                                      color: AppColors.yellow50,
+                                      borderRadius: BorderRadius.circular(
+                                          AppSize.width(value: 10))),
+                                  child: Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          AppImageCircular(
+                                            width: AppSize.width(value: 30),
+                                            height: AppSize.width(value: 30),
+                                            url:
+                                                "${AppApiUrl.domaine}${item?.user?.profile}",
+                                          ),
+                                          const Gap(width: 8),
+                                          Expanded(
+                                              child: AppText(
+                                            // data: "Courtney Henry",
 
-                                return Padding(
-                                  padding: EdgeInsets.only(
-                                      bottom: isLast
-                                          ? AppSize.width(value: 80)
-                                          : 0),
-                                  child: Container(
-                                    margin: EdgeInsets.symmetric(
-                                        horizontal: AppSize.width(value: 10),
-                                        vertical: AppSize.width(value: 5.0)),
-                                    padding: EdgeInsets.all(
-                                        AppSize.width(value: 10.0)),
-                                    decoration: BoxDecoration(
-                                        color: AppColors.yellow50,
-                                        borderRadius: BorderRadius.circular(
-                                            AppSize.width(value: 10))),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            AppImageCircular(
-                                              width: AppSize.width(value: 30),
-                                              height: AppSize.width(value: 30),
-                                              path: AssetsDevImages.devUser2,
-                                            ),
-                                            const Gap(width: 8),
-                                            Expanded(
-                                                child: AppText(
-                                              // data: "Courtney Henry",
-
-                                              data: item.user.name,
-                                              fontWeight: FontWeight.w600,
-                                              color: AppColors.black400,
-                                            )),
-                                            if (CommentOwner.owner ==
-                                                selectedCommentOwner)
-                                              PopupMenuButton<String>(
-                                                enableFeedback: true,
-                                                child: AppImage(
-                                                  width:
-                                                      AppSize.width(value: 30),
-                                                  height:
-                                                      AppSize.width(value: 30),
-                                                  path: AssetsIconsPath
-                                                      .popUpButton,
-                                                ),
-                                                color: Colors.transparent,
-                                                elevation: 0,
-                                                clipBehavior: Clip.hardEdge,
-                                                offset: Offset.zero,
-                                                // menuPadding: EdgeInsets.zero,
-                                                padding: EdgeInsets.zero,
-                                                position:
-                                                    PopupMenuPosition.under,
-                                                itemBuilder: (context) {
-                                                  return [
-                                                    PopupMenuItem(
-                                                      height: AppSize.width(
-                                                          value: 30),
-                                                      padding: EdgeInsets.zero,
-                                                      child: const ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  10.0),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  10.0),
-                                                        ),
-                                                        child:
-                                                            GlassMorPhishItem(
-                                                                child: AppImage(
-                                                          height: 300,
-                                                          path: AssetsImagesPath
-                                                              .editButtonImage,
-                                                          fit: BoxFit.fill,
-                                                        )),
+                                            data: item?.user?.name ?? "",
+                                            fontWeight: FontWeight.w600,
+                                            color: AppColors.black400,
+                                          )),
+                                          if (CommentOwner.owner ==
+                                              selectedCommentOwner)
+                                            PopupMenuButton<String>(
+                                              enableFeedback: true,
+                                              color: Colors.transparent,
+                                              elevation: 0,
+                                              clipBehavior: Clip.hardEdge,
+                                              offset: Offset.zero,
+                                              // menuPadding: EdgeInsets.zero,
+                                              padding: EdgeInsets.zero,
+                                              position: PopupMenuPosition.under,
+                                              itemBuilder: (context) {
+                                                return [
+                                                  PopupMenuItem(
+                                                    height: AppSize.width(
+                                                        value: 30),
+                                                    padding: EdgeInsets.zero,
+                                                    child: const ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                                10.0),
+                                                        topRight:
+                                                            Radius.circular(
+                                                                10.0),
                                                       ),
-                                                      onTap: () {
-                                                        serviceAddEditReview(
-                                                            buttonText:
-                                                                "Update Review",
-                                                            controller:
-                                                                controller);
-                                                      },
+                                                      child: GlassMorPhishItem(
+                                                          child: AppImage(
+                                                        height: 300,
+                                                        path: AssetsImagesPath
+                                                            .editButtonImage,
+                                                        fit: BoxFit.fill,
+                                                      )),
                                                     ),
-                                                    PopupMenuItem(
-                                                      height: AppSize.width(
-                                                          value: 30),
-                                                      padding: EdgeInsets.zero,
-                                                      child: const ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius.only(
-                                                          bottomLeft:
-                                                              Radius.circular(
-                                                                  10.0),
-                                                          bottomRight:
-                                                              Radius.circular(
-                                                                  10.0),
-                                                        ),
-                                                        child:
-                                                            GlassMorPhishItem(
-                                                                child: AppImage(
-                                                          fit: BoxFit.fill,
-                                                          path: AssetsImagesPath
-                                                              .detailsButtonImage,
-                                                        )),
+                                                    onTap: () {
+                                                      serviceAddEditReview(
+                                                          buttonText:
+                                                              "Update Review",
+                                                          controller:
+                                                              controller);
+                                                    },
+                                                  ),
+                                                  PopupMenuItem(
+                                                    height: AppSize.width(
+                                                        value: 30),
+                                                    padding: EdgeInsets.zero,
+                                                    child: const ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        bottomLeft:
+                                                            Radius.circular(
+                                                                10.0),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10.0),
                                                       ),
-                                                      onTap: () {
-                                                        servicesReviewDeleteDialogWarning();
-                                                      },
+                                                      child: GlassMorPhishItem(
+                                                          child: AppImage(
+                                                        fit: BoxFit.fill,
+                                                        path: AssetsImagesPath
+                                                            .detailsButtonImage,
+                                                      )),
                                                     ),
-                                                  ];
-                                                },
-                                              ),
-                                          ],
-                                        ),
-                                        const Gap(height: 8),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            RatingBar.builder(
-                                              initialRating:
-                                                  item.rating.toDouble() ?? 0.0,
-                                              ignoreGestures: true,
-                                              minRating: 1,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              itemCount: 5,
-                                              itemPadding: EdgeInsets.zero,
-                                              itemSize:
-                                                  AppSize.width(value: 20.0),
-                                              itemBuilder: (context, _) =>
-                                                  const Icon(
-                                                Icons.star,
-                                                color: Colors.amber,
-                                              ),
-                                              onRatingUpdate: (rating) {
-                                                print(rating);
+                                                    onTap: () {
+                                                      servicesReviewDeleteDialogWarning();
+                                                    },
+                                                  ),
+                                                ];
                                               },
+                                              child: AppImage(
+                                                width: AppSize.width(value: 30),
+                                                height:
+                                                    AppSize.width(value: 30),
+                                                path:
+                                                    AssetsIconsPath.popUpButton,
+                                              ),
                                             ),
-                                            const AppText(
-                                              data: "2 mins ago",
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w500,
-                                              color: AppColors.black200,
-                                            )
-                                          ],
-                                        ),
-                                        const Gap(height: 20),
-                                        AppText(
-                                          textAlign: TextAlign.justify,
-                                          data: item.comment,
-                                        )
-                                        // data:
-                                        //     """Consequat velit qui adipisicing sunt do rependerit ad laborum tempor ullamco exercitation. Ullamco tempor adipisicing et voluptate aaiugdh aiughdu"""),
-                                      ],
-                                    ),
+                                        ],
+                                      ),
+                                      const Gap(height: 8),
+
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          RatingBar.builder(
+                                            initialRating:
+                                                item?.rating.toDouble() ?? 0.0,
+                                            ignoreGestures: true,
+                                            minRating: 1,
+                                            direction: Axis.horizontal,
+                                            allowHalfRating: true,
+                                            itemCount: 5,
+                                            itemPadding: EdgeInsets.zero,
+                                            itemSize:
+                                                AppSize.width(value: 20.0),
+                                            itemBuilder: (context, _) =>
+                                                const Icon(
+                                              Icons.star,
+                                              color: Colors.amber,
+                                            ),
+                                            onRatingUpdate: (rating) {
+                                              print(rating);
+                                            },
+                                          ),
+                                          const AppText(
+                                            data: "2 mins ago",
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w500,
+                                            color: AppColors.black200,
+                                          )
+                                        ],
+                                      ),
+                                      const Gap(height: 20),
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: AppText(
+                                              textAlign: TextAlign.justify,
+                                              data: item?.comment ?? "",
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                      // data:
+                                      //     """Consequat velit qui adipisicing sunt do rependerit ad laborum tempor ullamco exercitation. Ullamco tempor adipisicing et voluptate aaiugdh aiughdu"""),
+                                    ],
                                   ),
-                                );
-                              },
+                                ),
+                              );
+                            },
+                          ),
+                          // SliverToBoxAdapter(
+                          //   child: Observer(
+                          //     builder: (context) {
+                          //       // print(controller.serviceDetails?.value?.price);
+                          //       if (controller.isLoading.value) {
+                          //         return const CircularProgressIndicator(
+                          //             color: Colors.black);
+                          //       }
+                          //       return ListView.builder(
+                          //         itemCount:
+
+                          //         // itemCount: 0,
+                          //         itemBuilder: (context, index) {
+
+                          //           return
+                          //         },
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
+
+                          SliverToBoxAdapter(
+                            child: Gap(
+                              height: AppSize.height(value: 70),
                             ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
+            ),
           );
         });
   }

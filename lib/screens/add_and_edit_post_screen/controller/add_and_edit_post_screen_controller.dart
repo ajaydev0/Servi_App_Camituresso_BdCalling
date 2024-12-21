@@ -1,7 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
+import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/services/repository/post_repository.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
@@ -19,6 +21,7 @@ class AddAndEditPostScreenController extends GetxController {
   RxString userLocalImage = RxString("");
   RxBool isImageAddCheck = RxBool(false);
   RxBool isJobCategoryCheck = RxBool(false);
+
   RxString selectedServicesCategory = "Select Category".obs;
   RxList<String> servicesCategoryList = <String>[
     "Plumber",
@@ -30,12 +33,21 @@ class AddAndEditPostScreenController extends GetxController {
   convertFile(imagePath) async {
     // await ImageRepository().imageUpdate(imagePath);
   }
-
+  ServiceDetailsModel serviceDetails = ServiceDetailsModel();
   onDataSetFunction() {
     try {
       final argData = Get.arguments;
       if (argData.runtimeType != Null) {
         screenTitle.value = "Edit Post";
+        serviceDetails = Get.arguments;
+        /////////// Value Asign....
+        titleController.text = serviceDetails.title ?? "";
+        priceController.text = serviceDetails.price.toString() ?? "";
+        pricungBreakdownController.text = serviceDetails.priceBreakdown ?? "";
+        descriptionController.text = serviceDetails.description ?? "";
+        locationController.text = serviceDetails.location ?? "";
+        selectedServicesCategory.value = serviceDetails.category ?? "";
+        // userLocalImage.value = serviceDetails.image ?? "";
       }
     } catch (e) {
       log("error form Add post screen on data set function : $e");
@@ -54,8 +66,11 @@ class AddAndEditPostScreenController extends GetxController {
         "category": selectedServicesCategory.value,
       };
       // Api Call
-      var data = await ImageRepository()
-          .imageUploadWithData(body: body, imagePath: userLocalImage.value);
+      var data = await ImageRepository().imageUploadWithData(
+        body: body,
+        imagePath: userLocalImage.value,
+        url: AppApiUrl.createPostUrl,
+      );
       if (data != null) {
         Get.back();
         AppSnackBar.success("Create Sucessful");
@@ -67,13 +82,37 @@ class AddAndEditPostScreenController extends GetxController {
     }
   }
 
-  editPostLogic() {
-    AppSnackBar.success("edit Post Logic");
+  editPostLogic() async {
+    try {
+      isLoadingButton.value = true;
+      Map<String, String> body = {
+        "title": titleController.text,
+        "price": priceController.text,
+        "price_breakdown": pricungBreakdownController.text,
+        "description": descriptionController.text,
+        "location": locationController.text,
+        "category": selectedServicesCategory.value,
+      };
+      // Api Call
+      var data = await ImageRepository().profilePatchImageUpdate(
+        body: body,
+        imagePath: userLocalImage.value,
+        url: "${AppApiUrl.updatePostUrl}${serviceDetails.sId}",
+      );
+      if (data != null) {
+        Get.back();
+        AppSnackBar.success("Update Sucessful");
+      }
+    } catch (e) {
+      print("$e");
+    } finally {
+      isLoadingButton.value = false;
+    }
   }
 
   clickAddAndEditButton() {
     try {
-      if (userLocalImage.value.isEmpty) {
+      if (userLocalImage.value.isEmpty && screenTitle.value == "Add Post") {
         isImageAddCheck.value = true;
       } else {
         isImageAddCheck.value = false;
@@ -102,6 +141,7 @@ class AddAndEditPostScreenController extends GetxController {
   void onInit() {
     super.onInit();
     onDataSetFunction();
+    print("${Get.arguments} ➡️➡️➡️➡️➡️➡️➡️➡️");
   }
 
   @override

@@ -11,6 +11,7 @@ import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart
 
 class ImageRepository {
   Future<dynamic> imageUploadWithData({
+    required String url,
     String? imagePath,
     required Map<String, String> body,
   }) async {
@@ -42,7 +43,7 @@ class ImageRepository {
 
       // Send the API request
       var data = await ApiPostServices().apiPostServices(
-        url: AppApiUrl.createPostUrl,
+        url: url,
         body: formData,
         token: AppAuthStorage().getToken(),
       );
@@ -57,50 +58,99 @@ class ImageRepository {
     return null;
   }
 
-  Future<dynamic> imageUpdate({
+  Future<dynamic> profilePatchImageUpdate({
+    required String url,
     String? imagePath,
-    String? name,
-    String? number,
-    String? dateOfBirth,
-    String? address,
+    required Map<String, String> body,
   }) async {
     try {
-      FormData formData = FormData();
+      // Initialize FormData with the body fields
+      FormData formData = FormData.fromMap(body);
 
+      // Check if an image path is provided
       if (imagePath != null) {
         final file = File(imagePath);
         if (await file.exists()) {
           String fileName = file.path.split('/').last;
-          var mimeType = lookupMimeType(file.path);
+          String? mimeType = lookupMimeType(file.path);
 
-          formData = FormData.fromMap({
-            'image': await MultipartFile.fromFile(file.path,
-                filename: fileName, contentType: MediaType.parse(mimeType!)),
-          });
+          // Add the file to FormData
+          formData.files.add(
+            MapEntry(
+              'image', // Key as per the API documentation
+              await MultipartFile.fromFile(
+                file.path,
+                filename: fileName,
+                contentType:
+                    mimeType != null ? MediaType.parse(mimeType) : null,
+              ),
+            ),
+          );
         }
       }
-      if (name != null) {
-        formData.fields.add(MapEntry("name", name));
-      }
-      if (number != null) {
-        formData.fields.add(MapEntry("contact", number));
-      }
-      if (dateOfBirth != null) {
-        formData.fields.add(MapEntry("dateOfBirth", dateOfBirth));
-      }
-      if (address != null) {
-        formData.fields.add(MapEntry("location", address));
-      }
 
-      var data = ApiPatchServices()
-          .apiPatchServices(url: AppApiUrl.updateProfileUrl, body: formData);
+      // Send the API request
+      var data = await ApiPatchServices().apiPatchServices(
+        url: url,
+        body: formData,
+        token: AppAuthStorage().getToken(),
+      );
+
       if (data != null) {
-        // print(data);
         return data;
       }
     } catch (e) {
       log("$e");
     }
+
     return null;
   }
+
+  // Future<dynamic> profilePatchImageUpdate({
+  //   ///////////
+  //   String? imagePath,
+  //   String? name,
+  //   String? number,
+  //   String? dateOfBirth,
+  //   String? address,
+  // }) async {
+  //   try {
+  //     FormData formData = FormData();
+
+  //     if (imagePath != null) {
+  //       final file = File(imagePath);
+  //       if (await file.exists()) {
+  //         String fileName = file.path.split('/').last;
+  //         var mimeType = lookupMimeType(file.path);
+
+  //         formData = FormData.fromMap({
+  //           'image': await MultipartFile.fromFile(file.path,
+  //               filename: fileName, contentType: MediaType.parse(mimeType!)),
+  //         });
+  //       }
+  //     }
+  //     if (name != null) {
+  //       formData.fields.add(MapEntry("name", name));
+  //     }
+  //     if (number != null) {
+  //       formData.fields.add(MapEntry("contact", number));
+  //     }
+  //     if (dateOfBirth != null) {
+  //       formData.fields.add(MapEntry("dateOfBirth", dateOfBirth));
+  //     }
+  //     if (address != null) {
+  //       formData.fields.add(MapEntry("location", address));
+  //     }
+
+  //     var data = ApiPatchServices()
+  //         .apiPatchServices(url: AppApiUrl.updateProfileUrl, body: formData);
+  //     if (data != null) {
+  //       // print(data);
+  //       return data;
+  //     }
+  //   } catch (e) {
+  //     log("$e");
+  //   }
+  //   return null;
+  // }
 }

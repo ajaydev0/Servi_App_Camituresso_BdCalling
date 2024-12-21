@@ -23,7 +23,7 @@ class ServicesHorizontalCardTwo extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item);
+        Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
       },
       child: Container(
         // height: AppSize.height(value: 200),
@@ -106,7 +106,7 @@ class ServicesHorizontalCardTwo extends StatelessWidget {
                   const Gap(width: 10),
                   const Icon(Icons.star, color: AppColors.primary),
                   const Gap(width: 5),
-                  AppText(data: "${item.rating}.0")
+                  AppText(data: "${item.rating}")
                 ],
               ),
             )

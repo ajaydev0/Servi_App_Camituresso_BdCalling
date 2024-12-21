@@ -6,12 +6,14 @@ class ProfileScreenController extends GetxController {
   RxBool isNetworkImage = true.obs;
   RxBool isLoading = true.obs;
 
-  Rx<ProfileModel> profile = ProfileModel().obs;
+  ProfileModel profileData = ProfileModel();
   getProfileData() async {
     try {
       isLoading.value = true;
-      var profileData = await Repository().getProfileData();
-      profile.value = profileData;
+      var data = await Repository().getProfileData();
+      if (data != null) {
+        profileData = data;
+      }
     } catch (e) {
       print("Error fetching profile: $e");
     } finally {

@@ -17,7 +17,7 @@ class PrivacyAndPolicyScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: AppText(
+              title: const AppText(
                 data: "Privacy And Policy",
                 fontWeight: FontWeight.w600,
               ),

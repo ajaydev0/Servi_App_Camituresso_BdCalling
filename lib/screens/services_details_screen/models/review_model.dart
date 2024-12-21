@@ -12,17 +12,6 @@ class GetReviewListModel {
     comment = json['comment'];
     rating = json['rating'];
   }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
-    }
-    data['comment'] = this.comment;
-    data['rating'] = this.rating;
-    return data;
-  }
 }
 
 class User {
@@ -36,13 +25,5 @@ class User {
     sId = json['_id'];
     name = json['name'];
     profile = json['profile'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['_id'] = this.sId;
-    data['name'] = this.name;
-    data['profile'] = this.profile;
-    return data;
   }
 }

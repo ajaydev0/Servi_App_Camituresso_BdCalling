@@ -1,7 +1,10 @@
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
+import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
+import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
 import 'package:servi_app_camituresso/screens/saved_screen/model/get_popular_post_model.dart';
+import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
 
@@ -165,7 +168,7 @@ class Repository {
         AppApiUrl.profileUrl,
       );
       if (data != null) {
-        return ProfileModel.fromJson(data);
+        return ProfileModel.fromJson(data["data"]);
       } else {
         throw Exception("Failed to load profile data");
       }
@@ -195,34 +198,61 @@ class Repository {
 
   // Get Recommendation Post
   Future<dynamic> getRecommendationrPostData() async {
+    List<RecommendedPostModel> data = <RecommendedPostModel>[];
     try {
-      var data = await ApiGetServices().apiGetServices(
+      var response = await ApiGetServices().apiGetServices(
         AppApiUrl.getRecommendationPostUrl,
       );
 
-      if (data != null) {
-        return data["data"];
+      if (response != null) {
+        // return data["data"];
+        if (response["data"].runtimeType != Null) {
+          for (var element in response["data"]) {
+            data.add(RecommendedPostModel.fromJson(element));
+          }
+        }
+        return data;
       }
     } catch (e) {
-      return null;
+      print("$e");
     }
-    return null;
+    return data;
+
+    // try {
+    //   var data = await ApiGetServices().apiGetServices(
+    //     AppApiUrl.getRecommendationPostUrl,
+    //   );
+
+    //   if (data != null) {
+    //     return data["data"];
+    //   }
+    // } catch (e) {
+    //   return null;
+    // }
+    // return null;
   }
 
   // Get Popular Post
   Future<dynamic> getPopularPostData() async {
+    List<PopularPostModel> data = <PopularPostModel>[];
     try {
-      var data = await ApiGetServices().apiGetServices(
+      var response = await ApiGetServices().apiGetServices(
         AppApiUrl.getPopularPostUrl,
       );
 
-      if (data != null) {
-        return data["data"];
+      if (response != null) {
+        // return data["data"];
+        if (response["data"].runtimeType != Null) {
+          for (var element in response["data"]) {
+            data.add(PopularPostModel.fromJson(element));
+          }
+        }
+        return data;
       }
     } catch (e) {
-      return null;
+      print("$e");
     }
-    return null;
+    return data;
   }
 
   // Get My Post
@@ -242,17 +272,18 @@ class Repository {
   }
 
   // Get Service Details Data
-  Future<dynamic> getServiceDetailsData(String id) async {
+
+  Future<ServiceDetailsModel?> getServiceDetailsData(String id) async {
     try {
+      // Api Call
       var data = await ApiGetServices().apiGetServices(
         "${AppApiUrl.getServiceDetailsUrl}$id",
       );
-
-      if (data != null) {
-        return data["data"];
+      if (data["data"].runtimeType != Null) {
+        return ServiceDetailsModel.fromJson(data["data"]);
       }
     } catch (e) {
-      return null;
+      print(e);
     }
     return null;
   }

@@ -9,7 +9,7 @@ class PopularViewAllController extends GetxController {
   RxBool isError = RxBool(false);
   RxList<DevServicesModel> listOfServices = RxList([]);
   DevCategoryModel? model;
-  List<dynamic> postList = [].obs;
+  List<PopularPostModel> postList = <PopularPostModel>[].obs;
 
   changeSavedMode(int index) {
     listOfServices[index].isSaved = !listOfServices[index].isSaved;
@@ -47,10 +47,9 @@ class PopularViewAllController extends GetxController {
       isLoading.value = true;
       var data = await Repository().getPopularPostData();
       if (data != null) {
-        for (var element in data) {
-          postList.add(PopularPostModel.fromJson(element));
-          update();
-        }
+        postList = data;
+        print(data);
+        update();
       }
     } catch (e) {
       print(e);
