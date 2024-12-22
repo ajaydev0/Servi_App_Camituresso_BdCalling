@@ -51,10 +51,10 @@ class EditProfileScreenController extends GetxController {
     try {
       isLoading.value = true;
       Map<String, String> body = {
-        "title": nameTextEditingController.text,
-        "price": contactTextEditingController.text,
-        "price_breakdown": dateOfBirthTextEditingController.text,
-        "description": addressTextEditingController.text,
+        "name": nameTextEditingController.text,
+        "contact": contactTextEditingController.text,
+        "dateOfBirth": dateOfBirthTextEditingController.text,
+        "location": addressTextEditingController.text,
       };
       var data = await ImageRepository().profilePatchImageUpdate(
           url: AppApiUrl.updateProfileUrl,
@@ -75,10 +75,10 @@ class EditProfileScreenController extends GetxController {
     try {
       isLoading.value = true;
       Map<String, String> body = {
-        "title": nameTextEditingController.text,
-        "price": contactTextEditingController.text,
-        "price_breakdown": dateOfBirthTextEditingController.text,
-        "description": addressTextEditingController.text,
+        "name": nameTextEditingController.text,
+        "contact": contactTextEditingController.text,
+        "dateOfBirth": dateOfBirthTextEditingController.text,
+        "location": addressTextEditingController.text,
       };
       var data = await ImageRepository().profilePatchImageUpdate(
           url: AppApiUrl.updateProfileUrl,

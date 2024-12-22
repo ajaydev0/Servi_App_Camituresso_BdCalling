@@ -27,6 +27,7 @@ import 'package:servi_app_camituresso/screens/profile_screen/profile_screen.dart
 import 'package:servi_app_camituresso/screens/recommendation_view_all/recommendation_view_all.dart';
 import 'package:servi_app_camituresso/screens/saved_screen/saved_screen.dart';
 import 'package:servi_app_camituresso/screens/search_screen/search_screen.dart';
+import 'package:servi_app_camituresso/screens/service_by_service_screen/service_by_service_screen.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/services_details_screen.dart';
 import 'package:servi_app_camituresso/screens/services_screen/services_screen.dart';
 import 'package:servi_app_camituresso/screens/splash_screen/splash_screen.dart';
@@ -202,6 +203,11 @@ List<GetPage> appRoutesFile = <GetPage>[
   GetPage(
     name: AppRoutes.savedScreen,
     page: () => const SavedScreen(),
+    middlewares: [InternetCheckMiddleWare()],
+  ),
+  GetPage(
+    name: AppRoutes.serviceByServiceScreen,
+    page: () => const ServiceByServiceScreen(),
     middlewares: [InternetCheckMiddleWare()],
   ),
 ];

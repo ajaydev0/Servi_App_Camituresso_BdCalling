@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/models/dev_category/dev_category_model.dart';
 import 'package:servi_app_camituresso/models/dev_services_model/dev_services_model.dart';
-import 'package:servi_app_camituresso/screens/saved_screen/model/get_popular_post_model.dart';
+import 'package:servi_app_camituresso/screens/saved_screen/model/get_saved_post_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class SavedScreenController extends GetxController {

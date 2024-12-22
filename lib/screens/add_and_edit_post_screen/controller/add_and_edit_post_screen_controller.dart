@@ -2,7 +2,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
-import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/services/repository/post_repository.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
@@ -24,11 +23,29 @@ class AddAndEditPostScreenController extends GetxController {
 
   RxString selectedServicesCategory = "Select Category".obs;
   RxList<String> servicesCategoryList = <String>[
-    "Plumber",
-    "Electrician",
-    "Home Service",
-    "Pet Service",
+    // "Plumber",
+    // "Electrician",
+    // "Home Service",
+    // "Pet Service",
   ].obs;
+  getCategoryList() async {
+    try {
+      isLoading.value = true;
+      var data = await Repository().getCategoryListData();
+      if (data.runtimeType != Null) {
+        for (var element in data) {
+          servicesCategoryList.add(element.name ?? "");
+        }
+        // servicesCategoryList = data;
+        update();
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   RxBool isOpenServicesCategoryList = false.obs;
   convertFile(imagePath) async {
     // await ImageRepository().imageUpdate(imagePath);
@@ -140,6 +157,7 @@ class AddAndEditPostScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    getCategoryList();
     onDataSetFunction();
     print("${Get.arguments} ➡️➡️➡️➡️➡️➡️➡️➡️");
   }

@@ -32,51 +32,55 @@ class ServicesScreen extends StatelessWidget {
                   child: CircularProgressIndicator(
                   color: AppColors.primary,
                 ))
-              : Padding(
-                  padding: EdgeInsets.all(AppSize.width(value: 10)),
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        crossAxisSpacing: AppSize.width(value: 10.0),
-                        mainAxisSpacing: AppSize.width(value: 10.0)),
-                    itemCount: controller.categoryList.length,
-                    itemBuilder: (context, index) {
-                      var item = controller.categoryList[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(AppRoutes.listOfViewServicesScreen,
-                              arguments: item);
+              : controller.categoryList.isEmpty
+                  ? const Center(
+                      child: AppText(data: "Empty..."),
+                    )
+                  : Padding(
+                      padding: EdgeInsets.all(AppSize.width(value: 10)),
+                      child: GridView.builder(
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            crossAxisSpacing: AppSize.width(value: 10.0),
+                            mainAxisSpacing: AppSize.width(value: 10.0)),
+                        itemCount: controller.categoryList.length,
+                        itemBuilder: (context, index) {
+                          var item = controller.categoryList[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Get.toNamed(AppRoutes.serviceByServiceScreen,
+                                  arguments: item.name);
+                            },
+                            child: Container(
+                              alignment: Alignment.center,
+                              width: AppSize.width(value: 100),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: AppSize.width(value: 8)),
+                              decoration: BoxDecoration(
+                                  color: AppColors.boxFill,
+                                  borderRadius: BorderRadius.circular(
+                                      AppSize.width(value: 12))),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  AppImage(
+                                    url: "${AppApiUrl.domaine}${item.image}",
+                                    height: AppSize.height(value: 40),
+                                    width: AppSize.height(value: 40),
+                                  ),
+                                  const Gap(height: 10),
+                                  AppText(
+                                    data: item.name ?? "",
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
                         },
-                        child: Container(
-                          alignment: Alignment.center,
-                          width: AppSize.width(value: 100),
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppSize.width(value: 8)),
-                          decoration: BoxDecoration(
-                              color: AppColors.boxFill,
-                              borderRadius: BorderRadius.circular(
-                                  AppSize.width(value: 12))),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              AppImage(
-                                url: "${AppApiUrl.domaine}${item.image}",
-                                height: AppSize.height(value: 40),
-                                width: AppSize.height(value: 40),
-                              ),
-                              const Gap(height: 10),
-                              AppText(
-                                data: item.name ?? "",
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
+                    ),
         );
       },
     );

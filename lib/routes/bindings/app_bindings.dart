@@ -15,6 +15,7 @@ import 'package:servi_app_camituresso/screens/privacy_and_policy_screen/controll
 import 'package:servi_app_camituresso/screens/profile_screen/controllers/profile_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/controllers/recommendation_view_all_controller.dart';
 import 'package:servi_app_camituresso/screens/search_screen/controllers/search_screen_controller.dart';
+import 'package:servi_app_camituresso/screens/service_by_service_screen/controllers/service_by_service_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/controllers/services_details_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/services_screen/controllers/services_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/terms_and_condition_screen/controllers/terms_and_condition_screen_controller.dart';
@@ -45,5 +46,6 @@ class AppBindings extends BindingsInterface {
     Get.lazyPut(() => EReceiptScreenController());
     Get.lazyPut(() => PopularViewAllController());
     Get.lazyPut(() => RecommendationViewAllController());
+    Get.lazyPut(() => ServiceByServiceScreenController());
   }
 }

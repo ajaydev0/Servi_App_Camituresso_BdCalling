@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
-import 'package:servi_app_camituresso/models/dev_services_model/dev_services_model.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
@@ -11,16 +11,17 @@ import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
 class HomeScreenCard extends StatelessWidget {
   const HomeScreenCard({super.key, required this.item});
-  final DevServicesModel item;
+  final dynamic item;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (item.category.toLowerCase() == "id10".toLowerCase()) {
-          Get.toNamed(AppRoutes.eighteenPlusWarningScreen, arguments: item);
-        } else {
-          Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item);
-        }
+        Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
+        // if (item.category.toLowerCase() == "id10".toLowerCase()) {
+        //   Get.toNamed(AppRoutes.eighteenPlusWarningScreen, arguments: item);
+        // } else {
+        //   Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item);
+        // }
       },
       child: Container(
         width: AppSize.height(value: 250),
@@ -39,7 +40,7 @@ class HomeScreenCard extends StatelessWidget {
               child: Stack(
                 children: [
                   AppImage(
-                    path: item.image,
+                    url: "${AppApiUrl.domaine}${item.image}",
                     height: AppSize.height(value: 150),
                     width: Get.width,
                   ),
@@ -97,7 +98,7 @@ class HomeScreenCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         AppText(
-                          data: item.title,
+                          data: item.title ?? "",
                           fontWeight: FontWeight.w600,
                           fontSize: 16,
                           maxLines: 1,
@@ -114,7 +115,7 @@ class HomeScreenCard extends StatelessWidget {
                             const Gap(width: 5),
                             Expanded(
                                 child: AppText(
-                              data: item.user.address,
+                              data: item.location ?? "",
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                             )),
@@ -126,7 +127,7 @@ class HomeScreenCard extends StatelessWidget {
                   const Gap(width: 10),
                   const Icon(Icons.star, color: AppColors.primary),
                   const Gap(width: 5),
-                  AppText(data: item.review.length.toString())
+                  AppText(data: item.rating.toString())
                 ],
               ),
             )

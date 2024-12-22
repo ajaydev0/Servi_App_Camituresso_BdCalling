@@ -97,7 +97,10 @@ class ServicesHorizontalCardTwo extends StatelessWidget {
                               path: AssetsIconsPath.location,
                             ),
                             const Gap(width: 5),
-                            Expanded(child: AppText(data: item.location ?? "")),
+                            Expanded(
+                                child: AppText(
+                              data: item.location ?? "",
+                            )),
                           ],
                         ),
                       ],

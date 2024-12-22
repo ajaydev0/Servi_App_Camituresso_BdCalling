@@ -3,8 +3,10 @@ import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dar
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
-import 'package:servi_app_camituresso/screens/saved_screen/model/get_popular_post_model.dart';
+import 'package:servi_app_camituresso/screens/saved_screen/model/get_saved_post_model.dart';
+import 'package:servi_app_camituresso/screens/service_by_service_screen/model/service_by_service_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
+import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
 
@@ -130,19 +132,26 @@ class Repository {
   }
 
   // Get Category List
-  Future<dynamic> getCategoryListData() async {
+  Future<List<CategoryModel>> getCategoryListData() async {
+    List<CategoryModel> data = <CategoryModel>[];
     try {
-      var data = await ApiGetServices().apiGetServices(
+      var response = await ApiGetServices().apiGetServices(
         AppApiUrl.getCategoryListUrl,
       );
 
-      if (data != null) {
-        return data["data"];
+      if (response != null) {
+        // return data["data"];
+        if (response["data"].runtimeType != Null) {
+          for (var element in response["data"]) {
+            data.add(CategoryModel.fromJson(element));
+          }
+        }
+        return data;
       }
     } catch (e) {
-      return null;
+      print("$e");
     }
-    return null;
+    return data;
   }
 
   // Create Post
@@ -197,7 +206,7 @@ class Repository {
   // }
 
   // Get Recommendation Post
-  Future<dynamic> getRecommendationrPostData() async {
+  Future<List<RecommendedPostModel>> getRecommendationrPostData() async {
     List<RecommendedPostModel> data = <RecommendedPostModel>[];
     try {
       var response = await ApiGetServices().apiGetServices(
@@ -233,7 +242,7 @@ class Repository {
   }
 
   // Get Popular Post
-  Future<dynamic> getPopularPostData() async {
+  Future<List<PopularPostModel>> getPopularPostData() async {
     List<PopularPostModel> data = <PopularPostModel>[];
     try {
       var response = await ApiGetServices().apiGetServices(
@@ -245,6 +254,29 @@ class Repository {
         if (response["data"].runtimeType != Null) {
           for (var element in response["data"]) {
             data.add(PopularPostModel.fromJson(element));
+          }
+        }
+        return data;
+      }
+    } catch (e) {
+      print("$e");
+    }
+    return data;
+  }
+
+  // Get Popular Post
+  Future<dynamic> getServiceByServiceData({String? categoryName}) async {
+    List<ServiceByServiceModel> data = <ServiceByServiceModel>[];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+        "${AppApiUrl.getServiceByServiceUrl}$categoryName",
+      );
+
+      if (response != null) {
+        // return data["data"];
+        if (response["data"].runtimeType != Null) {
+          for (var element in response["data"]) {
+            data.add(ServiceByServiceModel.fromJson(element));
           }
         }
         return data;

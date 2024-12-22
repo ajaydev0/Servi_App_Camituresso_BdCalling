@@ -20,11 +20,7 @@ class HomeScreenController extends GetxController {
   Isolate? bannerIsolate;
   RxInt selectedListOfBannerIndex = RxInt(0);
   late PageController listOfBannerPageViewController;
-  // RxList<String> listOfBanner = RxList([
-  //   "assets/dev_images/banner1.png",
-  //   "assets/dev_images/banner2.png",
-  //   "assets/dev_images/banner3.png",
-  // ]);
+
   bool isForwardDirection = true;
   onChangeListOfBanner(int index) {
     try {
@@ -91,31 +87,8 @@ class HomeScreenController extends GetxController {
       },
     );
   }
-///////////////////////// home screen data
 
-  RxList<DevServicesModel> popularListOfData = <DevServicesModel>[].obs;
-  RxList<DevServicesModel> reCommendationListOfData = <DevServicesModel>[].obs;
-
-  onInitialDataLoad() {
-    try {
-      for (var element in devListOfServicedData) {
-        if (element.category == "id1") {
-          popularListOfData.add(element);
-        }
-      }
-      for (var element in devListOfServicedData) {
-        if (element.category == "id10") {
-          reCommendationListOfData.add(element);
-        }
-      }
-
-      popularListOfData.refresh();
-      reCommendationListOfData.refresh();
-    } catch (e) {
-      print(e);
-    }
-  }
-
+  /// Profile Data Get
   ProfileModel profileData = ProfileModel();
   getProfileData() async {
     try {
@@ -132,9 +105,9 @@ class HomeScreenController extends GetxController {
     }
   }
 
-  ////////////////////// Get Bannar List
+  /// Bannar Data Get
   RxBool isLoadingBannar = false.obs;
-  // List<dynamic> bannarList = [].obs;
+
   List<BannarModel> bannarList = <BannarModel>[];
   getBannarList() async {
     try {
@@ -150,18 +123,16 @@ class HomeScreenController extends GetxController {
     }
   }
 
-  ////////////////////// Service Category Get
+  /// Service Category Data Get
   RxBool isLoadingCategory = false.obs;
   List<dynamic> categoryList = [].obs;
   getCategoryList() async {
     try {
       isLoadingCategory.value = true;
       var data = await Repository().getCategoryListData();
-      if (data != null) {
-        for (var element in data) {
-          categoryList.add(CategoryModel.fromJson(element));
-          update();
-        }
+      if (data.runtimeType != Null) {
+        categoryList = data;
+        update();
       }
     } catch (e) {
       print(e);
@@ -172,16 +143,14 @@ class HomeScreenController extends GetxController {
 
   ///////////////////////// Popular Post List
   RxBool isLoadingPopular = false.obs;
-  List<dynamic> popularPostList = [].obs;
+  List<PopularPostModel> popularPostList = <PopularPostModel>[].obs;
   getPopularPostList() async {
     try {
       isLoadingPopular.value = true;
       var data = await Repository().getPopularPostData();
-      if (data != null) {
-        for (var element in data) {
-          popularPostList.add(PopularPostModel.fromJson(element));
-          update();
-        }
+      if (data.runtimeType != Null) {
+        popularPostList = data;
+        update();
       }
     } catch (e) {
       print(e);
@@ -192,16 +161,15 @@ class HomeScreenController extends GetxController {
 
   ///////////////////////// Recoommended Post List
   RxBool isLoadingRecommended = false.obs;
-  List<dynamic> recommendedPostList = [].obs;
+  List<RecommendedPostModel> recommendedPostList = <RecommendedPostModel>[].obs;
   getRecommendedPostList() async {
     try {
       isLoadingRecommended.value = true;
       var data = await Repository().getRecommendationrPostData();
-      if (data != null) {
-        for (var element in data) {
-          recommendedPostList.add(RecommendedPostModel.fromJson(element));
-          update();
-        }
+      if (data.runtimeType != Null) {
+        recommendedPostList = data;
+
+        update();
       }
     } catch (e) {
       print(e);
@@ -217,7 +185,7 @@ class HomeScreenController extends GetxController {
       initialPage: selectedListOfBannerIndex.value,
     );
     onListOfBannerSetUp();
-    onInitialDataLoad();
+    // onInitialDataLoad();
     // Get Profile Data
     getProfileData();
     // Bannar

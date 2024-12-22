@@ -29,4 +29,5 @@ class AppRoutes {
   static const popularViewAllScreen = "/popular-View-all-screen";
   static const recommendationViewAllScreen = "/recommendation-view-all-screen";
   static const savedScreen = "/saved-screen";
+  static const serviceByServiceScreen = "/service-by-service-screen";
 }

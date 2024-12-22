@@ -4,7 +4,7 @@ class BannarModel {
   String? image;
   String? createdAt;
   String? updatedAt;
-  int? iV;
+  dynamic iV;
 
   BannarModel(
       {this.sId,

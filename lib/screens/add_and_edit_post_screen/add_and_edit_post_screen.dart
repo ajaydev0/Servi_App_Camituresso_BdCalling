@@ -4,8 +4,6 @@ import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/screens/add_and_edit_post_screen/controller/add_and_edit_post_screen_controller.dart';
-import 'package:servi_app_camituresso/services/api/services/api.dart';
-import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
@@ -219,71 +217,80 @@ class AddAndEditPostScreen extends StatelessWidget {
                       const Gap(height: 10),
                       const AppText(data: "Job Category"),
                       const Gap(height: 10),
-                      Obx(
-                        () => Container(
-                          decoration: BoxDecoration(
-                              border: Border.all(
-                                color: controller.isJobCategoryCheck.value
-                                    ? AppColors.warning
-                                    : AppColors.primary,
-                              ),
-                              borderRadius: BorderRadius.circular(
-                                  AppSize.width(value: 10))),
-                          child: ExpansionTile(
-                            key: GlobalKey(),
-                            title: AppText(
-                                data:
-                                    controller.selectedServicesCategory.value),
-                            initiallyExpanded:
-                                controller.isOpenServicesCategoryList.value,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    AppSize.width(value: 10.0))),
-                            expansionAnimationStyle: AnimationStyle(
-                              duration: const Duration(seconds: 1),
-                              reverseDuration: const Duration(seconds: 1),
-                              curve: Curves.ease,
-                            ),
-                            onExpansionChanged: (value) {
-                              controller.isOpenServicesCategoryList.value =
-                                  value;
-                            },
-                            children: List.generate(
-                              controller.servicesCategoryList.length,
-                              (index) {
-                                var item =
-                                    controller.servicesCategoryList[index];
-                                return GestureDetector(
-                                  onTap: () {
-                                    controller.isOpenServicesCategoryList
-                                        .value = false;
-                                    controller.selectedServicesCategory.value =
-                                        item;
-                                    controller.isJobCategoryCheck.value = false;
-                                  },
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: AppColors.yellow200,
-                                      border: Border(
-                                        bottom: BorderSide(
-                                            color: AppColors.bannerBoxFill),
-                                      ),
+                      controller.isLoading.value
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                              color: AppColors.primary,
+                            ))
+                          : Obx(
+                              () => Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: controller.isJobCategoryCheck.value
+                                          ? AppColors.warning
+                                          : AppColors.primary,
                                     ),
-                                    width: Get.width,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: AppSize.width(value: 10),
-                                        horizontal: AppSize.width(value: 10)),
-                                    child: AppText(
-                                      data: item,
-                                      color: AppColors.black900,
-                                    ),
+                                    borderRadius: BorderRadius.circular(
+                                        AppSize.width(value: 10))),
+                                child: ExpansionTile(
+                                  key: GlobalKey(),
+                                  title: AppText(
+                                      data: controller
+                                          .selectedServicesCategory.value),
+                                  initiallyExpanded: controller
+                                      .isOpenServicesCategoryList.value,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          AppSize.width(value: 10.0))),
+                                  expansionAnimationStyle: AnimationStyle(
+                                    duration: const Duration(seconds: 1),
+                                    reverseDuration: const Duration(seconds: 1),
+                                    curve: Curves.ease,
                                   ),
-                                );
-                              },
+                                  onExpansionChanged: (value) {
+                                    controller.isOpenServicesCategoryList
+                                        .value = value;
+                                  },
+                                  children: List.generate(
+                                    controller.servicesCategoryList.length,
+                                    (index) {
+                                      var item = controller
+                                          .servicesCategoryList[index];
+                                      return GestureDetector(
+                                        onTap: () {
+                                          controller.isOpenServicesCategoryList
+                                              .value = false;
+                                          controller.selectedServicesCategory
+                                              .value = item;
+                                          controller.isJobCategoryCheck.value =
+                                              false;
+                                        },
+                                        child: Container(
+                                          decoration: const BoxDecoration(
+                                            color: AppColors.yellow200,
+                                            border: Border(
+                                              bottom: BorderSide(
+                                                  color:
+                                                      AppColors.bannerBoxFill),
+                                            ),
+                                          ),
+                                          width: Get.width,
+                                          padding: EdgeInsets.symmetric(
+                                              vertical:
+                                                  AppSize.width(value: 10),
+                                              horizontal:
+                                                  AppSize.width(value: 10)),
+                                          child: AppText(
+                                            data: item,
+                                            color: AppColors.black900,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
 
                       ///////////// Job Location
                       const Gap(height: 20),

@@ -53,7 +53,7 @@ class SavedScreen extends StatelessWidget {
                               return GestureDetector(
                                 onTap: () {
                                   Get.toNamed(AppRoutes.servicesDetailsScreen,
-                                      arguments: item);
+                                      arguments: item.service?.sId);
                                 },
                                 child: Container(
                                   // height: AppSize.height(value: 200),
@@ -116,7 +116,7 @@ class SavedScreen extends StatelessWidget {
                                                 children: [
                                                   AppText(
                                                     data: item.service
-                                                            ?.location ??
+                                                            ?.category ??
                                                         "",
                                                     fontWeight: FontWeight.w600,
                                                     fontSize: 18,

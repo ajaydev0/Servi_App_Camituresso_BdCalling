@@ -4,7 +4,7 @@ class CategoryModel {
   String? image;
   String? createdAt;
   String? updatedAt;
-  int? iV;
+  dynamic iV;
 
   CategoryModel(
       {this.sId,

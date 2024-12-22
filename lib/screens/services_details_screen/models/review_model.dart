@@ -2,7 +2,7 @@ class GetReviewListModel {
   String? sId;
   User? user;
   String? comment;
-  int? rating;
+  dynamic rating;
 
   GetReviewListModel({this.sId, this.user, this.comment, this.rating});
 

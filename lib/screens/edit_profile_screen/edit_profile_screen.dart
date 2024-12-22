@@ -469,8 +469,7 @@ class EditProfileScreen extends StatelessWidget {
                               return null;
                             },
                           ),
-
-                          const Gap(height: 50),
+                          const Gap(height: 90),
                         ],
                       ),
                     ),

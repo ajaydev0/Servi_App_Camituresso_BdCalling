@@ -21,6 +21,7 @@ class AppApiUrl {
   static const String getPopularPostUrl = "$baseUrl/post/popular";
   static const String getRecommendationPostUrl = "$baseUrl/post/recommended";
   static const String getCategoryListUrl = "$baseUrl/service";
+  static const String getServiceByServiceUrl = "$baseUrl/service/";
   static const String getBannar = "$baseUrl/banner";
   static const String bookmarkListUrl = "$baseUrl/bookmark";
   static const String termsAndConditionsUrl =

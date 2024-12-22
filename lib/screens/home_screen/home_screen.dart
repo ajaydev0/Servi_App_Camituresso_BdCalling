@@ -130,8 +130,8 @@ class HomeScreen extends StatelessWidget {
                     var item = controller.categoryList[index];
                     return GestureDetector(
                       onTap: () {
-                        Get.toNamed(AppRoutes.listOfViewServicesScreen,
-                            arguments: item);
+                        Get.toNamed(AppRoutes.serviceByServiceScreen,
+                            arguments: item.name);
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -169,6 +169,7 @@ class HomeScreen extends StatelessWidget {
                 name: "Popular",
                 onTapCall: () {
                   Get.toNamed(AppRoutes.popularViewAllScreen);
+                  // print(controller.popularPostList.length);
                 },
               ),
 
@@ -178,9 +179,9 @@ class HomeScreen extends StatelessWidget {
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
                 items: List.generate(
-                  controller.popularListOfData.length,
+                  controller.popularPostList.length,
                   (index) {
-                    var item = controller.popularListOfData[index];
+                    var item = controller.popularPostList[index];
                     return HomeScreenCard(
                       item: item,
                     );
@@ -205,9 +206,9 @@ class HomeScreen extends StatelessWidget {
                 padding:
                     EdgeInsets.symmetric(horizontal: AppSize.width(value: 8)),
                 items: List.generate(
-                  controller.reCommendationListOfData.length,
+                  controller.recommendedPostList.length,
                   (index) {
-                    var item = controller.reCommendationListOfData[index];
+                    var item = controller.recommendedPostList[index];
                     return HomeScreenCard(
                       item: item,
                     );
