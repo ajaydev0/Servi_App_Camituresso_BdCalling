@@ -13,6 +13,7 @@ import 'package:servi_app_camituresso/screens/services_details_screen/widgets/se
 import 'package:servi_app_camituresso/screens/services_details_screen/controllers/services_details_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/widgets/services_review_delete_dialog_warning.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/widgets/glass_mor_Phish_item.dart';
+import 'package:servi_app_camituresso/screens/your_post_services_details_screen/controllers/your_post_services_details_screen_controller.dart';
 import 'package:servi_app_camituresso/user_type.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
@@ -20,13 +21,13 @@ import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image_circular.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
-class ServicesDetailsScreen extends StatelessWidget {
-  const ServicesDetailsScreen({super.key});
+class YourPostServicesDetailsScreen extends StatelessWidget {
+  const YourPostServicesDetailsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-        init: ServicesDetailsScreenController(),
+        init: YourPostServicesDetailsScreenController(),
         builder: (controller) {
           return Obx(
             () => RefreshIndicator(
@@ -155,86 +156,86 @@ class ServicesDetailsScreen extends StatelessWidget {
                                             ),
                                           // >>>>>>>>>>>>>>>>>>>>>> edit and removed button  <<<<<<<<<<<<<<<<<<<<<<
                                           // >>>>>>>>>>>>>>>>>>>>>> pop up this button item show <<<<<<<<<<<<<<<<<<<<<<
-                                          // if (selectedUser ==
-                                          //     UserType.servicesProvider)
-                                          //   PopupMenuButton<String>(
-                                          //     enableFeedback: true,
-                                          //     child: AppImage(
-                                          //       width: AppSize.width(value: 30),
-                                          //       height:
-                                          //           AppSize.width(value: 30),
-                                          //       path:
-                                          //           AssetsIconsPath.popUpButton,
-                                          //     ),
-                                          //     color: Colors.transparent,
-                                          //     elevation: 0,
-                                          //     clipBehavior: Clip.hardEdge,
-                                          //     offset: Offset.zero,
-                                          //     // menuPadding: EdgeInsets.zero,
-                                          //     padding: EdgeInsets.zero,
-                                          //     position: PopupMenuPosition.under,
-                                          //     itemBuilder: (context) {
-                                          //       return [
-                                          //         // >>>>>>>>>>>>>>>>>>>>>> edit button  <<<<<<<<<<<<<<<<<<<<<<
-                                          //         // >>>>>>>>>>>>>>>>>>>>>> when click goto edit screen <<<<<<<<<<<<<<<<<<<<<<
-                                          //         PopupMenuItem(
-                                          //           height: AppSize.width(
-                                          //               value: 30),
-                                          //           padding: EdgeInsets.zero,
-                                          //           child: const ClipRRect(
-                                          //             borderRadius:
-                                          //                 BorderRadius.only(
-                                          //               topLeft:
-                                          //                   Radius.circular(
-                                          //                       10.0),
-                                          //               topRight:
-                                          //                   Radius.circular(
-                                          //                       10.0),
-                                          //             ),
-                                          //             child: GlassMorPhishItem(
-                                          //                 child: AppImage(
-                                          //               height: 300,
-                                          //               path: AssetsImagesPath
-                                          //                   .editButtonImage,
-                                          //               fit: BoxFit.fill,
-                                          //             )),
-                                          //           ),
-                                          //           onTap: () {
-                                          //             Get.toNamed(
-                                          //                 AppRoutes
-                                          //                     .addPostAndEditScreen,
-                                          //                 arguments: controller
-                                          //                     .serviceDetails);
-                                          //           },
-                                          //         ),
-                                          //         PopupMenuItem(
-                                          //           height: AppSize.width(
-                                          //               value: 30),
-                                          //           padding: EdgeInsets.zero,
-                                          //           child: const ClipRRect(
-                                          //             borderRadius:
-                                          //                 BorderRadius.only(
-                                          //               bottomLeft:
-                                          //                   Radius.circular(
-                                          //                       10.0),
-                                          //               bottomRight:
-                                          //                   Radius.circular(
-                                          //                       10.0),
-                                          //             ),
-                                          //             child: GlassMorPhishItem(
-                                          //                 child: AppImage(
-                                          //               fit: BoxFit.fill,
-                                          //               path: AssetsImagesPath
-                                          //                   .detailsButtonImage,
-                                          //             )),
-                                          //           ),
-                                          //           onTap: () {
-                                          //             servicesDetailsDeleteDialogWarning();
-                                          //           },
-                                          //         ),
-                                          //       ];
-                                          //     },
-                                          //   ),
+                                          if (selectedUser ==
+                                              UserType.servicesProvider)
+                                            PopupMenuButton<String>(
+                                              enableFeedback: true,
+                                              child: AppImage(
+                                                width: AppSize.width(value: 30),
+                                                height:
+                                                    AppSize.width(value: 30),
+                                                path:
+                                                    AssetsIconsPath.popUpButton,
+                                              ),
+                                              color: Colors.transparent,
+                                              elevation: 0,
+                                              clipBehavior: Clip.hardEdge,
+                                              offset: Offset.zero,
+                                              // menuPadding: EdgeInsets.zero,
+                                              padding: EdgeInsets.zero,
+                                              position: PopupMenuPosition.under,
+                                              itemBuilder: (context) {
+                                                return [
+                                                  // >>>>>>>>>>>>>>>>>>>>>> edit button  <<<<<<<<<<<<<<<<<<<<<<
+                                                  // >>>>>>>>>>>>>>>>>>>>>> when click goto edit screen <<<<<<<<<<<<<<<<<<<<<<
+                                                  PopupMenuItem(
+                                                    height: AppSize.width(
+                                                        value: 30),
+                                                    padding: EdgeInsets.zero,
+                                                    child: const ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        topLeft:
+                                                            Radius.circular(
+                                                                10.0),
+                                                        topRight:
+                                                            Radius.circular(
+                                                                10.0),
+                                                      ),
+                                                      child: GlassMorPhishItem(
+                                                          child: AppImage(
+                                                        height: 300,
+                                                        path: AssetsImagesPath
+                                                            .editButtonImage,
+                                                        fit: BoxFit.fill,
+                                                      )),
+                                                    ),
+                                                    onTap: () {
+                                                      Get.toNamed(
+                                                          AppRoutes
+                                                              .addPostAndEditScreen,
+                                                          arguments: controller
+                                                              .serviceDetails);
+                                                    },
+                                                  ),
+                                                  PopupMenuItem(
+                                                    height: AppSize.width(
+                                                        value: 30),
+                                                    padding: EdgeInsets.zero,
+                                                    child: const ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.only(
+                                                        bottomLeft:
+                                                            Radius.circular(
+                                                                10.0),
+                                                        bottomRight:
+                                                            Radius.circular(
+                                                                10.0),
+                                                      ),
+                                                      child: GlassMorPhishItem(
+                                                          child: AppImage(
+                                                        fit: BoxFit.fill,
+                                                        path: AssetsImagesPath
+                                                            .detailsButtonImage,
+                                                      )),
+                                                    ),
+                                                    onTap: () {
+                                                      servicesDetailsDeleteDialogWarning();
+                                                    },
+                                                  ),
+                                                ];
+                                              },
+                                            ),
                                         ],
                                       ),
                                     ),
@@ -318,30 +319,30 @@ class ServicesDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       ///////////////////// goto conversation
-                                      GestureDetector(
-                                        onTap: () {
-                                          // Get.toNamed(
-                                          //     AppRoutes.conversationScreen,
-                                          //     arguments: controller.item);
-                                          // Get.toNamed(
-                                          //   AppRoutes.conversationScreen,
-                                          //   arguments: ChatDataModel(
-                                          //     name: controller.item?.user.name ?? "",
-                                          //     imageUrl: controller.item?.user.image ??
-                                          //         AssetsDevImages.devUser,
-                                          //     isSender: false,
-                                          //     massage: "test message",
-                                          //     readeMessage: false,
-                                          //     time: DateTime(2024, 8, 19, 11),
-                                          //   ),
-                                          // );
-                                        },
-                                        child: AppImage(
-                                          path: AssetsIconsPath.chatFill,
-                                          width: AppSize.width(value: 35),
-                                          height: AppSize.width(value: 35),
-                                        ),
-                                      )
+                                      // GestureDetector(
+                                      //   onTap: () {
+                                      //     // Get.toNamed(
+                                      //     //     AppRoutes.conversationScreen,
+                                      //     //     arguments: controller.item);
+                                      //     // Get.toNamed(
+                                      //     //   AppRoutes.conversationScreen,
+                                      //     //   arguments: ChatDataModel(
+                                      //     //     name: controller.item?.user.name ?? "",
+                                      //     //     imageUrl: controller.item?.user.image ??
+                                      //     //         AssetsDevImages.devUser,
+                                      //     //     isSender: false,
+                                      //     //     massage: "test message",
+                                      //     //     readeMessage: false,
+                                      //     //     time: DateTime(2024, 8, 19, 11),
+                                      //     //   ),
+                                      //     // );
+                                      //   },
+                                      //   child: AppImage(
+                                      //     path: AssetsIconsPath.chatFill,
+                                      //     width: AppSize.width(value: 35),
+                                      //     height: AppSize.width(value: 35),
+                                      //   ),
+                                      // )
                                     ],
                                   ),
                                   const Gap(height: 10),
@@ -459,29 +460,29 @@ class ServicesDetailsScreen extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                             actions: [
-                              GestureDetector(
-                                onTap: () {
-                                  controller.reviewRating = 3;
-                                  serviceAddEditReview(
-                                      buttonText: "Add Review",
-                                      controller: controller);
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: AppSize.width(value: 20.0),
-                                      vertical: AppSize.width(value: 8.0)),
-                                  decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(
-                                          AppSize.width(value: 10.0))),
-                                  child: const AppText(
-                                    data: "Add Riview",
-                                    color: AppColors.white50,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ),
-                              const Gap(width: 20)
+                              // GestureDetector(
+                              //   onTap: () {
+                              //     controller.reviewRating = 3;
+                              //     // serviceAddEditReview(
+                              //     //     buttonText: "Add Review",
+                              //     //     controller: controller);
+                              //   },
+                              //   child: Container(
+                              //     padding: EdgeInsets.symmetric(
+                              //         horizontal: AppSize.width(value: 20.0),
+                              //         vertical: AppSize.width(value: 8.0)),
+                              //     decoration: BoxDecoration(
+                              //         color: AppColors.primary,
+                              //         borderRadius: BorderRadius.circular(
+                              //             AppSize.width(value: 10.0))),
+                              //     child: const AppText(
+                              //       data: "Add Riview",
+                              //       color: AppColors.white50,
+                              //       fontWeight: FontWeight.w600,
+                              //     ),
+                              //   ),
+                              // ),
+                              // const Gap(width: 20)
                             ],
                           ),
                           SliverAnimatedList(
@@ -525,84 +526,78 @@ class ServicesDetailsScreen extends StatelessWidget {
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.black400,
                                           )),
-                                          if (CommentOwner.owner ==
-                                              selectedCommentOwner)
-                                            PopupMenuButton<String>(
-                                              enableFeedback: true,
-                                              color: Colors.transparent,
-                                              elevation: 0,
-                                              clipBehavior: Clip.hardEdge,
-                                              offset: Offset.zero,
-                                              // menuPadding: EdgeInsets.zero,
-                                              padding: EdgeInsets.zero,
-                                              position: PopupMenuPosition.under,
-                                              itemBuilder: (context) {
-                                                return [
-                                                  PopupMenuItem(
-                                                    height: AppSize.width(
-                                                        value: 30),
-                                                    padding: EdgeInsets.zero,
-                                                    child: const ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                10.0),
-                                                        topRight:
-                                                            Radius.circular(
-                                                                10.0),
-                                                      ),
-                                                      child: GlassMorPhishItem(
-                                                          child: AppImage(
-                                                        height: 300,
-                                                        path: AssetsImagesPath
-                                                            .editButtonImage,
-                                                        fit: BoxFit.fill,
-                                                      )),
-                                                    ),
-                                                    onTap: () {
-                                                      serviceAddEditReview(
-                                                          buttonText:
-                                                              "Update Review",
-                                                          controller:
-                                                              controller);
-                                                    },
-                                                  ),
-                                                  PopupMenuItem(
-                                                    height: AppSize.width(
-                                                        value: 30),
-                                                    padding: EdgeInsets.zero,
-                                                    child: const ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        bottomLeft:
-                                                            Radius.circular(
-                                                                10.0),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                10.0),
-                                                      ),
-                                                      child: GlassMorPhishItem(
-                                                          child: AppImage(
-                                                        fit: BoxFit.fill,
-                                                        path: AssetsImagesPath
-                                                            .detailsButtonImage,
-                                                      )),
-                                                    ),
-                                                    onTap: () {
-                                                      servicesReviewDeleteDialogWarning();
-                                                    },
-                                                  ),
-                                                ];
-                                              },
-                                              child: AppImage(
-                                                width: AppSize.width(value: 30),
-                                                height:
-                                                    AppSize.width(value: 30),
-                                                path:
-                                                    AssetsIconsPath.popUpButton,
-                                              ),
-                                            ),
+                                          // if (CommentOwner.owner ==
+                                          //     selectedCommentOwner)
+                                          // PopupMenuButton<String>(
+                                          //   enableFeedback: true,
+                                          //   color: Colors.transparent,
+                                          //   elevation: 0,
+                                          //   clipBehavior: Clip.hardEdge,
+                                          //   offset: Offset.zero,
+                                          //   // menuPadding: EdgeInsets.zero,
+                                          //   padding: EdgeInsets.zero,
+                                          //   position: PopupMenuPosition.under,
+                                          //   itemBuilder: (context) {
+                                          //     return [
+                                          //       PopupMenuItem(
+                                          //         height:
+                                          //             AppSize.width(value: 30),
+                                          //         padding: EdgeInsets.zero,
+                                          //         child: const ClipRRect(
+                                          //           borderRadius:
+                                          //               BorderRadius.only(
+                                          //             topLeft:
+                                          //                 Radius.circular(10.0),
+                                          //             topRight:
+                                          //                 Radius.circular(10.0),
+                                          //           ),
+                                          //           child: GlassMorPhishItem(
+                                          //               child: AppImage(
+                                          //             height: 300,
+                                          //             path: AssetsImagesPath
+                                          //                 .editButtonImage,
+                                          //             fit: BoxFit.fill,
+                                          //           )),
+                                          //         ),
+                                          //         onTap: () {
+                                          //           // serviceAddEditReview(
+                                          //           //     buttonText:
+                                          //           //         "Update Review",
+                                          //           //     controller:
+                                          //           //         controller);
+                                          //         },
+                                          //       ),
+                                          //       PopupMenuItem(
+                                          //         height:
+                                          //             AppSize.width(value: 30),
+                                          //         padding: EdgeInsets.zero,
+                                          //         child: const ClipRRect(
+                                          //           borderRadius:
+                                          //               BorderRadius.only(
+                                          //             bottomLeft:
+                                          //                 Radius.circular(10.0),
+                                          //             bottomRight:
+                                          //                 Radius.circular(10.0),
+                                          //           ),
+                                          //           child: GlassMorPhishItem(
+                                          //               child: AppImage(
+                                          //             fit: BoxFit.fill,
+                                          //             path: AssetsImagesPath
+                                          //                 .detailsButtonImage,
+                                          //           )),
+                                          //         ),
+                                          //         onTap: () {
+                                          //           servicesReviewDeleteDialogWarning();
+                                          //         },
+                                          //       ),
+                                          //     ];
+                                          //   },
+                                          //   child: AppImage(
+                                          //     width: AppSize.width(value: 30),
+                                          //     height: AppSize.width(value: 30),
+                                          //     path: AssetsIconsPath.popUpButton,
+                                          //   ),
+                                          // ),
                                         ],
                                       ),
                                       const Gap(height: 8),

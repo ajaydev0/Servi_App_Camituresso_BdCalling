@@ -183,6 +183,7 @@ class HomeScreen extends StatelessWidget {
                   (index) {
                     var item = controller.popularPostList[index];
                     return HomeScreenCard(
+                      controller: controller,
                       item: item,
                     );
                   },
@@ -210,6 +211,7 @@ class HomeScreen extends StatelessWidget {
                   (index) {
                     var item = controller.recommendedPostList[index];
                     return HomeScreenCard(
+                      controller: controller,
                       item: item,
                     );
                   },

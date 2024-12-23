@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
@@ -25,19 +26,20 @@ class ConversationScreen extends StatelessWidget {
           return Scaffold(
             extendBody: true,
             appBar: AppBar(
-              backgroundColor: Color(0xffFBF6E4),
+              backgroundColor: const Color(0xffFBF6E4),
               forceMaterialTransparency: true,
               title: Row(
                 children: [
                   AppImageCircular(
                     width: AppSize.width(value: 40),
                     height: AppSize.width(value: 40),
-                    path: controller.chatDataModel?.imageUrl,
+                    url:
+                        "${AppApiUrl.domaine}${controller.argData.participants![0].profile}",
                   ),
                   const Gap(width: 10),
                   Expanded(
                       child: AppText(
-                          data: controller.argData["user"]["name"] ?? "",
+                          data: controller.argData.participants![0].name ?? "",
                           color: AppColors.black900,
                           fontWeight: FontWeight.w800)),
                 ],
@@ -118,7 +120,7 @@ class ConversationScreen extends StatelessWidget {
                             path: AssetsIconsPath.camera,
                           ),
                         ),
-                        Gap(width: 10),
+                        const Gap(width: 10),
                         GestureDetector(
                           onTap: () {
                             controller.callImageSend(ImageSource.gallery);

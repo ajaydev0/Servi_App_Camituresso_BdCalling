@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
@@ -122,8 +123,56 @@ class AddAndEditPostScreen extends StatelessWidget {
                         textInputAction: TextInputAction.newline,
                       ),
 
+                      ///////////// Adult
+                      const Gap(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Row(
+                                children: [
+                                  const AppText(
+                                    data: "Adult",
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  const Gap(width: 5),
+                                  Tooltip(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: AppSize.width(value: 20.0)),
+                                    message:
+                                        "This services post  contains content intended solely for persons aged 18 and over show.",
+                                    preferBelow: false,
+                                    showDuration: const Duration(seconds: 5),
+                                    triggerMode: TooltipTriggerMode.tap,
+                                    child: Icon(
+                                      Icons.report_outlined,
+                                      size: AppSize.width(value: 25),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
+                          Obx(
+                            () => CupertinoSwitch(
+                              value: controller.isAdultServices.value,
+                              activeColor: AppColors.black100,
+                              trackColor: AppColors.black100,
+                              thumbColor: controller.isAdultServices.value
+                                  ? AppColors.primary
+                                  : AppColors.gray,
+                              onChanged: (value) {
+                                controller.isAdultServices.value = value;
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+
                       ///////////// job price
                       const Gap(height: 20),
+
                       const AppText(
                         data: "Job Price",
                         fontWeight: FontWeight.w500,

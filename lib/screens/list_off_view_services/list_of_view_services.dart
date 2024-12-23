@@ -51,7 +51,8 @@ class ListOfViewServices extends StatelessWidget {
                               return GestureDetector(
                                 onTap: () {
                                   // print("${item.image}");
-                                  Get.toNamed(AppRoutes.servicesDetailsScreen,
+                                  Get.toNamed(
+                                      AppRoutes.yourPostServicesDetailsScreen,
                                       arguments: item.sId);
                                 },
                                 child: Container(

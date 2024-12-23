@@ -59,6 +59,7 @@ class ServicesHorizontalCardTwo extends StatelessWidget {
                         icon: const Icon(Icons.bookmark,
                             color: Color(0xffD0A933))),
                   ),
+
                   // Positioned(
                   //   right: AppSize.width(value: 20),
                   //   top: AppSize.width(value: 20),

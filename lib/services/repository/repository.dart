@@ -1,4 +1,5 @@
 import 'package:servi_app_camituresso/const/app_api_url.dart';
+import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
@@ -9,8 +10,32 @@ import 'package:servi_app_camituresso/screens/services_details_screen/models/ser
 import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
+import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 
 class Repository {
+  // Get Notifications List
+  Future<List<ChatListModel>> getChatListData() async {
+    List<ChatListModel> data = <ChatListModel>[];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+        AppApiUrl.chatList,
+        token: AppAuthStorage().getToken(),
+      );
+
+      if (response != null) {
+        if (response["data"].runtimeType != Null) {
+          print("❤️❤️❤️❤️❤️❤️❤️ ${response}");
+          for (var element in response["data"]) {
+            data.add(ChatListModel.fromJson(element));
+          }
+        }
+      }
+      return data;
+    } catch (e) {
+      return data;
+    }
+  }
+
   // Get Privacy Policy
   Future<String> getPrivacyPolicyData() async {
     String data = "";
@@ -330,6 +355,21 @@ class Repository {
 
       if (data != null) {
         return data["data"];
+      }
+    } catch (e) {
+      return null;
+    }
+    return null;
+  }
+
+  // Create Review
+  Future<dynamic> addBookmark({String? id}) async {
+    try {
+      var data = await ApiPostServices()
+          .apiPostServices(url: "${AppApiUrl.bookmarkAddUrl}$id");
+
+      if (data != null) {
+        return data["message"];
       }
     } catch (e) {
       return null;

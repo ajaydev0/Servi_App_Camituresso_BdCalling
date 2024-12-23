@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
@@ -24,7 +25,9 @@ class ChatScreen extends StatelessWidget {
             preferredSize: Size.fromHeight(AppSize.width(value: 100)),
             child: SafeArea(
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: AppSize.height(value: 20), vertical: AppSize.height(value: 12)),
+                margin: EdgeInsets.symmetric(
+                    horizontal: AppSize.height(value: 20),
+                    vertical: AppSize.height(value: 12)),
                 child: AppInputWidget(
                   filled: true,
                   fillColor: AppColors.black50,
@@ -38,70 +41,85 @@ class ChatScreen extends StatelessWidget {
                       path: AssetsIconsPath.search,
                     ),
                   ),
-                  contentPadding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10)),
+                  contentPadding: EdgeInsets.symmetric(
+                      horizontal: AppSize.width(value: 10)),
                   borderRadius: BorderRadius.circular(AppSize.width(value: 50)),
                 ),
               ),
             ),
           ),
           body: ListView.builder(
-            itemCount: controller.listOfChat.length,
+            itemCount: controller.chatList.length,
             itemBuilder: (context, index) {
-              var item = controller.listOfChat[index];
+              var item = controller.chatList[index];
               return GestureDetector(
                 onTap: () {
                   Get.toNamed(AppRoutes.conversationScreen, arguments: item);
                 },
                 child: Container(
                   decoration: BoxDecoration(
-                    color: item.readeMessage ? AppColors.white50 : AppColors.black50.withOpacity(0.3),
-                    borderRadius: index == 0 && !item.readeMessage
+                    color:
+                        // item.readeMessage
+                        true
+                            ? AppColors.white50
+                            : AppColors.black50.withOpacity(0.3),
+                    borderRadius: false
+                        // index == 0 && !item.readeMessage
                         ? BorderRadius.only(
                             topLeft: Radius.circular(AppSize.width(value: 30)),
                             topRight: Radius.circular(AppSize.width(value: 30)),
                           )
-                        : !item.readeMessage && item.isLast
+                        : true
+                            //  !item.readeMessage && item.isLast
                             ? BorderRadius.only(
-                                bottomLeft: Radius.circular(AppSize.width(value: 30)),
-                                bottomRight: Radius.circular(AppSize.width(value: 30)),
+                                bottomLeft:
+                                    Radius.circular(AppSize.width(value: 30)),
+                                bottomRight:
+                                    Radius.circular(AppSize.width(value: 30)),
                               )
                             : null,
                   ),
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10.0), vertical: 2),
-                    decoration: BoxDecoration(
+                    margin: EdgeInsets.symmetric(
+                        horizontal: AppSize.width(value: 10.0), vertical: 2),
+                    decoration: const BoxDecoration(
                         border: Border(
-                      bottom: !item.readeMessage && item.isLast ? BorderSide.none : BorderSide(color: AppColors.black200),
+                      bottom: true
+                          //  !item.readeMessage && item.isLast
+                          ? BorderSide.none
+                          : BorderSide(color: AppColors.black200),
                     )),
                     child: ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: AppImageCircular(
-                        path: item.imageUrl,
+                        url:
+                            "${AppApiUrl.domaine}${item.participants![0].profile}",
                         width: AppSize.width(value: 50),
                         height: AppSize.width(value: 50),
                       ),
                       title: AppText(
-                        data: item.name,
+                        data: item.participants![0].name ?? "",
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
                       ),
-                      trailing: AppText(
-                        data: timeTextFormate(item.time),
-                        color: AppColors.black200,
-                      ),
-                      subtitle: item.isSender
+                      // trailing: AppText(
+                      //   data: timeTextFormate(item.lastMessage?.createdAt.toString() ?? ""),
+                      //   color: AppColors.black200,
+                      // ),
+                      subtitle: true
+                          //  item.isSender
                           ? Row(
                               children: [
                                 AppText(data: "You: "),
                                 Expanded(
                                     child: AppText(
-                                  data: item.massage,
+                                  data: item.lastMessage?.text ?? "",
                                   color: AppColors.black300,
                                 ))
                               ],
                             )
                           : AppText(
-                              data: item.massage,
+                              data: item.lastMessage?.text ?? "",
                               color: AppColors.black300,
                             ),
                     ),

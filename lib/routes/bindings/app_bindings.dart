@@ -21,6 +21,7 @@ import 'package:servi_app_camituresso/screens/services_screen/controllers/servic
 import 'package:servi_app_camituresso/screens/terms_and_condition_screen/controllers/terms_and_condition_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/transaction_history_screen/controllers/transaction_history_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/user_history_screen/controllers/user_history_screen_controller.dart';
+import 'package:servi_app_camituresso/screens/your_post_services_details_screen/controllers/your_post_services_details_screen_controller.dart';
 
 class AppBindings extends BindingsInterface {
   @override
@@ -31,6 +32,7 @@ class AppBindings extends BindingsInterface {
     Get.lazyPut(() => ServicesScreenController());
     Get.lazyPut(() => ListOffViewServicesController());
     Get.lazyPut(() => ServicesDetailsScreenController());
+    Get.lazyPut(() => YourPostServicesDetailsScreenController());
     Get.lazyPut(() => SearchScreenController());
     Get.lazyPut(() => EighteenPlusWarningScreenController());
     Get.lazyPut(() => ProfileScreenController());

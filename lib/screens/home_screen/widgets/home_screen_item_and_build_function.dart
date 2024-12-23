@@ -17,10 +17,14 @@ Widget itemBuildFunction(
       double dynamicHeight = boxConstraints.maxWidth / dividedValue;
       return Obx(
         () => loading.value
-            ? const Center(
-                child: CircularProgressIndicator(
-                color: AppColors.primary,
-              ))
+            ? SizedBox(
+                width: Get.width,
+                height: dynamicHeight,
+                child: const Center(
+                    child: CircularProgressIndicator(
+                  color: AppColors.primary,
+                )),
+              )
             : SizedBox(
                 width: Get.width,
                 height: dynamicHeight,

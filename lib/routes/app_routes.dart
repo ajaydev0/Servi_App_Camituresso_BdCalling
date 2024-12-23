@@ -12,6 +12,8 @@ class AppRoutes {
   static const servicesScreen = "/services-screen";
   static const listOfViewServicesScreen = "/list-of-view-services-screen";
   static const servicesDetailsScreen = "/services-details-screen";
+  static const yourPostServicesDetailsScreen =
+      "/your-post-services-details-screen";
   static const searchScreen = "/search-screen";
   static const profileScreen = "/profile-screen";
   static const editProfileScreen = "/edit-profile-screen";

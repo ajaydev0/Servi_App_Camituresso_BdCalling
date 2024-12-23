@@ -24,12 +24,13 @@ class AppApiUrl {
   static const String getServiceByServiceUrl = "$baseUrl/service/";
   static const String getBannar = "$baseUrl/banner";
   static const String bookmarkListUrl = "$baseUrl/bookmark";
+  static const String bookmarkAddUrl = "$baseUrl/bookmark/";
   static const String termsAndConditionsUrl =
       "$baseUrl/rule/terms-and-conditions";
   static const String aboutUsUrl = "$baseUrl/rule/about";
   static const String privacyPolicyUrl = "$baseUrl/rule/privacy-policy";
 
   //////////////////////////////////////  chat
-  static const String chat = "$baseUrl/chat";
+  static const String chatList = "$baseUrl/chat";
   static const String message = "$baseUrl/message";
 }

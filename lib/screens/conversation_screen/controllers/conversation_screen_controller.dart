@@ -6,6 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:servi_app_camituresso/dev_data/cover_dev_data.dart';
 import 'package:servi_app_camituresso/models/chat_or_conversations/chat_data_model.dart';
 import 'package:servi_app_camituresso/models/chat_or_conversations/conversation_data_model.dart';
+import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/widgets/image_user_pic/image_user_pi.dart';
 
@@ -29,7 +30,7 @@ class ConversationScreenController extends GetxController {
   ChatDataModel? chatDataModel;
   RxList<ConversationDataModel> listOfConversation = RxList();
   RxString localImage = RxString("");
-  dynamic argData;
+  ChatListModel argData = ChatListModel();
 
   messageScrollUp({int value = 50}) {
     try {

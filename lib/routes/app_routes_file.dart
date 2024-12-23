@@ -34,6 +34,7 @@ import 'package:servi_app_camituresso/screens/splash_screen/splash_screen.dart';
 import 'package:servi_app_camituresso/screens/terms_and_condition_screen/terms_and_condition_screen.dart';
 import 'package:servi_app_camituresso/screens/transaction_history_screen/transaction_history_screen.dart';
 import 'package:servi_app_camituresso/screens/user_history_screen/user_history_screen.dart';
+import 'package:servi_app_camituresso/screens/your_post_services_details_screen/your_post_services_details_screen.dart';
 
 List<GetPage> appRoutesFile = <GetPage>[
   ////////// initial page
@@ -108,6 +109,11 @@ List<GetPage> appRoutesFile = <GetPage>[
   GetPage(
     name: AppRoutes.servicesDetailsScreen,
     page: () => const ServicesDetailsScreen(),
+    middlewares: [InternetCheckMiddleWare()],
+  ),
+  GetPage(
+    name: AppRoutes.yourPostServicesDetailsScreen,
+    page: () => const YourPostServicesDetailsScreen(),
     middlewares: [InternetCheckMiddleWare()],
   ),
 

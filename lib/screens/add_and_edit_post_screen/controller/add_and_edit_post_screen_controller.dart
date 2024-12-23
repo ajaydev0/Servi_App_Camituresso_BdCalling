@@ -8,6 +8,7 @@ import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
 
 class AddAndEditPostScreenController extends GetxController {
+  RxBool isAdultServices = false.obs;
   RxBool isLoading = false.obs;
   RxBool isLoadingButton = false.obs;
   GlobalKey<FormState> addAndEditPostKey = GlobalKey<FormState>();

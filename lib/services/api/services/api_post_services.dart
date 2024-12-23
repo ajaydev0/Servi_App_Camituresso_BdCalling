@@ -17,9 +17,11 @@ class ApiPostServices {
     final Response response;
     try {
       if (token != null) {
-        response = await NonAuthApi().sendRequest.post(url,
-            data: body,
-            options: Options(headers: {"Authorization": "Bearer $token"}));
+        response = await NonAuthApi().sendRequest.post(
+              url,
+              data: body,
+              options: Options(headers: {"Authorization": "Bearer $token"}),
+            );
       } else {
         response = await AppApi().sendRequest.post(url, data: body);
       }
