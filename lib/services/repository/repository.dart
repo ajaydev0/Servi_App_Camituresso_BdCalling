@@ -1,5 +1,6 @@
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
+import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
@@ -24,7 +25,6 @@ class Repository {
 
       if (response != null) {
         if (response["data"].runtimeType != Null) {
-          print("❤️❤️❤️❤️❤️❤️❤️ ${response}");
           for (var element in response["data"]) {
             data.add(ChatListModel.fromJson(element));
           }
@@ -251,19 +251,6 @@ class Repository {
       print("$e");
     }
     return data;
-
-    // try {
-    //   var data = await ApiGetServices().apiGetServices(
-    //     AppApiUrl.getRecommendationPostUrl,
-    //   );
-
-    //   if (data != null) {
-    //     return data["data"];
-    //   }
-    // } catch (e) {
-    //   return null;
-    // }
-    // return null;
   }
 
   // Get Popular Post
@@ -275,7 +262,6 @@ class Repository {
       );
 
       if (response != null) {
-        // return data["data"];
         if (response["data"].runtimeType != Null) {
           for (var element in response["data"]) {
             data.add(PopularPostModel.fromJson(element));
@@ -329,7 +315,6 @@ class Repository {
   }
 
   // Get Service Details Data
-
   Future<ServiceDetailsModel?> getServiceDetailsData(String id) async {
     try {
       // Api Call
@@ -375,5 +360,28 @@ class Repository {
       return null;
     }
     return null;
+  }
+
+  // Get Chat Message list
+  Future<List<MessageListModel>> getChatMessageListData(
+      {String? chatId}) async {
+    List<MessageListModel> data = <MessageListModel>[];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+        "${AppApiUrl.messageList}$chatId",
+      );
+      if (response != null) {
+        // return data["data"];
+        if (response["data"].runtimeType != Null) {
+          for (var element in response["data"]) {
+            data.add(MessageListModel.fromJson(element));
+          }
+        }
+        return data;
+      }
+    } catch (e) {
+      print("$e");
+    }
+    return data;
   }
 }

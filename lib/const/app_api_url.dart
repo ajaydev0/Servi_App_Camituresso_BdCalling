@@ -32,5 +32,6 @@ class AppApiUrl {
 
   //////////////////////////////////////  chat
   static const String chatList = "$baseUrl/chat";
-  static const String message = "$baseUrl/message";
+  static const String messageList = "$baseUrl/message/";
+  static const String sendMessage = "$baseUrl/message";
 }

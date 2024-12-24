@@ -60,11 +60,12 @@ class AddAndEditPostScreenController extends GetxController {
         serviceDetails = Get.arguments;
         /////////// Value Asign....
         titleController.text = serviceDetails.title ?? "";
-        priceController.text = serviceDetails.price.toString() ?? "";
+        priceController.text = serviceDetails.price.toString();
         pricungBreakdownController.text = serviceDetails.priceBreakdown ?? "";
         descriptionController.text = serviceDetails.description ?? "";
         locationController.text = serviceDetails.location ?? "";
         selectedServicesCategory.value = serviceDetails.category ?? "";
+        isAdultServices.value = serviceDetails.adult ?? false;
         // userLocalImage.value = serviceDetails.image ?? "";
       }
     } catch (e) {
@@ -75,12 +76,13 @@ class AddAndEditPostScreenController extends GetxController {
   addPostLogic() async {
     try {
       isLoadingButton.value = true;
-      Map<String, String> body = {
+      Map<String, dynamic> body = {
         "title": titleController.text,
         "price": priceController.text,
         "price_breakdown": pricungBreakdownController.text,
         "description": descriptionController.text,
         "location": locationController.text,
+        "adult": isAdultServices.value,
         "category": selectedServicesCategory.value,
       };
       // Api Call
@@ -103,12 +105,13 @@ class AddAndEditPostScreenController extends GetxController {
   editPostLogic() async {
     try {
       isLoadingButton.value = true;
-      Map<String, String> body = {
+      Map<String, dynamic> body = {
         "title": titleController.text,
         "price": priceController.text,
         "price_breakdown": pricungBreakdownController.text,
         "description": descriptionController.text,
         "location": locationController.text,
+        "adult": isAdultServices.value,
         "category": selectedServicesCategory.value,
       };
       // Api Call

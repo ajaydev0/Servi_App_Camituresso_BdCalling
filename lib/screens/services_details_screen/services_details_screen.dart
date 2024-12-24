@@ -3,6 +3,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
+import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/const/assets_dev_images.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
@@ -95,8 +96,12 @@ class ServicesDetailsScreen extends StatelessWidget {
                                   fit: StackFit.expand,
                                   children: [
                                     AppImage(
-                                      url:
-                                          "${AppApiUrl.domaine}${controller.serviceDetails.image}",
+                                      url: controller.serviceDetails.image ==
+                                              AppConst.nullImageUrl
+                                          ? controller.serviceDetails.image
+                                          : "${AppApiUrl.domaine}${controller.serviceDetails.image}",
+                                      // url:
+                                      //     "${AppApiUrl.domaine}${controller.serviceDetails.image}",
                                     ),
                                     Positioned(
                                       top: AppSize.width(value: 30),

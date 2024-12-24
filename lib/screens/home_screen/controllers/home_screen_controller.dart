@@ -11,6 +11,7 @@ import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
 import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
+import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class HomeScreenController extends GetxController {
@@ -97,6 +98,7 @@ class HomeScreenController extends GetxController {
       if (data != null) {
         profileData = data;
         update();
+        AppAuthStorage().setChatID(profileData.sId ?? "");
       }
     } catch (e) {
       print("Error fetching profile: $e");

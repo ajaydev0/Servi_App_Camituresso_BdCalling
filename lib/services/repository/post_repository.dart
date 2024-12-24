@@ -13,7 +13,7 @@ class ImageRepository {
   Future<dynamic> imageUploadWithData({
     required String url,
     String? imagePath,
-    required Map<String, String> body,
+    required Map<String, dynamic> body,
   }) async {
     try {
       // Initialize FormData with the body fields
@@ -61,7 +61,7 @@ class ImageRepository {
   Future<dynamic> profilePatchImageUpdate({
     required String url,
     String? imagePath,
-    required Map<String, String> body,
+    required Map<String, dynamic> body,
   }) async {
     try {
       // Initialize FormData with the body fields

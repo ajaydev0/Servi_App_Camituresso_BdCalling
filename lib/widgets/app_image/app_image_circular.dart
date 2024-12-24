@@ -69,10 +69,11 @@ class AppImageCircular extends StatelessWidget {
                 width: width,
                 height: height,
                 decoration: const BoxDecoration(
-                    color: AppColors.yellow100,
-                    image: DecorationImage(
-                        image: AssetImage(AssetsImagesPath.nullImage),
-                        fit: BoxFit.fill)),
+                  color: AppColors.yellow100,
+                  // image: DecorationImage(
+                  //     image: AssetImage(AssetsImagesPath.nullImage),
+                  //     fit: BoxFit.fill)
+                ),
               ),
             );
           },

@@ -23,14 +23,18 @@ class AssetsIconsPath {
   static const String camera = "assets/icons/camera.png";
   static const String file = "assets/icons/file.png";
   static const String addImage = "assets/icons/add_image.png";
-  static const String paymentMethodCard = "assets/icons/payment_method_card.png";
+  static const String paymentMethodCard =
+      "assets/icons/payment_method_card.png";
   static const String about = "assets/icons/about.png";
   static const String privacyPolicy = "assets/icons/privacy_policy.png";
-  static const String transactionHistory = "assets/icons/transaction_history.png";
+  static const String transactionHistory =
+      "assets/icons/transaction_history.png";
   static const String userHistory = "assets/icons/user_history.png";
   static const String yourPost = "assets/icons/your_post.png";
   static const String actionEdit = "assets/icons/action_edit.png";
   static const String transactionCard = "assets/icons/transaction_card.png";
   static const String backButton = "assets/icons/back_button.png";
   static const String popUpButton = "assets/icons/pop_up_button.png";
+  static const String imagePick = "assets/icons/pick_image.png";
+  static const String cameraPick = "assets/icons/pick_camera.png";
 }

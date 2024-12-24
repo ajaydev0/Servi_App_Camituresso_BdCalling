@@ -34,7 +34,8 @@ class EighteenPlusWarningScreen extends StatelessWidget {
                       Gap(height: 30),
                       RichText(
                         text: TextSpan(
-                            text: "This Apps contains content intended solely for persons ",
+                            text:
+                                "This Apps contains content intended solely for persons ",
                             style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 20,
@@ -74,7 +75,8 @@ class EighteenPlusWarningScreen extends StatelessWidget {
                     children: [
                       GestureDetector(
                         onTap: () {
-                          Get.offAndToNamed(AppRoutes.servicesDetailsScreen, arguments: controller.servicesModel);
+                          Get.offAndToNamed(AppRoutes.servicesDetailsScreen,
+                              arguments: controller.item.sId);
                         },
                         child: Container(
                           margin: EdgeInsets.all(AppSize.width(value: 10)),
@@ -83,7 +85,8 @@ class EighteenPlusWarningScreen extends StatelessWidget {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: AppColors.primary,
-                            borderRadius: BorderRadius.circular(AppSize.width(value: 15.0)),
+                            borderRadius: BorderRadius.circular(
+                                AppSize.width(value: 15.0)),
                             border: Border.all(color: AppColors.primary),
                           ),
                           child: AppText(
@@ -105,7 +108,8 @@ class EighteenPlusWarningScreen extends StatelessWidget {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             color: AppColors.white50,
-                            borderRadius: BorderRadius.circular(AppSize.width(value: 15.0)),
+                            borderRadius: BorderRadius.circular(
+                                AppSize.width(value: 15.0)),
                             border: Border.all(color: AppColors.primary),
                           ),
                           child: AppText(

@@ -1,16 +1,14 @@
 import 'dart:developer';
-
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/models/dev_services_model/dev_services_model.dart';
 
 class EighteenPlusWarningScreenController extends GetxController {
-  DevServicesModel? servicesModel;
-
+  // DevServicesModel? servicesModel;
+  dynamic item;
   onDataSetUp() {
     try {
       final argData = Get.arguments;
       if (argData.runtimeType != Null) {
-        servicesModel = argData;
+        item = argData;
       }
     } catch (e) {
       log("error form 18+ warning data on setup : $e");

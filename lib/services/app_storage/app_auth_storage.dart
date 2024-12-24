@@ -25,4 +25,17 @@ class AppAuthStorage {
   Future<void> storageClear() async {
     await box.erase();
   }
+
+  ///////////////// Chat ID
+  Future<void> setChatID(String value) async {
+    await box.write(StorageKey.chatID, value);
+  }
+
+  String? getChatID() {
+    return box.read(StorageKey.chatID);
+  }
+
+  Future<void> removeChatID() async {
+    await box.remove(StorageKey.chatID);
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
+import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
 import 'package:servi_app_camituresso/models/dev_category/dev_category_model.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
@@ -199,8 +200,10 @@ class HomeScreenTopWidget extends StatelessWidget {
                     child: AppImageCircular(
                       width: AppSize.width(value: 60),
                       height: AppSize.width(value: 60),
-                      url:
-                          "${AppApiUrl.domaine}${controller.profileData.profile}",
+                      url: controller.profileData.profile ==
+                              AppConst.nullImageUrl
+                          ? controller.profileData.profile
+                          : "${AppApiUrl.domaine}${controller.profileData.profile}",
                       // url: controller.profile.value.data?.profile ?? '',
                       // controller.profile.value.data!.profile!
                       fit: BoxFit.fill,
@@ -226,9 +229,9 @@ class HomeScreenTopWidget extends StatelessWidget {
                         ),
                         const Gap(height: 10),
                         AppText(
-                          data: controller.profileData.location?.isEmpty ?? true
-                              ? "Location...."
-                              : controller.profileData.location!,
+                          data: controller.profileData.email?.isEmpty ?? true
+                              ? "email"
+                              : controller.profileData.email!,
                           color: AppColors.white600,
                           fontWeight: FontWeight.w400,
                           fontSize: 14,

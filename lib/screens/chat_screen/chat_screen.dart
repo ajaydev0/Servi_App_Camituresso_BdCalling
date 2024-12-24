@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
+import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/controllers/chat_screen_controller.dart';
@@ -57,43 +58,54 @@ class ChatScreen extends StatelessWidget {
                   Get.toNamed(AppRoutes.conversationScreen, arguments: item);
                 },
                 child: Container(
+                  margin: EdgeInsets.only(bottom: 10, left: 20, right: 20),
                   decoration: BoxDecoration(
-                    color:
-                        // item.readeMessage
-                        true
-                            ? AppColors.white50
-                            : AppColors.black50.withOpacity(0.3),
-                    borderRadius: false
-                        // index == 0 && !item.readeMessage
-                        ? BorderRadius.only(
-                            topLeft: Radius.circular(AppSize.width(value: 30)),
-                            topRight: Radius.circular(AppSize.width(value: 30)),
-                          )
-                        : true
-                            //  !item.readeMessage && item.isLast
-                            ? BorderRadius.only(
-                                bottomLeft:
-                                    Radius.circular(AppSize.width(value: 30)),
-                                bottomRight:
-                                    Radius.circular(AppSize.width(value: 30)),
-                              )
-                            : null,
-                  ),
+                      color:
+                          // item.readeMessage
+                          true
+                              ? AppColors.black50
+                              : AppColors.black50.withOpacity(0.3),
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(AppSize.width(value: 30)))
+                      //  false
+                      //     // index == 0 && !item.readeMessage
+                      //     ? BorderRadius.only(
+                      //         topLeft: Radius.circular(AppSize.width(value: 30)),
+                      //         topRight: Radius.circular(AppSize.width(value: 30)),
+                      //       )
+                      //     : true
+                      //         //  !item.readeMessage && item.isLast
+                      //         ? BorderRadius.only(
+                      //             bottomLeft:
+                      //                 Radius.circular(AppSize.width(value: 30)),
+                      //             bottomRight:
+                      //                 Radius.circular(AppSize.width(value: 30)),
+                      //           )
+                      //         : null,
+                      ),
                   child: Container(
                     margin: EdgeInsets.symmetric(
-                        horizontal: AppSize.width(value: 10.0), vertical: 2),
+                      horizontal: AppSize.width(value: 10.0),
+                      vertical: 2,
+                    ),
                     decoration: const BoxDecoration(
                         border: Border(
-                      bottom: true
-                          //  !item.readeMessage && item.isLast
-                          ? BorderSide.none
-                          : BorderSide(color: AppColors.black200),
-                    )),
+                            // bottom:
+                            //  true
+                            //  !item.readeMessage && item.isLast
+                            // ? BorderSide.none
+                            // :
+                            // BorderSide(color: AppColors.black200),
+                            )),
                     child: ListTile(
                       contentPadding: EdgeInsets.zero,
                       leading: AppImageCircular(
-                        url:
-                            "${AppApiUrl.domaine}${item.participants![0].profile}",
+                        url: item.participants![0].profile ==
+                                AppConst.nullImageUrl
+                            ? item.participants![0].profile
+                            : "${AppApiUrl.domaine}${item.participants![0].profile}",
+                        // url:
+                        //     "${AppApiUrl.domaine}${item.participants![0].profile}",
                         width: AppSize.width(value: 50),
                         height: AppSize.width(value: 50),
                       ),
@@ -106,22 +118,24 @@ class ChatScreen extends StatelessWidget {
                       //   data: timeTextFormate(item.lastMessage?.createdAt.toString() ?? ""),
                       //   color: AppColors.black200,
                       // ),
-                      subtitle: true
+                      subtitle:
+                          //  true
                           //  item.isSender
-                          ? Row(
-                              children: [
-                                AppText(data: "You: "),
-                                Expanded(
-                                    child: AppText(
-                                  data: item.lastMessage?.text ?? "",
-                                  color: AppColors.black300,
-                                ))
-                              ],
-                            )
-                          : AppText(
-                              data: item.lastMessage?.text ?? "",
-                              color: AppColors.black300,
-                            ),
+                          // ? Row(
+                          //     children: [
+                          //       AppText(data: "You: "),
+                          //       Expanded(
+                          //           child: AppText(
+                          //         data: item.lastMessage?.text ?? "",
+                          //         color: AppColors.black300,
+                          //       ))
+                          //     ],
+                          //   )
+                          // :
+                          AppText(
+                        data: item.lastMessage?.text ?? "",
+                        color: AppColors.black300,
+                      ),
                     ),
                   ),
                 ),

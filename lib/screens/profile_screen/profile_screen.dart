@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
+import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/controllers/profile_screen_controller.dart';
@@ -69,20 +70,19 @@ class ProfileScreen extends StatelessWidget {
                     //   height: AppSize.height(value: 140),
                     //   fit: BoxFit.fill,
                     // ),
-                    GestureDetector(
-                      onTap: () {
-                        print("Image Value ${controller.profileData.name}");
-                      },
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(100),
-                        child: AppImage(
-                          width: AppSize.height(value: 160),
-                          height: AppSize.height(value: 160),
-                          // color: AppColors.fill,
-                          fit: BoxFit.fill,
-                          url:
-                              "${AppApiUrl.domaine}${controller.profileData.profile}",
-                        ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(100),
+                      child: AppImage(
+                        width: AppSize.height(value: 160),
+                        height: AppSize.height(value: 160),
+                        // color: AppColors.fill,
+                        fit: BoxFit.fill,
+                        url: controller.profileData.profile ==
+                                AppConst.nullImageUrl
+                            ? controller.profileData.profile
+                            : "${AppApiUrl.domaine}${controller.profileData.profile}",
+                        // url:
+                        //     "${AppApiUrl.domaine}${controller.profileData.profile}",
                       ),
                     ),
                     // AppImageCircular(

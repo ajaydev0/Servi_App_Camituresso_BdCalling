@@ -24,7 +24,12 @@ class HomeScreenCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
+        if (item.adult) {
+          Get.toNamed(AppRoutes.eighteenPlusWarningScreen, arguments: item);
+        } else {
+          Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
+        }
+
         // if (item.category.toLowerCase() == "id10".toLowerCase()) {
         //   Get.toNamed(AppRoutes.eighteenPlusWarningScreen, arguments: item);
         // } else {
