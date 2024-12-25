@@ -1,16 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
-import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
-
 import 'package:servi_app_camituresso/screens/conversation_screen/controllers/conversation_screen_controller.dart';
-import 'package:servi_app_camituresso/screens/conversation_screen/list/chat_list.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
@@ -18,7 +11,6 @@ import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image_circular.dart';
 import 'package:servi_app_camituresso/widgets/inputs/app_input_widget_chat.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
-import 'package:servi_app_camituresso/widgets/time_format/date_and_time_format.dart';
 
 class ConversationScreen extends StatelessWidget {
   const ConversationScreen({super.key});
@@ -38,18 +30,21 @@ class ConversationScreen extends StatelessWidget {
                   AppImageCircular(
                     width: AppSize.width(value: 40),
                     height: AppSize.width(value: 40),
-                    url: controller.argData.participants?[0].profile ==
-                            AppConst.nullImageUrl
-                        ? "${controller.argData.participants?[0].profile}"
-                        : "${AppApiUrl.domaine}${controller.argData.participants?[0].profile}",
+                    path: AssetsImagesPath.splash,
+                    // url: controller.argData.participants?[0].profile ==
+                    //         AppConst.nullImageUrl
+                    //     ? "${controller.argData.participants?[0].profile}"
+                    //     : "${AppApiUrl.domaine}${controller.argData.participants?[0].profile}",
 
                     // url:
                     //     "${AppApiUrl.domaine}${controller.argData.participants?[0].profile}",
                   ),
                   const Gap(width: 10),
-                  Expanded(
+                  const Expanded(
                       child: AppText(
-                          data: controller.argData.participants![0].name ?? "",
+                          // data: "name",
+                          data: "User Name",
+                          // data: controller.argData.participants?[0].name ?? "",
                           color: AppColors.black900,
                           fontWeight: FontWeight.w800)),
                 ],
@@ -66,48 +61,74 @@ class ConversationScreen extends StatelessWidget {
                 const Gap(width: 20)
               ],
             ),
-            body: Stack(
-              children: [
-                // Background Image
-                AppImage(
-                  width: AppSize.size.width,
-                  height: AppSize.size.height,
-                  path: AssetsImagesPath.conversation,
-                ),
-                // Chat Container
-                controller.isLoading.value
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.black,
-                        ),
-                      )
-                    : Positioned.fill(
-                        child: GestureDetector(
-                          onTap: () {
-                            controller.outSideClick();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                left: 20, right: 20, bottom: 80),
-                            child: ListView.builder(
-                              controller: controller.scrollController,
-                              itemCount: controller.messageList.length,
-                              padding: const EdgeInsets.all(0),
-                              itemBuilder: (context, index) {
-                                var item = controller.messageList[index];
-                                return Align(
-                                  alignment: item.sender?.sId ==
-                                          AppAuthStorage().getChatID()
-                                      ? Alignment.centerRight
-                                      : Alignment.centerLeft,
-                                  child: controller.showMessage(item),
-                                );
-                              },
+            body: Obx(
+              () => Stack(
+                children: [
+                  // Background Image
+                  AppImage(
+                    width: AppSize.size.width,
+                    height: AppSize.size.height,
+                    path: AssetsImagesPath.conversation,
+                  ),
+                  // Chat Container
+                  controller.isLoading.value
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.black,
+                          ),
+                        )
+                      : Positioned.fill(
+                          child: GestureDetector(
+                            onTap: () {
+                              controller.outSideClick();
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  left: 20, right: 20, bottom: 80),
+                              child: Obx(
+                                () => ListView.builder(
+                                  reverse: true,
+                                  controller: controller.scrollController,
+                                  itemCount:
+                                      controller.listOfMessageData.length +
+                                          (controller.hasMore.value ? 1 : 0),
+                                  itemBuilder: (context, index) {
+                                    // Show loading indicator for pagination if it's the last index and more data is being fetched
+                                    if (index ==
+                                        controller.listOfMessageData.length) {
+                                      if (controller.hasMore.value &&
+                                          controller.isLoadingMore.value) {
+                                        return const Center(
+                                          child: Padding(
+                                            padding: EdgeInsets.all(8.0),
+                                            child: CircularProgressIndicator(
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        );
+                                      } else {
+                                        return const SizedBox(); // Placeholder when no more data to load
+                                      }
+                                    }
+
+                                    // Render message item
+                                    var item =
+                                        controller.listOfMessageData[index];
+                                    return Align(
+                                      alignment: item.sender ==
+                                              AppAuthStorage().getChatID()
+                                          ? Alignment.centerRight
+                                          : Alignment.centerLeft,
+                                      child: controller.showMessage(item),
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-              ],
+                ],
+              ),
             ),
 
             floatingActionButtonLocation:
@@ -162,8 +183,9 @@ class ConversationScreen extends StatelessWidget {
                         InkWell(
                           onTap: () {
                             controller.sendMessage(
-                                controller.chatController.text,
-                                formatTime2(DateTime.now().toString()));
+                                // controller.chatController.text,
+                                // formatTime2(DateTime.now().toString())
+                                );
                           },
                           child: const AppImage(
                             path: AssetsIconsPath.chatSendButton,
@@ -177,8 +199,8 @@ class ConversationScreen extends StatelessWidget {
                         // Looks
                         InkWell(
                           onTap: () {
-                            controller.sendImage(ImageSource.gallery,
-                                formatTime2(DateTime.now().toString()));
+                            // controller.sendImage(ImageSource.gallery,
+                            //     formatTime2(DateTime.now().toString()));
                           },
                           child: const AppImage(
                             path: AssetsIconsPath.imagePick,
@@ -186,8 +208,8 @@ class ConversationScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            controller.sendImage(ImageSource.camera,
-                                formatTime2(DateTime.now().toString()));
+                            // controller.sendImage(ImageSource.camera,
+                            //     formatTime2(DateTime.now().toString()));
                           },
                           child: const AppImage(
                             path: AssetsIconsPath.cameraPick,
@@ -247,7 +269,7 @@ class ConversationScreen extends StatelessWidget {
                                   controller.focuse.value == true
                                       ? {
                                           controller.focusNode.requestFocus(),
-                                          controller.scrollToBottom()
+                                          // controller.scrollToBottom()
                                         }
                                       : null;
                                 },
@@ -272,11 +294,15 @@ class ConversationScreen extends StatelessWidget {
 
                         InkWell(
                           onTap: () {
+                            controller.sendMessage(
+                                // controller.chatController.text,
+                                // formatTime2(DateTime.now().toString())
+                                );
                             // controller.conncectSocket();
                             // controller.sendMessageApi();
-                            print(AppAuthStorage().getChatID());
+                            // print(AppAuthStorage().getChatID());
 
-                            log("${controller.messageList}");
+                            // log("${controller.listOfMessageData}");
 
                             // controller.sendMessage(
                             //     controller.chatController.text,

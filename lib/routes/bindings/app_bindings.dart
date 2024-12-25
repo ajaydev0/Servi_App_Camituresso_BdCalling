@@ -3,6 +3,7 @@ import 'package:servi_app_camituresso/screens/about_us_screen/controllers/about_
 import 'package:servi_app_camituresso/screens/add_and_edit_post_screen/controller/add_and_edit_post_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/add_post_successfully_screen/controllers/add_post_successfully_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/change_password_screen/controllers/change_password_screen_controller.dart';
+import 'package:servi_app_camituresso/screens/clients_details_screen/controllers/clients_details_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/controllers/conversation_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/e_receipt_screen/controllers/e_receipt_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/edit_profile_screen/controllers/edit_profile_screen_controller.dart';
@@ -49,5 +50,6 @@ class AppBindings extends BindingsInterface {
     Get.lazyPut(() => PopularViewAllController());
     Get.lazyPut(() => RecommendationViewAllController());
     Get.lazyPut(() => ServiceByServiceScreenController());
+    Get.lazyPut(() => ClientsDetailsScreenController());
   }
 }

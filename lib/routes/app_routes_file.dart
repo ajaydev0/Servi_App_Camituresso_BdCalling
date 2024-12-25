@@ -13,6 +13,7 @@ import 'package:servi_app_camituresso/screens/auth_screen/reset_password_screen/
 import 'package:servi_app_camituresso/screens/auth_screen/sign_in_screen/sign_in_screen.dart';
 import 'package:servi_app_camituresso/screens/auth_screen/sign_up_screen/sign_up_screen.dart';
 import 'package:servi_app_camituresso/screens/change_password_screen/change_password_screen.dart';
+import 'package:servi_app_camituresso/screens/clients_details_screen/clients_details_screen.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/conversation_screen.dart';
 import 'package:servi_app_camituresso/screens/e_receipt_screen/e_receipt_screen.dart';
 import 'package:servi_app_camituresso/screens/edit_profile_screen/edit_profile_screen.dart';
@@ -214,6 +215,11 @@ List<GetPage> appRoutesFile = <GetPage>[
   GetPage(
     name: AppRoutes.serviceByServiceScreen,
     page: () => const ServiceByServiceScreen(),
+    middlewares: [InternetCheckMiddleWare()],
+  ),
+  GetPage(
+    name: AppRoutes.clientsDetailsScreen,
+    page: () => const ClientsDetailsScreen(),
     middlewares: [InternetCheckMiddleWare()],
   ),
 ];

@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/routes/app_routes.dart';
+import 'package:servi_app_camituresso/screens/services_details_screen/models/create_chat_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
@@ -17,6 +19,21 @@ class ServicesDetailsScreenController extends GetxController {
     return "index is $index";
   });
   List<dynamic> reviewList = [].obs;
+
+  clickOnMessageButton() async {
+    print(serviceDetails.user?.sId);
+    try {
+      var response =
+          await Repository().createChat(chatId: serviceDetails.user?.sId);
+      if (response != null) {
+        Get.toNamed(AppRoutes.conversationScreen, arguments: response);
+        // AppSnackBar.success("Chat Create Successful");
+      }
+    } catch (e) {
+      print("Chat Create Exception $e");
+    }
+    //
+  }
 
   clickAddAndEditReviewButton() async {
     try {

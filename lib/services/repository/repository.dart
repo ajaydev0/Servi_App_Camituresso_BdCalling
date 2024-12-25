@@ -1,3 +1,4 @@
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
@@ -7,6 +8,7 @@ import 'package:servi_app_camituresso/screens/profile_screen/models/profile_scre
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
 import 'package:servi_app_camituresso/screens/saved_screen/model/get_saved_post_model.dart';
 import 'package:servi_app_camituresso/screens/service_by_service_screen/model/service_by_service_model.dart';
+import 'package:servi_app_camituresso/screens/services_details_screen/models/create_chat_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
@@ -240,8 +242,8 @@ class Repository {
 
       if (response != null) {
         // return data["data"];
-        if (response["data"].runtimeType != Null) {
-          for (var element in response["data"]) {
+        if (response["data"]["services"].runtimeType != Null) {
+          for (var element in response["data"]["services"]) {
             data.add(RecommendedPostModel.fromJson(element));
           }
         }
@@ -262,8 +264,8 @@ class Repository {
       );
 
       if (response != null) {
-        if (response["data"].runtimeType != Null) {
-          for (var element in response["data"]) {
+        if (response["data"]["services"].runtimeType != Null) {
+          for (var element in response["data"]["services"]) {
             data.add(PopularPostModel.fromJson(element));
           }
         }
@@ -306,7 +308,7 @@ class Repository {
       );
 
       if (data != null) {
-        return data["data"];
+        return data["data"]["posts"];
       }
     } catch (e) {
       return null;
@@ -362,26 +364,49 @@ class Repository {
     return null;
   }
 
-  // Get Chat Message list
-  Future<List<MessageListModel>> getChatMessageListData(
-      {String? chatId}) async {
+  Future<List<MessageListModel>> getChatMessageListData({
+    String? chatId,
+    int? page,
+  }) async {
     List<MessageListModel> data = <MessageListModel>[];
+
     try {
       var response = await ApiGetServices().apiGetServices(
-        "${AppApiUrl.messageList}$chatId",
+        "${AppApiUrl.messageList}$chatId?page=$page&limit=20",
       );
+
       if (response != null) {
-        // return data["data"];
-        if (response["data"].runtimeType != Null) {
-          for (var element in response["data"]) {
+        if (response["data"]?["messages"] != null) {
+          for (var element in response["data"]["messages"]) {
             data.add(MessageListModel.fromJson(element));
           }
         }
-        return data;
       }
     } catch (e) {
-      print("$e");
+      print("Error in getChatMessageListData: $e");
     }
+
     return data;
+  }
+
+  Future<CreateChatModel?> createChat({
+    String? chatId,
+  }) async {
+    try {
+      var response = await ApiPostServices().apiPostServices(
+        url: "${AppApiUrl.chatList}/$chatId",
+        token: AppAuthStorage().getToken(),
+      );
+
+      if (response != null) {
+        if (response["data"] != null) {
+          return CreateChatModel.fromJson(response["data"]);
+        }
+      }
+    } catch (e) {
+      print("Error in getChatMessageListData: $e");
+    }
+
+    return null;
   }
 }

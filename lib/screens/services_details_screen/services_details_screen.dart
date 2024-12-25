@@ -325,6 +325,8 @@ class ServicesDetailsScreen extends StatelessWidget {
                                       ///////////////////// goto conversation
                                       GestureDetector(
                                         onTap: () {
+                                          controller.clickOnMessageButton();
+
                                           // Get.toNamed(
                                           //     AppRoutes.conversationScreen,
                                           //     arguments: controller.item);

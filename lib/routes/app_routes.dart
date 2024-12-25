@@ -32,4 +32,5 @@ class AppRoutes {
   static const recommendationViewAllScreen = "/recommendation-view-all-screen";
   static const savedScreen = "/saved-screen";
   static const serviceByServiceScreen = "/service-by-service-screen";
+  static const clientsDetailsScreen = "/clients-details-screen";
 }
