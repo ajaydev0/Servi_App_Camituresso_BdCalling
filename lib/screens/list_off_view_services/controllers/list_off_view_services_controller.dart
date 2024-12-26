@@ -8,63 +8,54 @@ import 'package:servi_app_camituresso/services/repository/repository.dart';
 class ListOffViewServicesController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isError = RxBool(false);
-  RxList<DevServicesModel> listOfServices = RxList([]);
-  DevCategoryModel? model;
-  List<dynamic> postList = [].obs;
+  RxBool isLoadingMore = false.obs;
+  RxBool hasMore = true.obs;
 
-  changeSavedMode(int index) {
-    listOfServices[index].isSaved = !listOfServices[index].isSaved;
-    listOfServices.refresh();
-    update();
-  }
+  RxList<GetPostModel> postList = <GetPostModel>[].obs;
+  int currentPage = 1;
+  final int limit = 20;
 
-  onDataSetFunction() {
+  // Fetch the first page or refresh data
+  Future<void> getPostAndInList({bool isRefresh = false}) async {
+    if (isRefresh) {
+      currentPage = 1;
+      hasMore.value = true;
+      postList.clear();
+    }
+
+    if (isLoading.value || isLoadingMore.value || !hasMore.value) return;
+
     try {
-      isError.value = false;
-      isLoading.value = true;
-      final argData = Get.arguments;
-      if (argData.runtimeType != Null) {
-        model = argData;
-        listOfServices.clear();
-        for (var element in devListOfServicedData) {
-          if (element.category == model?.id) {
-            listOfServices.add(element);
-          }
+      if (isRefresh) {
+        isLoading.value = true;
+      } else {
+        isLoadingMore.value = true;
+      }
+
+      var data =
+          await Repository().getPostData(page: currentPage, limit: limit);
+
+      if (data.isNotEmpty) {
+        postList.addAll(data);
+        currentPage++;
+        if (data.length < limit) {
+          hasMore.value = false; // No more data to fetch
         }
       } else {
-        listOfServices.addAll(devListOfServicedData);
+        hasMore.value = false; // No more data to fetch
       }
-      listOfServices.refresh();
-      isLoading.value = false;
-      update();
     } catch (e) {
       isError.value = true;
-      isLoading.value = false;
-    }
-  }
-
-  getPostAndInList() async {
-    try {
-      isLoading.value = true;
-      var data = await Repository().getPostData();
-      if (data != null) {
-        for (var element in data) {
-          postList.add(GetPostModel.fromJson(element));
-          update();
-        }
-      }
-    } catch (e) {
-      print(e);
+      print("Error in getPostAndInList: $e");
     } finally {
       isLoading.value = false;
+      isLoadingMore.value = false;
     }
   }
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    await getPostAndInList();
-
-    // onDataSetFunction();
+    getPostAndInList();
   }
 }

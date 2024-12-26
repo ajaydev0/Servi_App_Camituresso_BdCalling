@@ -1,68 +1,57 @@
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/models/dev_category/dev_category_model.dart';
-import 'package:servi_app_camituresso/models/dev_services_model/dev_services_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class RecommendationViewAllController extends GetxController {
   RxBool isLoading = false.obs;
   RxBool isError = RxBool(false);
-  RxList<DevServicesModel> listOfServices = RxList([]);
-  DevCategoryModel? model;
-  List<RecommendedPostModel> postList = <RecommendedPostModel>[].obs;
+  RxBool isLoadingMore = false.obs;
+  RxBool hasMore = true.obs;
 
-  changeSavedMode(int index) {
-    listOfServices[index].isSaved = !listOfServices[index].isSaved;
-    listOfServices.refresh();
-    update();
-  }
+  RxList<RecommendedPostModel> postList = <RecommendedPostModel>[].obs;
+  int currentPage = 1;
+  final int limit = 20;
 
-  // onDataSetFunction() {
-  //   try {
-  //     isError.value = false;
-  //     isLoading.value = true;
-  //     final argData = Get.arguments;
-  //     if (argData.runtimeType != Null) {
-  //       model = argData;
-  //       listOfServices.clear();
-  //       for (var element in devListOfServicedData) {
-  //         if (element.category == model?.id) {
-  //           listOfServices.add(element);
-  //         }
-  //       }
-  //     } else {
-  //       listOfServices.addAll(devListOfServicedData);
-  //     }
-  //     listOfServices.refresh();
-  //     isLoading.value = false;
-  //     update();
-  //   } catch (e) {
-  //     isError.value = true;
-  //     isLoading.value = false;
-  //   }
-  // }
+  // Fetch the first page or refresh data
+  Future<void> getRecommendedPostAndInList({bool isRefresh = false}) async {
+    if (isRefresh) {
+      currentPage = 1;
+      hasMore.value = true;
+      postList.clear();
+    }
 
-  getRecommendedPostAndInList() async {
+    if (isLoading.value || isLoadingMore.value || !hasMore.value) return;
+
     try {
-      isLoading.value = true;
-      var data = await Repository().getRecommendationrPostData();
-      if (data != null) {
-        postList = data;
-        print(data);
-        update();
+      isLoading.value = isRefresh;
+      isLoadingMore.value = !isRefresh;
+
+      var data = await Repository().getRecommendationrPostData(
+        page: currentPage,
+        limit: limit,
+      );
+
+      if (data.isNotEmpty) {
+        postList.addAll(data);
+        currentPage++;
+        if (data.length < limit) {
+          hasMore.value = false; // No more data to fetch
+        }
+      } else {
+        hasMore.value = false; // No more data to fetch
       }
     } catch (e) {
-      print(e);
+      isError.value = true;
+      print("Error in getRecommendedPostAndInList: $e");
     } finally {
       isLoading.value = false;
+      isLoadingMore.value = false;
     }
   }
 
   @override
-  void onInit() async {
+  void onInit() {
     super.onInit();
-    await getRecommendedPostAndInList();
-
-    // onDataSetFunction();
+    getRecommendedPostAndInList();
   }
 }

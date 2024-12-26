@@ -323,32 +323,40 @@ class ServicesDetailsScreen extends StatelessWidget {
                                         ),
                                       ),
                                       ///////////////////// goto conversation
-                                      GestureDetector(
-                                        onTap: () {
-                                          controller.clickOnMessageButton();
+                                      controller.isLoadingForChat.value
+                                          ? const Center(
+                                              child: CircularProgressIndicator(
+                                                color: Colors.black,
+                                              ),
+                                            )
+                                          : GestureDetector(
+                                              onTap: () {
+                                                controller
+                                                    .clickOnMessageButton();
 
-                                          // Get.toNamed(
-                                          //     AppRoutes.conversationScreen,
-                                          //     arguments: controller.item);
-                                          // Get.toNamed(
-                                          //   AppRoutes.conversationScreen,
-                                          //   arguments: ChatDataModel(
-                                          //     name: controller.item?.user.name ?? "",
-                                          //     imageUrl: controller.item?.user.image ??
-                                          //         AssetsDevImages.devUser,
-                                          //     isSender: false,
-                                          //     massage: "test message",
-                                          //     readeMessage: false,
-                                          //     time: DateTime(2024, 8, 19, 11),
-                                          //   ),
-                                          // );
-                                        },
-                                        child: AppImage(
-                                          path: AssetsIconsPath.chatFill,
-                                          width: AppSize.width(value: 35),
-                                          height: AppSize.width(value: 35),
-                                        ),
-                                      )
+                                                // Get.toNamed(
+                                                //     AppRoutes.conversationScreen,
+                                                //     arguments: controller.item);
+                                                // Get.toNamed(
+                                                //   AppRoutes.conversationScreen,
+                                                //   arguments: ChatDataModel(
+                                                //     name: controller.item?.user.name ?? "",
+                                                //     imageUrl: controller.item?.user.image ??
+                                                //         AssetsDevImages.devUser,
+                                                //     isSender: false,
+                                                //     massage: "test message",
+                                                //     readeMessage: false,
+                                                //     time: DateTime(2024, 8, 19, 11),
+                                                //   ),
+                                                // );
+                                              },
+                                              child: AppImage(
+                                                path: AssetsIconsPath.chatFill,
+                                                width: AppSize.width(value: 35),
+                                                height:
+                                                    AppSize.width(value: 35),
+                                              ),
+                                            )
                                     ],
                                   ),
                                   const Gap(height: 10),

@@ -216,7 +216,7 @@ class ConversationScreenController extends GetxController {
     }
   }
 
-  dynamic argData;
+  ChatListModel argData = ChatListModel();
 
   // //Get arguments and get value Randomly
   getArguments() {

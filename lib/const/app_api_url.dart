@@ -29,6 +29,7 @@ class AppApiUrl {
       "$baseUrl/rule/terms-and-conditions";
   static const String aboutUsUrl = "$baseUrl/rule/about";
   static const String privacyPolicyUrl = "$baseUrl/rule/privacy-policy";
+  static const String searchPostUrl = "$baseUrl/post";
 
   //////////////////////////////////////  chat
   static const String chatList = "$baseUrl/chat";

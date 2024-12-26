@@ -22,54 +22,104 @@ class SearchScreen extends StatelessWidget {
           appBar: AppBar(
             centerTitle: true,
             forceMaterialTransparency: true,
-            title: const AppText(data: "Search", fontWeight: FontWeight.w500, fontSize: 22),
+            title: const AppText(
+                data: "Search", fontWeight: FontWeight.w500, fontSize: 22),
             bottom: PreferredSize(
               preferredSize: Size.fromHeight(AppSize.height(value: 50)),
               child: Column(
                 children: [
                   Container(
-                    margin: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10.0)),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: AppSize.width(value: 10.0)),
                     child: AppInputWidgetTwo(
-                      onChanged: controller.callSearchFunction,
+                      // onChanged: controller.callSearchFunction,
                       filled: true,
                       fillColor: AppColors.yellow50,
                       textInputAction: TextInputAction.search,
                       controller: controller.textEditingController,
                       onFieldSubmitted: (p0) {
-                        controller.searchData();
+                        controller.callFilterFunctionAPI();
+                        // controller.searchData();
                       },
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(AppSize.width(value: 10)),
+                        borderRadius:
+                            BorderRadius.circular(AppSize.width(value: 10)),
                         borderSide: const BorderSide(color: AppColors.primary),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 50), vertical: AppSize.width(value: 6)),
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: AppSize.width(value: 50),
+                          vertical: AppSize.width(value: 6)),
                       prefix: Center(
-                        child: AppImage(path: AssetsIconsPath.search, width: AppSize.width(value: 30)),
+                        child: AppImage(
+                            path: AssetsIconsPath.search,
+                            width: AppSize.width(value: 30)),
                       ),
                       suffixIcon: GestureDetector(
                         onTap: () {
                           controller.callFilterDataFunction();
                         },
                         child: Center(
-                          child: AppImage(path: AssetsIconsPath.searchButton, width: AppSize.width(value: 30)),
+                          child: AppImage(
+                              path: AssetsIconsPath.searchButton,
+                              width: AppSize.width(value: 30)),
                         ),
                       ),
                     ),
                   ),
-                  Gap(height: 10)
+                  const Gap(height: 10)
                 ],
               ),
             ),
           ),
           body: Obx(
-            () => ListView.builder(
-              itemCount: controller.listOfServices.length,
-              itemBuilder: (context, index) {
-                return ServicesHorizontalCard(
-                  item: controller.listOfServices[index],
-                );
-              },
-            ),
+            () => controller.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.black,
+                    ),
+                  )
+                : controller.postList.isEmpty
+                    ? const Center(
+                        child: AppText(
+                          data: "Empty",
+                          fontSize: 25,
+                          color: Colors.grey,
+                        ),
+                      )
+                    : ListView.builder(
+                        controller: controller.scrollController,
+                        itemCount: controller.postList.length +
+                            (controller.hasMore.value ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          // Show loading indicator for pagination if it's the last index and more data is being fetched
+                          if (index == controller.postList.length) {
+                            if (controller.hasMore.value &&
+                                controller.isLoadingMore.value) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0),
+                                  child: CircularProgressIndicator(
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              );
+                            } else {
+                              return const SizedBox(); // Placeholder when no more data to load
+                            }
+                          }
+
+                          // Render message item
+                          // var item =
+                          //     controller.listOfMessageData[index];
+                          return ServicesHorizontalCard(
+                            item: controller.postList[index],
+                          );
+                        },
+
+                        // itemBuilder: (context, index) {
+                        //   return
+                        // },
+                      ),
           ),
         );
       },

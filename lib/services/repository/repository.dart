@@ -3,10 +3,12 @@ import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
+import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
 import 'package:servi_app_camituresso/screens/saved_screen/model/get_saved_post_model.dart';
+import 'package:servi_app_camituresso/screens/search_screen/model/serach_page_post_model.dart';
 import 'package:servi_app_camituresso/screens/service_by_service_screen/model/service_by_service_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/create_chat_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
@@ -233,21 +235,69 @@ class Repository {
   // }
 
   // Get Recommendation Post
-  Future<List<RecommendedPostModel>> getRecommendationrPostData() async {
+  Future<List<RecommendedPostModel>> getRecommendationrPostData({
+    int page = 1,
+    int limit = 5,
+  }) async {
     List<RecommendedPostModel> data = <RecommendedPostModel>[];
     try {
       var response = await ApiGetServices().apiGetServices(
-        AppApiUrl.getRecommendationPostUrl,
+        "${AppApiUrl.getRecommendationPostUrl}?page=$page&limit=$limit",
       );
 
       if (response != null) {
-        // return data["data"];
-        if (response["data"]["services"].runtimeType != Null) {
+        if (response["data"]?["services"] != null) {
           for (var element in response["data"]["services"]) {
             data.add(RecommendedPostModel.fromJson(element));
           }
         }
-        return data;
+      }
+    } catch (e) {
+      print("Error in getRecommendationrPostData: $e");
+    }
+    return data;
+  }
+
+  // Get Popular Post
+  Future<List<PopularPostModel>> getPopularPostData({
+    int page = 1,
+    int limit = 5,
+  }) async {
+    List<PopularPostModel> data = <PopularPostModel>[];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+        "${AppApiUrl.getPopularPostUrl}?page=$page&limit=$limit",
+      );
+
+      if (response != null) {
+        if (response["data"]?["services"] != null) {
+          for (var element in response["data"]["services"]) {
+            data.add(PopularPostModel.fromJson(element));
+          }
+        }
+      }
+    } catch (e) {
+      print("Error in getPopularPostData: $e");
+    }
+    return data;
+  }
+
+  Future<List<SearchPagePostModel>> getSearchPostListDataInit() async {
+    List<SearchPagePostModel> data = <SearchPagePostModel>[];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+          AppApiUrl.searchPostUrl,
+          token: AppAuthStorage().getToken());
+
+      if (response != null) {
+        if (response["data"].runtimeType != Null) {
+          final findData = response["data"];
+          if (findData["service"].runtimeType != Null) {
+            for (var element in findData["service"]) {
+              data.add(SearchPagePostModel.fromJson(element));
+            }
+          }
+        }
       }
     } catch (e) {
       print("$e");
@@ -255,21 +305,31 @@ class Repository {
     return data;
   }
 
-  // Get Popular Post
-  Future<List<PopularPostModel>> getPopularPostData() async {
-    List<PopularPostModel> data = <PopularPostModel>[];
+  Future<List<SearchPagePostModel>> getSearchPostListDataSearch({
+    Map<String, dynamic>? queryParameters,
+    int page = 1,
+    int limit = 5,
+  }) async {
+    List<SearchPagePostModel> data = <SearchPagePostModel>[];
     try {
+      queryParameters ??= {};
+      queryParameters.addAll({"page": page, "limit": limit});
+
       var response = await ApiGetServices().apiGetServices(
-        AppApiUrl.getPopularPostUrl,
+        AppApiUrl.searchPostUrl,
+        queryParameters: queryParameters,
+        token: AppAuthStorage().getToken(),
       );
 
       if (response != null) {
-        if (response["data"]["services"].runtimeType != Null) {
-          for (var element in response["data"]["services"]) {
-            data.add(PopularPostModel.fromJson(element));
+        if (response["data"].runtimeType != Null) {
+          final findData = response["data"];
+          if (findData["service"].runtimeType != Null) {
+            for (var element in findData["service"]) {
+              data.add(SearchPagePostModel.fromJson(element));
+            }
           }
         }
-        return data;
       }
     } catch (e) {
       print("$e");
@@ -301,19 +361,22 @@ class Repository {
   }
 
   // Get My Post
-  Future<dynamic> getPostData() async {
+  Future<List<GetPostModel>> getPostData({int page = 1, int limit = 5}) async {
+    List<GetPostModel> posts = [];
     try {
-      var data = await ApiGetServices().apiGetServices(
-        AppApiUrl.getPostUrl,
+      var response = await ApiGetServices().apiGetServices(
+        "${AppApiUrl.getPostUrl}?page=$page&limit=$limit",
       );
 
-      if (data != null) {
-        return data["data"]["posts"];
+      if (response != null && response["data"]?["posts"] != null) {
+        for (var element in response["data"]["posts"]) {
+          posts.add(GetPostModel.fromJson(element));
+        }
       }
     } catch (e) {
-      return null;
+      print("Error in getPostData: $e");
     }
-    return null;
+    return posts;
   }
 
   // Get Service Details Data

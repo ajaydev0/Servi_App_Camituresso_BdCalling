@@ -28,6 +28,7 @@ class AppInputWidget extends StatefulWidget {
       this.maxLines,
       this.onFieldSubmitted,
       this.onTap,
+      this.onChanged,
       this.filled = true,
       this.prefixIconConstraints,
       this.suffixIconConstraints,
@@ -55,6 +56,7 @@ class AppInputWidget extends StatefulWidget {
   final TextStyle? style;
   final void Function(String)? onFieldSubmitted;
   final void Function()? onTap;
+  final void Function(String)? onChanged;
   final BoxConstraints? prefixIconConstraints;
   final BoxConstraints? suffixIconConstraints;
   final TextAlignVertical textAlignVertical;
@@ -78,6 +80,7 @@ class _AppInputWidgetState extends State<AppInputWidget> {
         borderRadius: widget.borderRadius ??
             BorderRadius.circular(AppSize.width(value: 8.0)),
         child: TextFormField(
+          onChanged: widget.onChanged,
           onTapOutside: ((ajay) {
             FocusScope.of(context).unfocus();
           }),

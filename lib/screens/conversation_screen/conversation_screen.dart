@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
@@ -30,21 +31,21 @@ class ConversationScreen extends StatelessWidget {
                   AppImageCircular(
                     width: AppSize.width(value: 40),
                     height: AppSize.width(value: 40),
-                    path: AssetsImagesPath.splash,
+                    // path: AssetsImagesPath.splash,
                     // url: controller.argData.participants?[0].profile ==
                     //         AppConst.nullImageUrl
                     //     ? "${controller.argData.participants?[0].profile}"
                     //     : "${AppApiUrl.domaine}${controller.argData.participants?[0].profile}",
 
-                    // url:
-                    //     "${AppApiUrl.domaine}${controller.argData.participants?[0].profile}",
+                    url:
+                        "${AppApiUrl.domaine}${controller.argData.participants?[0].profile}",
                   ),
                   const Gap(width: 10),
-                  const Expanded(
+                  Expanded(
                       child: AppText(
                           // data: "name",
-                          data: "User Name",
-                          // data: controller.argData.participants?[0].name ?? "",
+                          // data: "User Name",
+                          data: controller.argData.participants?[0].name ?? "",
                           color: AppColors.black900,
                           fontWeight: FontWeight.w800)),
                 ],

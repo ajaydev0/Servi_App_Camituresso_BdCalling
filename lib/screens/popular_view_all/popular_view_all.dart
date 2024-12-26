@@ -10,50 +10,63 @@ class PopularViewAll extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: PopularViewAllController(),
-      builder: (controller) {
-        return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            forceMaterialTransparency: true,
-            title: const AppText(
-              data: "Popular ",
-              fontWeight: FontWeight.w500,
-              fontSize: 22,
-            ),
-          ),
-          body: Obx(
-            () => controller.isError.value
-                ? const Center(
-                    child: AppText(data: "Error"),
-                  )
-                : controller.isLoading.value
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ))
-                    : controller.postList.isEmpty
-                        ? const Center(
-                            child: AppText(data: "Empty..."),
-                          )
-                        : ListView.builder(
-                            reverse: false,
-                            itemCount: controller.postList.length,
-                            itemBuilder: (context, index) {
-                              var item = controller.postList[index];
+    final controller = Get.put(PopularViewAllController());
+    final ScrollController scrollController = ScrollController();
 
-                              return ServicesHorizontalCardTwo(
-                                item: item,
-                                onTap: () {
-                                  controller.changeSavedMode(index);
-                                },
-                              );
-                            },
+    // Detect scroll to bottom
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent &&
+          controller.hasMore.value &&
+          !controller.isLoadingMore.value) {
+        controller.getPopularPostAndInList(isRefresh: false);
+      }
+    });
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        forceMaterialTransparency: true,
+        title: const AppText(
+          data: "Popular ",
+          fontWeight: FontWeight.w500,
+          fontSize: 22,
+        ),
+      ),
+      body: Obx(
+        () => controller.isError.value
+            ? const Center(
+                child: AppText(data: "Error"),
+              )
+            : controller.isLoading.value
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: AppColors.primary,
+                    ),
+                  )
+                : ListView.builder(
+                    controller: scrollController,
+                    itemCount: controller.postList.length +
+                        (controller.hasMore.value ? 1 : 0),
+                    itemBuilder: (context, index) {
+                      if (index == controller.postList.length) {
+                        return const Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
                           ),
-          ),
-        );
-      },
+                        );
+                      }
+
+                      var item = controller.postList[index];
+                      return ServicesHorizontalCardTwo(
+                        item: item,
+                        onTap: () {
+                          // controller.changeSavedMode(index);
+                        },
+                      );
+                    },
+                  ),
+      ),
     );
   }
 }

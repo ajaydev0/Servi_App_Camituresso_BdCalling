@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
+import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/create_chat_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
@@ -9,6 +10,7 @@ import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
 
 class ServicesDetailsScreenController extends GetxController {
   RxBool isLoadingReview = false.obs;
+  RxBool isLoadingForChat = false.obs;
   RxBool isLoading = false.obs;
   TextEditingController reviewController = TextEditingController();
   int reviewRating = 3;
@@ -19,18 +21,59 @@ class ServicesDetailsScreenController extends GetxController {
     return "index is $index";
   });
   List<dynamic> reviewList = [].obs;
+  List<ChatListModel> chatList = <ChatListModel>[].obs;
+
+  Future<void> getChatList() async {
+    try {
+      isLoading.value = true;
+      var data = await Repository().getChatListData();
+      if (data.runtimeType != Null) {
+        chatList = data;
+
+        update();
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   clickOnMessageButton() async {
     print(serviceDetails.user?.sId);
     try {
-      var response =
+      isLoadingForChat.value = true;
+      var createChatResponse =
           await Repository().createChat(chatId: serviceDetails.user?.sId);
-      if (response != null) {
-        Get.toNamed(AppRoutes.conversationScreen, arguments: response);
+      var chatListResponse = await Repository().getChatListData();
+
+      if (createChatResponse != null && chatListResponse.runtimeType != Null) {
+        print("❗❗❗❗❗❗${createChatResponse.sId}");
+        print("❗❗❗❗❗❗${chatListResponse}");
+
+        var data = chatListResponse.where(
+          (element) {
+            return element.sId!
+                .toLowerCase()
+                .contains(createChatResponse.sId?.toLowerCase() ?? "");
+          },
+        ).toList();
+        if (data.isNotEmpty) {
+          ChatListModel sendData = ChatListModel();
+          sendData = data[0];
+          Get.toNamed(AppRoutes.conversationScreen, arguments: sendData);
+          print("Data Ache");
+          print(data);
+          print(sendData);
+        }
+        print("❗❗❗❗❗❗${data}");
+
         // AppSnackBar.success("Chat Create Successful");
       }
     } catch (e) {
       print("Chat Create Exception $e");
+    } finally {
+      isLoadingForChat.value = false;
     }
     //
   }
