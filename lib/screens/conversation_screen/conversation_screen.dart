@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/controllers/conversation_screen_controller.dart';
+import 'package:servi_app_camituresso/screens/conversation_screen/widgets/offer_dialog_box.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
@@ -53,7 +55,7 @@ class ConversationScreen extends StatelessWidget {
               actions: [
                 GestureDetector(
                     onTap: () {
-                      // conversationOfferDialog(controller);
+                      conversationOfferDialog(controller);
                     },
                     child: const AppText(
                         data: "Offer",
@@ -200,8 +202,10 @@ class ConversationScreen extends StatelessWidget {
                         // Looks
                         InkWell(
                           onTap: () {
-                            // controller.sendImage(ImageSource.gallery,
-                            //     formatTime2(DateTime.now().toString()));
+                            controller.sendImage(
+                                ImageSource.gallery, DateTime.now().toString()
+                                // formatTime2(DateTime.now().toString())
+                                );
                           },
                           child: const AppImage(
                             path: AssetsIconsPath.imagePick,
@@ -209,8 +213,8 @@ class ConversationScreen extends StatelessWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            // controller.sendImage(ImageSource.camera,
-                            //     formatTime2(DateTime.now().toString()));
+                            controller.sendImage(
+                                ImageSource.camera, DateTime.now().toString());
                           },
                           child: const AppImage(
                             path: AssetsIconsPath.cameraPick,

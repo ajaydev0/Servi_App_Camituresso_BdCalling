@@ -1,6 +1,7 @@
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
+import 'package:servi_app_camituresso/screens/clients_details_screen/model/booking_request_details_model.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
 import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
@@ -15,6 +16,7 @@ import 'package:servi_app_camituresso/screens/services_details_screen/models/cre
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
+import 'package:servi_app_camituresso/services/api/services/api_patch_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 
@@ -238,7 +240,7 @@ class Repository {
   // Get Recommendation Post
   Future<List<RecommendedPostModel>> getRecommendationrPostData({
     int page = 1,
-    int limit = 5,
+    int limit = 20,
   }) async {
     List<RecommendedPostModel> data = <RecommendedPostModel>[];
     try {
@@ -262,7 +264,7 @@ class Repository {
   // Get Popular Post
   Future<List<PopularPostModel>> getPopularPostData({
     int page = 1,
-    int limit = 5,
+    int limit = 20,
   }) async {
     List<PopularPostModel> data = <PopularPostModel>[];
     try {
@@ -305,22 +307,44 @@ class Repository {
     }
     return data;
   }
+//  // Get Recommendation Post
+//   Future<List<RecommendedPostModel>> getRecommendationrPostData({
+//     int page = 1,
+//     int limit = 20,
+//   }) async {
+//     List<RecommendedPostModel> data = <RecommendedPostModel>[];
+//     try {
+//       var response = await ApiGetServices().apiGetServices(
+//         "${AppApiUrl.getRecommendationPostUrl}?page=$page&limit=$limit",
+//       );
 
-  Future<List<BookingRequestListModel>> getBookingRequestListData() async {
+//       if (response != null) {
+//         if (response["data"]?["services"] != null) {
+//           for (var element in response["data"]["services"]) {
+//             data.add(RecommendedPostModel.fromJson(element));
+//           }
+//         }
+//       }
+//     } catch (e) {
+//       print("Error in getRecommendationrPostData: $e");
+//     }
+//     return data;
+//   }
+
+  Future<List<BookingRequestListModel>> getBookingRequestListData({
+    int page = 1,
+    int limit = 20,
+  }) async {
     List<BookingRequestListModel> data = <BookingRequestListModel>[];
     try {
       var response = await ApiGetServices().apiGetServices(
-          AppApiUrl.bookingRequest,
-          token: AppAuthStorage().getToken());
+        "${AppApiUrl.bookingRequest}?page=$page&limit=$limit",
+        token: AppAuthStorage().getToken(),
+      );
 
-      if (response != null) {
-        if (response["data"].runtimeType != Null) {
-          final findData = response["data"];
-          if (findData["offers"].runtimeType != Null) {
-            for (var element in findData["offers"]) {
-              data.add(BookingRequestListModel.fromJson(element));
-            }
-          }
+      if (response != null && response["data"] != null) {
+        for (var element in response["data"]["offers"]) {
+          data.add(BookingRequestListModel.fromJson(element));
         }
       }
     } catch (e) {
@@ -412,6 +436,45 @@ class Repository {
       );
       if (data["data"].runtimeType != Null) {
         return ServiceDetailsModel.fromJson(data["data"]);
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  // Get Service Details Data
+  Future<BookingRequestDetailsModel?> getBookingRequestDetailsData(
+      String id) async {
+    try {
+      // Api Call
+      var data = await ApiGetServices().apiGetServices(
+        "${AppApiUrl.bookingRequest}/$id",
+      );
+      if (data["data"].runtimeType != Null) {
+        return BookingRequestDetailsModel.fromJson(data["data"]);
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  // Get Service Details Data
+  Future<BookingRequestDetailsModel?> getBookingRequestChangeStatus(
+      {String? id, String? status}) async {
+    try {
+      // Api Call
+      var data = await ApiPatchServices().apiPatchServices(
+        url: "${AppApiUrl.bookingRequest}/$id?status=$status",
+        // body: formData,
+        token: AppAuthStorage().getToken(),
+      );
+      // var data = await ApiGetServices().apiGetServices(
+      //   "${AppApiUrl.bookingRequest}/$id?status=$status",
+      // );
+      if (data["data"].runtimeType != Null) {
+        return BookingRequestDetailsModel.fromJson(data["data"]);
       }
     } catch (e) {
       print(e);

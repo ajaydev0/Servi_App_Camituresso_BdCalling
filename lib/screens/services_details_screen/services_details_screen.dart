@@ -14,6 +14,7 @@ import 'package:servi_app_camituresso/screens/services_details_screen/widgets/se
 import 'package:servi_app_camituresso/screens/services_details_screen/controllers/services_details_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/widgets/services_review_delete_dialog_warning.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/widgets/glass_mor_Phish_item.dart';
+import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/user_type.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
@@ -100,18 +101,15 @@ class ServicesDetailsScreen extends StatelessWidget {
                                               AppConst.nullImageUrl
                                           ? controller.serviceDetails.image
                                           : "${AppApiUrl.domaine}${controller.serviceDetails.image}",
-                                      // url:
-                                      //     "${AppApiUrl.domaine}${controller.serviceDetails.image}",
                                     ),
                                     Positioned(
                                       top: AppSize.width(value: 30),
-                                      left: AppSize.width(value: 30),
-                                      right: AppSize.width(value: 30),
+                                      left: AppSize.width(value: 20),
+                                      right: AppSize.width(value: 20),
                                       child: Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
                                         children: [
-                                          // >>>>>>>>>>>>>>>>>>>>>> back button <<<<<<<<<<<<<<<<<<<<<<
                                           GestureDetector(
                                             onTap: () {
                                               Get.back();
@@ -122,124 +120,33 @@ class ServicesDetailsScreen extends StatelessWidget {
                                               path: AssetsIconsPath.backButton,
                                             ),
                                           ),
-                                          ////////////  saved button
-
-                                          /// api data use on this
-                                          ///  if (selectedUser == UserType.user)
-                                          // GestureDetector(
-                                          //     onTap: () {
-                                          //     },
-                                          //     child: AppImage(
-                                          //       width: AppSize.width(value: 30),
-                                          //       height: AppSize.width(value: 30),
-                                          //       path: value == true ? AssetsIconsPath.savaDed : AssetsIconsPath.notSavaDed2,
-                                          //     ),
-                                          // ),
-                                          /////////////// use only dev ui
-                                          if (selectedUser == UserType.user)
-                                            ValueBuilder<bool?>(
-                                              initialValue: false,
-                                              builder: (snapshot, updater) =>
-                                                  GestureDetector(
-                                                onTap: () {
-                                                  if (snapshot != null) {
-                                                    updater(!snapshot);
-                                                  }
-                                                },
-                                                child: AppImage(
-                                                  width:
-                                                      AppSize.width(value: 30),
-                                                  height:
-                                                      AppSize.width(value: 30),
-                                                  path: snapshot == true
-                                                      ? AssetsIconsPath.savaDed
-                                                      : AssetsIconsPath
-                                                          .notSavaDed2,
-                                                ),
-                                              ),
+                                          ValueBuilder<bool?>(
+                                            initialValue: true,
+                                            builder: (snapshot, updater) =>
+                                                GestureDetector(
+                                              onTap: () async {
+                                                if (snapshot != null) {
+                                                  updater(!snapshot);
+                                                }
+                                              },
+                                              child: IconButton(
+                                                  style: ButtonStyle(
+                                                      backgroundColor:
+                                                          WidgetStatePropertyAll(
+                                                              Colors.black
+                                                                  .withOpacity(
+                                                                      .4))),
+                                                  onPressed: null,
+                                                  icon: Icon(
+                                                      snapshot == true
+                                                          ? Icons.bookmark
+                                                          : Icons
+                                                              .bookmark_outline,
+                                                      color: snapshot == true
+                                                          ? Color(0xffD0A933)
+                                                          : Colors.white)),
                                             ),
-                                          // >>>>>>>>>>>>>>>>>>>>>> edit and removed button  <<<<<<<<<<<<<<<<<<<<<<
-                                          // >>>>>>>>>>>>>>>>>>>>>> pop up this button item show <<<<<<<<<<<<<<<<<<<<<<
-                                          // if (selectedUser ==
-                                          //     UserType.servicesProvider)
-                                          //   PopupMenuButton<String>(
-                                          //     enableFeedback: true,
-                                          //     child: AppImage(
-                                          //       width: AppSize.width(value: 30),
-                                          //       height:
-                                          //           AppSize.width(value: 30),
-                                          //       path:
-                                          //           AssetsIconsPath.popUpButton,
-                                          //     ),
-                                          //     color: Colors.transparent,
-                                          //     elevation: 0,
-                                          //     clipBehavior: Clip.hardEdge,
-                                          //     offset: Offset.zero,
-                                          //     // menuPadding: EdgeInsets.zero,
-                                          //     padding: EdgeInsets.zero,
-                                          //     position: PopupMenuPosition.under,
-                                          //     itemBuilder: (context) {
-                                          //       return [
-                                          //         // >>>>>>>>>>>>>>>>>>>>>> edit button  <<<<<<<<<<<<<<<<<<<<<<
-                                          //         // >>>>>>>>>>>>>>>>>>>>>> when click goto edit screen <<<<<<<<<<<<<<<<<<<<<<
-                                          //         PopupMenuItem(
-                                          //           height: AppSize.width(
-                                          //               value: 30),
-                                          //           padding: EdgeInsets.zero,
-                                          //           child: const ClipRRect(
-                                          //             borderRadius:
-                                          //                 BorderRadius.only(
-                                          //               topLeft:
-                                          //                   Radius.circular(
-                                          //                       10.0),
-                                          //               topRight:
-                                          //                   Radius.circular(
-                                          //                       10.0),
-                                          //             ),
-                                          //             child: GlassMorPhishItem(
-                                          //                 child: AppImage(
-                                          //               height: 300,
-                                          //               path: AssetsImagesPath
-                                          //                   .editButtonImage,
-                                          //               fit: BoxFit.fill,
-                                          //             )),
-                                          //           ),
-                                          //           onTap: () {
-                                          //             Get.toNamed(
-                                          //                 AppRoutes
-                                          //                     .addPostAndEditScreen,
-                                          //                 arguments: controller
-                                          //                     .serviceDetails);
-                                          //           },
-                                          //         ),
-                                          //         PopupMenuItem(
-                                          //           height: AppSize.width(
-                                          //               value: 30),
-                                          //           padding: EdgeInsets.zero,
-                                          //           child: const ClipRRect(
-                                          //             borderRadius:
-                                          //                 BorderRadius.only(
-                                          //               bottomLeft:
-                                          //                   Radius.circular(
-                                          //                       10.0),
-                                          //               bottomRight:
-                                          //                   Radius.circular(
-                                          //                       10.0),
-                                          //             ),
-                                          //             child: GlassMorPhishItem(
-                                          //                 child: AppImage(
-                                          //               fit: BoxFit.fill,
-                                          //               path: AssetsImagesPath
-                                          //                   .detailsButtonImage,
-                                          //             )),
-                                          //           ),
-                                          //           onTap: () {
-                                          //             servicesDetailsDeleteDialogWarning();
-                                          //           },
-                                          //         ),
-                                          //       ];
-                                          //     },
-                                          //   ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -417,45 +324,18 @@ class ServicesDetailsScreen extends StatelessWidget {
                                   //     """Hello, I'm Marc Marquez, a certified electrician with over [X] years of experience in providing reliable and efficient electrical services. From fixing faulty wiring and installing new lighting fixtures to upgrading electrical panels and ensuring your home or business meets safety standards, I'm here to help with all your electrical needs. I take pride in delivering high-quality work, ensuring your safety and satisfaction with every job. Whether it's a minor repair or a major installation, you can count on me to get the job done right. Book my services through this app, and I'll be at your location in no time. """),
                                   Gap(height: 20),
                                   AppText(
-                                    data: "House Cleaning",
+                                    data: "Price Breakdown",
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600,
                                   ),
                                   Gap(height: 10),
-                                  Row(
-                                    children: [
-                                      AppText(data: "*"),
-                                      Gap(width: 10),
-                                      Expanded(
-                                          child: AppText(
-                                              height: 1.5,
-                                              data:
-                                                  """Description: Providers charge a fixed amount per hour for their services.""")),
-                                    ],
-                                  ),
-                                  Gap(height: 5),
-                                  Row(
-                                    children: [
-                                      AppText(data: "*"),
-                                      Gap(width: 10),
-                                      Expanded(
-                                          child: AppText(
-                                              height: 1.5,
-                                              data:
-                                                  """Hourly Rate: \$30/hour""")),
-                                    ],
-                                  ),
-                                  Gap(height: 5),
-                                  Row(
-                                    children: [
-                                      AppText(data: "*"),
-                                      Gap(width: 10),
-                                      Expanded(
-                                          child: AppText(
-                                              height: 1.5,
-                                              data:
-                                                  """Fixed Price: \$150 for a standard 3-bedroom house cleaning""")),
-                                    ],
+                                  AppText(
+                                    height: 2,
+                                    textAlign: TextAlign.justify,
+                                    data: controller
+                                            .serviceDetails.priceBreakdown ??
+                                        "",
+                                    // data: "",
                                   ),
                                 ],
                               ),

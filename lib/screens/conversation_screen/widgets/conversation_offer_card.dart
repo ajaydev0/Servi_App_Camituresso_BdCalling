@@ -19,7 +19,9 @@ class ConversationOfferCard extends StatelessWidget {
           constraints: BoxConstraints(maxWidth: Get.width / 2),
           alignment: Alignment.center,
           padding: EdgeInsets.all(AppSize.width(value: 5.0)),
-          decoration: BoxDecoration(color: AppColors.green, borderRadius: BorderRadius.circular(AppSize.width(value: 5))),
+          decoration: BoxDecoration(
+              color: AppColors.green,
+              borderRadius: BorderRadius.circular(AppSize.width(value: 5))),
           child: AppText(
             data: "\$${item.offerPice}",
             color: AppColors.white300,
@@ -31,7 +33,9 @@ class ConversationOfferCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10.0), vertical: AppSize.width(value: 5.0)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSize.width(value: 10.0),
+                  vertical: AppSize.width(value: 5.0)),
               decoration: BoxDecoration(
                 color: AppColors.primary,
                 borderRadius: BorderRadius.circular(AppSize.width(value: 5)),
@@ -45,7 +49,9 @@ class ConversationOfferCard extends StatelessWidget {
             ),
             Gap(width: 20),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10.0), vertical: AppSize.width(value: 5.0)),
+              padding: EdgeInsets.symmetric(
+                  horizontal: AppSize.width(value: 10.0),
+                  vertical: AppSize.width(value: 5.0)),
               decoration: BoxDecoration(
                 color: AppColors.white50,
                 borderRadius: BorderRadius.circular(AppSize.width(value: 5)),
@@ -64,7 +70,8 @@ class ConversationOfferCard extends StatelessWidget {
         const Gap(height: 4.5),
         Container(
           constraints: BoxConstraints(maxWidth: Get.width / 2),
-          alignment: item.isSendMe ? Alignment.centerLeft : Alignment.centerRight,
+          alignment:
+              item.isSendMe ? Alignment.centerLeft : Alignment.centerRight,
           padding: EdgeInsets.all(AppSize.width(value: 5.0)),
           child: AppText(
             textAlign: TextAlign.end,

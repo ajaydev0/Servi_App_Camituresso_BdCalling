@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
@@ -53,14 +54,15 @@ class ClientsDetailsScreen extends StatelessWidget {
                                 child: AppImage(
                                   height: AppSize.size.height * 0.15,
                                   width: AppSize.size.width * 0.35,
-                                  path: AssetsImagesPath.nullImage,
+                                  url:
+                                      "${AppApiUrl.domaine}${controller.itemDetails.user?.profile}",
                                 ),
                               ),
                             ],
                           ),
                           const Gap(height: 10),
-                          const AppText(
-                            data: "Shanto Hasan",
+                          AppText(
+                            data: controller.itemDetails.user?.name ?? "",
                             fontSize: 20,
                             fontWeight: FontWeight.w500,
                           ),
@@ -106,24 +108,31 @@ class ClientsDetailsScreen extends StatelessWidget {
                                 // height: AppSize.width(value: 30),
                                 // width: AppSize.width(value: 100),
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 8),
+                                    horizontal: 20, vertical: 0),
                                 decoration: BoxDecoration(
                                     color: AppColors.primary.withOpacity(.3),
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(20))),
-                                child: const Row(
+                                child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     AppText(
-                                      data: "Booking ID: 846456444",
+                                      data:
+                                          "Booking ID: ${controller.itemDetails.offerId}",
                                       color: AppColors.gray,
                                     ),
-                                    Gap(width: 10),
-                                    Icon(
-                                      Icons.file_copy,
-                                      color: AppColors.black400,
-                                      size: 15,
-                                    )
+                                    // Gap(width: 10),
+                                    IconButton(
+                                        onPressed: () {
+                                          controller.copyToClipboard(context,
+                                              controller.itemDetails.offerId);
+                                        },
+                                        tooltip: 'Copy to Clipboard',
+                                        icon: const Icon(
+                                          Icons.file_copy,
+                                          color: AppColors.black400,
+                                          size: 15,
+                                        ))
                                   ],
                                 ),
                               ),
@@ -151,20 +160,27 @@ class ClientsDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           const Gap(height: 20),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                AppText(
+                                const AppText(
                                   data: "Address",
                                   color: AppColors.gray,
                                   fontSize: 18,
                                 ),
-                                AppText(
-                                  data: "1901 Thornridge Cir. Shiloh",
-                                  color: AppColors.black500,
-                                  fontSize: 18,
+                                Expanded(
+                                  child: AppText(
+                                    data:
+                                        controller.itemDetails.user?.location ??
+                                            "",
+                                    color: AppColors.black500,
+                                    fontSize: 18,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.right,
+                                  ),
                                 ),
                               ],
                             ),
@@ -188,7 +204,7 @@ class ClientsDetailsScreen extends StatelessWidget {
                             child: Row(
                               children: [
                                 AppText(
-                                  data: "Service Details",
+                                  data: "Price Breakdown",
                                   color: AppColors.black700,
                                   fontSize: 20,
                                 ),
@@ -196,43 +212,58 @@ class ClientsDetailsScreen extends StatelessWidget {
                             ),
                           ),
                           const Gap(height: 20),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 AppText(
-                                  data: "Room Clean",
+                                  data: controller.itemDetails.service
+                                          ?.priceBreakdown ??
+                                      "",
                                   color: AppColors.gray,
                                   fontSize: 18,
-                                ),
-                                AppText(
-                                  data: "\$250",
-                                  color: AppColors.black500,
-                                  fontSize: 20,
+                                  // textAlign: TextAlign.start,
                                 ),
                               ],
                             ),
                           ),
-                          const Gap(height: 10),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                AppText(
-                                  data: "Room Wash",
-                                  color: AppColors.gray,
-                                  fontSize: 18,
-                                ),
-                                AppText(
-                                  data: "\$50",
-                                  color: AppColors.black500,
-                                  fontSize: 20,
-                                ),
-                              ],
-                            ),
-                          ),
+                          // const Padding(
+                          //   padding: EdgeInsets.symmetric(horizontal: 20),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       AppText(
+                          //         data: "Room Clean",
+                          //         color: AppColors.gray,
+                          //         fontSize: 18,
+                          //       ),
+                          //       AppText(
+                          //         data: "\$250",
+                          //         color: AppColors.black500,
+                          //         fontSize: 20,
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          // const Gap(height: 10),
+                          // const Padding(
+                          //   padding: EdgeInsets.symmetric(horizontal: 20),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     children: [
+                          //       AppText(
+                          //         data: "Room Wash",
+                          //         color: AppColors.gray,
+                          //         fontSize: 18,
+                          //       ),
+                          //       AppText(
+                          //         data: "\$50",
+                          //         color: AppColors.black500,
+                          //         fontSize: 20,
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
                           const Gap(height: 30),
                           Row(
                             children: [
@@ -247,19 +278,20 @@ class ClientsDetailsScreen extends StatelessWidget {
                             ],
                           ),
                           const Gap(height: 20),
-                          const Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                AppText(
+                                const AppText(
                                   data: "Total",
                                   color: AppColors.black700,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
                                 ),
                                 AppText(
-                                  data: "\$300",
+                                  data:
+                                      "\$${controller.itemDetails.service?.price}",
                                   color: AppColors.black700,
                                   fontSize: 20,
                                   fontWeight: FontWeight.w600,
@@ -303,6 +335,7 @@ class ClientsDetailsScreen extends StatelessWidget {
                               const Gap(width: 10),
                               GestureDetector(
                                 onTap: () {
+                                  print(controller.itemDetails.status);
                                   // Get.toNamed(
                                   //     AppRoutes.paymentMethodScreen);
                                 },

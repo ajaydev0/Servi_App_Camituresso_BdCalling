@@ -19,7 +19,7 @@ class ConversationCard extends StatelessWidget {
           data: item.message,
           color: item.isSendMe ? AppColors.black700 : AppColors.white50,
         ),
-        Gap(height: 4.5),
+        const Gap(height: 4.5),
         AppText(
           data: timeTextFormate(item.dateTime),
           color: item.isSendMe ? AppColors.black300 : AppColors.white600,

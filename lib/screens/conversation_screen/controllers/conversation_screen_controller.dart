@@ -11,21 +11,31 @@ import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
+import 'package:servi_app_camituresso/screens/conversation_screen/widgets/full_view_image.dart';
+import 'package:servi_app_camituresso/screens/conversation_screen/widgets/message_time_format.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/services/repository/post_repository.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
+import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ConversationScreenController extends GetxController {
+//////// Offer
+  final TextEditingController offerAmount = TextEditingController();
+  final TextEditingController offerServiceDetails = TextEditingController();
+  RxString selectedService = "".obs;
+
   //// Socket
   late IO.Socket socket;
   RxBool isLoading = false.obs;
+  RxBool isLoadingUploadImage = false.obs;
   RxBool isSendingMessage = false.obs;
   late RxBool initDate = false.obs;
+  final GlobalKey sendOffDialogKey = GlobalKey();
   final TextEditingController dateTextController = TextEditingController();
   final TextEditingController chatController = TextEditingController();
   final ScrollController scrollController = ScrollController();
@@ -128,34 +138,68 @@ class ConversationScreenController extends GetxController {
     }
   }
 
+  onlyTextSend() async {
+    if (chatController.text != "") {
+      isSendingMessage.value = true;
+      Map<String, dynamic> body = {
+        "text": chatController.text,
+        "chatId": argData.sId,
+        "messageType": "text",
+      };
+      // Api Call
+      var data = await ImageRepository().imageUploadWithData2(
+        body: body,
+        // imagePath: userLocalImage.value,
+        url: AppApiUrl.sendMessage,
+      );
+      if (data != null) {
+        listOfMessageData.insert(listOfMessageData.length, data);
+      }
+      //////////// Get List Abr
+      // var messageData =
+      //     await Repository().getChatMessageListData(chatId: argData.sId);
+      // if (messageData.runtimeType != Null) {
+      //   messageList.value = messageData;
+      // }
+      /////////
+      update();
+      chatController.text = "";
+    }
+  }
+
+  // onlyImageSend() async {
+  //   final pickedFile = await picker.pickImage(source: source);
+  //   if (pickedFile?.path != "") {
+  //     isSendingMessage.value = true;
+  //     Map<String, dynamic> body = {
+  //       "image": picker,
+  //       "chatId": argData.sId,
+  //       "messageType": "image",
+  //     };
+  //     // Api Call
+  //     var data = await ImageRepository().imageUploadWithData2(
+  //       body: body,
+  //       // imagePath: userLocalImage.value,
+  //       url: AppApiUrl.sendMessage,
+  //     );
+  //     if (data != null) {
+  //       listOfMessageData.insert(listOfMessageData.length, data);
+  //     }
+  //     //////////// Get List Abr
+  //     // var messageData =
+  //     //     await Repository().getChatMessageListData(chatId: argData.sId);
+  //     // if (messageData.runtimeType != Null) {
+  //     //   messageList.value = messageData;
+  //     // }
+  //     /////////
+  //     update();
+  //     chatController.text = "";
+  //   }
+  // }
+
   void sendMessage() async {
     try {
-      if (chatController.text != "") {
-        isSendingMessage.value = true;
-        Map<String, dynamic> body = {
-          "text": chatController.text,
-          "chatId": argData.sId,
-          "messageType": "text",
-        };
-        // Api Call
-        var data = await ImageRepository().imageUploadWithData2(
-          body: body,
-          // imagePath: userLocalImage.value,
-          url: AppApiUrl.sendMessage,
-        );
-        if (data != null) {
-          listOfMessageData.insert(listOfMessageData.length, data);
-        }
-        //////////// Get List Abr
-        // var messageData =
-        //     await Repository().getChatMessageListData(chatId: argData.sId);
-        // if (messageData.runtimeType != Null) {
-        //   messageList.value = messageData;
-        // }
-        /////////
-        update();
-        chatController.text = "";
-      }
+      await onlyTextSend();
     } catch (e) {
       print(" Demo Error $e");
     } finally {
@@ -244,7 +288,9 @@ class ConversationScreenController extends GetxController {
                       //  message["user"] == "professional"
                       //     ? AppColors.chatBoxColor
                       //     :
-                      AppColors.white100,
+                      item.sender == AppAuthStorage().getChatID()
+                          ? AppColors.primary
+                          : AppColors.white100,
                   borderRadius: BorderRadius.only(
                     topLeft: const Radius.circular(20),
                     topRight: const Radius.circular(20),
@@ -268,8 +314,8 @@ class ConversationScreenController extends GetxController {
                   ),
                 ],
               )),
-          const AppText(
-            data: "10.00 AM",
+          AppText(
+            data: formatTime(item.createdAt ?? ""),
             color: AppColors.black900,
             fontSize: 12,
           ),
@@ -286,9 +332,11 @@ class ConversationScreenController extends GetxController {
           // maxHeight: AppSize.size.height * 0.20
         ),
         padding: const EdgeInsets.all(15),
-        decoration: const BoxDecoration(
-            color: AppColors.white100,
-            borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+            color: item.sender == AppAuthStorage().getChatID()
+                ? AppColors.primary
+                : AppColors.white100,
+            borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(20),
                 topRight: Radius.circular(20),
                 bottomLeft: Radius.circular(20))),
@@ -300,17 +348,17 @@ class ConversationScreenController extends GetxController {
               ),
               child: GestureDetector(
                 onTap: () {
-                  // Navigator.push(
-                  //   Get.context!,
-                  //   MaterialPageRoute(
-                  //     builder: (_) =>
-                  //         FullScreenImageViewer(image: message['image']),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    Get.context!,
+                    MaterialPageRoute(
+                      builder: (_) => FullScreenImageViewer(
+                          image: "${AppApiUrl.domaine}${item.image}"),
+                    ),
+                  );
                 },
-                child: const AppImage(
-                  path: AssetsImagesPath.splash,
-                  // url: "${AppApiUrl.domaine}${item.image}",
+                child: AppImage(
+                  // path: AssetsImagesPath.splash,
+                  url: "${AppApiUrl.domaine}${item.image}",
                   height: 250,
                   fit: BoxFit.fitWidth,
                 ),
@@ -323,11 +371,11 @@ class ConversationScreenController extends GetxController {
               ),
             ),
             const Gap(height: 20),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 AppText(
-                  data: "10.00 AM",
+                  data: formatTime(item.createdAt ?? ""),
                   // data: message["time"],
                   color: AppColors.black400,
                   fontSize: 12,
@@ -366,16 +414,32 @@ class ConversationScreenController extends GetxController {
       userScreen.value = argData.toString();
     }
   }
-  // void sendImage(ImageSource source, String time) async {
-  //   final pickedFile = await picker.pickImage(source: source);
-  //   if (pickedFile != null) {
-  //     myChatData.add({
-  //       'user': "professional",
-  //       'text': null,
-  //       'image': File(pickedFile.path),
-  //       'time': time,
-  //     });
-  //     // scrollToBottom();
-  //   }
-  // }
+
+  void sendImage(ImageSource source, String time) async {
+    final pickedFile = await picker.pickImage(source: source);
+
+    try {
+      if (pickedFile != null) {
+        isLoadingUploadImage.value = true;
+        Map<String, dynamic> body = {
+          // "image": File(pickedFile.path),
+          "chatId": argData.sId,
+          "messageType": "image",
+        };
+        // Api Call
+        var data = await ImageRepository().imageUploadWithData2(
+          body: body,
+          imagePath: pickedFile.path,
+          url: AppApiUrl.sendMessage,
+        );
+        if (data != null) {
+          AppSnackBar.success("Success");
+        }
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoadingUploadImage.value = false;
+    }
+  }
 }

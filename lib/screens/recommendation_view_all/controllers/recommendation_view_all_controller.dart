@@ -10,7 +10,7 @@ class RecommendationViewAllController extends GetxController {
 
   RxList<RecommendedPostModel> postList = <RecommendedPostModel>[].obs;
   int currentPage = 1;
-  final int limit = 20;
+  final int limit = 5;
 
   // Fetch the first page or refresh data
   Future<void> getRecommendedPostAndInList({bool isRefresh = false}) async {

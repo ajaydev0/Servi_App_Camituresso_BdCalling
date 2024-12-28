@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
-import 'package:servi_app_camituresso/screens/services_details_screen/models/create_chat_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';

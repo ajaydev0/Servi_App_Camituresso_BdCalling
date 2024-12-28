@@ -89,47 +89,47 @@ class HomeScreenCard extends StatelessWidget {
                   //           //  Color(0xffD0A933)
                   //           )),
                   // ),
-                  Positioned(
-                    right: AppSize.width(value: 10),
-                    top: AppSize.width(value: 10),
-                    child: ValueBuilder<bool?>(
-                      initialValue: item.bookmark,
-                      builder: (snapshot, updater) => GestureDetector(
-                        onTap: () async {
-                          if (snapshot != null) {
-                            updater(!snapshot);
-                            print(item.sId);
-                            var data =
-                                await Repository().addBookmark(id: item.sId);
-                            print(data);
-                            // controller.update();
-                            // await controller.getPopularPostList();
-                            await controller.getRecommendedPostList();
-                          }
-                        },
-                        child: IconButton(
-                            style: ButtonStyle(
-                                backgroundColor: WidgetStatePropertyAll(
-                                    Colors.black.withOpacity(.4))),
-                            onPressed: null,
-                            icon: Icon(
-                                snapshot == true
-                                    ? Icons.bookmark
-                                    : Icons.bookmark_outline,
-                                color: snapshot == true
-                                    ? Color(0xffD0A933)
-                                    : Colors.white)),
+                  // Positioned(
+                  //   right: AppSize.width(value: 10),
+                  //   top: AppSize.width(value: 10),
+                  //   child: ValueBuilder<bool?>(
+                  //     initialValue: item.bookmark,
+                  //     builder: (snapshot, updater) => GestureDetector(
+                  //       onTap: () async {
+                  //         if (snapshot != null) {
+                  //           updater(!snapshot);
+                  //           print(item.sId);
+                  //           var data =
+                  //               await Repository().addBookmark(id: item.sId);
+                  //           print(data);
+                  //           // controller.update();
+                  //           // await controller.getPopularPostList();
+                  //           await controller.getRecommendedPostList();
+                  //         }
+                  //       },
+                  //       child: IconButton(
+                  //           style: ButtonStyle(
+                  //               backgroundColor: WidgetStatePropertyAll(
+                  //                   Colors.black.withOpacity(.4))),
+                  //           onPressed: null,
+                  //           icon: Icon(
+                  //               snapshot == true
+                  //                   ? Icons.bookmark
+                  //                   : Icons.bookmark_outline,
+                  //               color: snapshot == true
+                  //                   ? Color(0xffD0A933)
+                  //                   : Colors.white)),
 
-                        //  AppImage(
-                        //   width: AppSize.width(value: 30),
-                        //   height: AppSize.width(value: 30),
-                        //   path: snapshot == true
-                        //       ? AssetsIconsPath.savaDed
-                        //       : AssetsIconsPath.notSavaDed,
-                        // ),
-                      ),
-                    ),
-                  )
+                  //       //  AppImage(
+                  //       //   width: AppSize.width(value: 30),
+                  //       //   height: AppSize.width(value: 30),
+                  //       //   path: snapshot == true
+                  //       //       ? AssetsIconsPath.savaDed
+                  //       //       : AssetsIconsPath.notSavaDed,
+                  //       // ),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
             ),

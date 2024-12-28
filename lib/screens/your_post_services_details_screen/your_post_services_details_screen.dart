@@ -390,7 +390,7 @@ class YourPostServicesDetailsScreen extends StatelessWidget {
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  Gap(height: 10),
+                                  const Gap(height: 10),
                                   AppText(
                                     height: 2,
                                     textAlign: TextAlign.justify,
@@ -401,47 +401,20 @@ class YourPostServicesDetailsScreen extends StatelessWidget {
                                   ),
                                   // data:
                                   //     """Hello, I'm Marc Marquez, a certified electrician with over [X] years of experience in providing reliable and efficient electrical services. From fixing faulty wiring and installing new lighting fixtures to upgrading electrical panels and ensuring your home or business meets safety standards, I'm here to help with all your electrical needs. I take pride in delivering high-quality work, ensuring your safety and satisfaction with every job. Whether it's a minor repair or a major installation, you can count on me to get the job done right. Book my services through this app, and I'll be at your location in no time. """),
-                                  Gap(height: 20),
-                                  AppText(
-                                    data: "House Cleaning",
+                                  const Gap(height: 20),
+                                  const AppText(
+                                    data: "Price Breakdown",
                                     fontSize: 20,
                                     fontWeight: FontWeight.w600,
                                   ),
-                                  Gap(height: 10),
-                                  Row(
-                                    children: [
-                                      AppText(data: "*"),
-                                      Gap(width: 10),
-                                      Expanded(
-                                          child: AppText(
-                                              height: 1.5,
-                                              data:
-                                                  """Description: Providers charge a fixed amount per hour for their services.""")),
-                                    ],
-                                  ),
-                                  Gap(height: 5),
-                                  Row(
-                                    children: [
-                                      AppText(data: "*"),
-                                      Gap(width: 10),
-                                      Expanded(
-                                          child: AppText(
-                                              height: 1.5,
-                                              data:
-                                                  """Hourly Rate: \$30/hour""")),
-                                    ],
-                                  ),
-                                  Gap(height: 5),
-                                  Row(
-                                    children: [
-                                      AppText(data: "*"),
-                                      Gap(width: 10),
-                                      Expanded(
-                                          child: AppText(
-                                              height: 1.5,
-                                              data:
-                                                  """Fixed Price: \$150 for a standard 3-bedroom house cleaning""")),
-                                    ],
+                                  const Gap(height: 10),
+                                  AppText(
+                                    height: 2,
+                                    textAlign: TextAlign.justify,
+                                    data: controller
+                                            .serviceDetails.priceBreakdown ??
+                                        "",
+                                    // data: "",
                                   ),
                                 ],
                               ),
@@ -449,12 +422,12 @@ class YourPostServicesDetailsScreen extends StatelessWidget {
                           ),
                           //////////////  app bar pinned
                           // include title and add review button
-                          SliverAppBar(
+                          const SliverAppBar(
                             automaticallyImplyLeading: false,
                             forceMaterialTransparency: false,
                             backgroundColor: AppColors.white50,
                             pinned: true,
-                            title: const AppText(
+                            title: AppText(
                               data: "Top Reviews",
                               fontSize: 20,
                               fontWeight: FontWeight.w600,

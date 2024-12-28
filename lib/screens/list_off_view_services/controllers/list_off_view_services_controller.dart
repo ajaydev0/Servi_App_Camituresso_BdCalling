@@ -1,7 +1,4 @@
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/dev_data/dev_list_of_services_data.dart';
-import 'package:servi_app_camituresso/models/dev_category/dev_category_model.dart';
-import 'package:servi_app_camituresso/models/dev_services_model/dev_services_model.dart';
 import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 

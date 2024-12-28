@@ -72,13 +72,15 @@ class SearchScreen extends StatelessWidget {
             ),
           ),
           body: Obx(
-            () => controller.isLoading.value
-                ? const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.black,
-                    ),
-                  )
-                : controller.postList.isEmpty
+            () =>
+                // controller.isLoading.value
+                //     ? const Center(
+                //         child: CircularProgressIndicator(
+                //           color: Colors.black,
+                //         ),
+                //       )
+                //     :
+                controller.postList.isEmpty
                     ? const Center(
                         child: AppText(
                           data: "Empty",
@@ -93,32 +95,21 @@ class SearchScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           // Show loading indicator for pagination if it's the last index and more data is being fetched
                           if (index == controller.postList.length) {
-                            if (controller.hasMore.value &&
-                                controller.isLoadingMore.value) {
-                              return const Center(
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: CircularProgressIndicator(
-                                    color: Colors.black,
-                                  ),
+                            return const Center(
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: CircularProgressIndicator(
+                                  color: Colors.black,
                                 ),
-                              );
-                            } else {
-                              return const SizedBox(); // Placeholder when no more data to load
-                            }
+                              ),
+                            );
                           }
 
-                          // Render message item
-                          // var item =
-                          //     controller.listOfMessageData[index];
+                          // Render post item
                           return ServicesHorizontalCard(
                             item: controller.postList[index],
                           );
                         },
-
-                        // itemBuilder: (context, index) {
-                        //   return
-                        // },
                       ),
           ),
         );

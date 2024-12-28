@@ -1,50 +1,109 @@
 import 'dart:developer';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/dev_data/dev_request_data.dart';
 import 'package:servi_app_camituresso/screens/request_screen/models/booking_request_data_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class RequestScreenController extends GetxController {
-  RxBool isLoading = RxBool(true);
-  RxBool isError = RxBool(false);
-  RxList<BookingRequestDataModel> listOfRequest = RxList([]);
-
-  ///////////////////////// Popular Post List
-  RxBool isLoadingPopular = false.obs;
-  List<BookingRequestListModel> bookingList = <BookingRequestListModel>[].obs;
-  getBookingList() async {
+  rejectBookClick(sID) async {
     try {
-      isLoadingPopular.value = true;
-      var data = await Repository().getBookingRequestListData();
-      if (data.runtimeType != Null) {
-        bookingList = data;
-        update();
-      }
+      // isLoadingReject.value = true;
+      await Repository()
+          .getBookingRequestChangeStatus(id: sID, status: "Rejected");
+
+      var context = Get.context;
+      Navigator.pop(context!);
+      getBookingList();
+      update();
     } catch (e) {
       print(e);
     } finally {
-      isLoadingPopular.value = false;
+      // isLoadingReject.value = false;
     }
   }
 
-  initializedDataLoad() {
+  confirmBookClick(sID) async {
     try {
-      isLoading.value = true;
-      listOfRequest.addAll(devRequestData);
-      listOfRequest.refresh();
-      isLoading.value = false;
+      // isLoadingConfirm.value = true;
+      await Repository()
+          .getBookingRequestChangeStatus(id: sID, status: "Accepted");
+
+      var context = Get.context;
+      Navigator.pop(context!);
+      getBookingList();
+      update();
     } catch (e) {
-      log("error form request data load function : $e");
-      isError.value = true;
+      print(e);
+    } finally {
+      // isLoadingConfirm.value = false;
     }
-    update();
+  }
+
+  // getBookingList() async {
+  //   try {
+  //     isLoadingPopular.value = true;
+  //     var data = await Repository().getBookingRequestListData();
+  //     if (data.runtimeType != Null) {
+  //       bookingList = data;
+  //       update();
+  //     }
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     isLoadingPopular.value = false;
+  //   }
+  // }
+
+  RxBool isLoading = false.obs;
+  RxBool isError = RxBool(false);
+  RxBool isLoadingMore = false.obs;
+  RxBool hasMore = true.obs;
+  RxList<BookingRequestListModel> bookingList = <BookingRequestListModel>[].obs;
+
+  int currentPage = 1;
+  final int limit = 5;
+
+  // Fetch the first page or refresh data
+  Future<void> getBookingList({bool isRefresh = false}) async {
+    if (isRefresh) {
+      currentPage = 1;
+      hasMore.value = true;
+      bookingList.clear();
+    }
+
+    if (isLoading.value || isLoadingMore.value || !hasMore.value) return;
+
+    try {
+      isLoading.value = isRefresh;
+      isLoadingMore.value = !isRefresh;
+
+      var data = await Repository().getBookingRequestListData(
+        page: currentPage,
+        limit: limit,
+      );
+
+      if (data.isNotEmpty) {
+        bookingList.addAll(data);
+        currentPage++;
+        if (data.length < limit) {
+          hasMore.value = false; // No more data to fetch
+        }
+      } else {
+        hasMore.value = false; // No more data to fetch
+      }
+    } catch (e) {
+      isError.value = true;
+      print("Error in getRecommendedPostAndInList: $e");
+    } finally {
+      isLoading.value = false;
+      isLoadingMore.value = false;
+    }
   }
 
   @override
   void onInit() {
-    getBookingList();
-    initializedDataLoad();
     super.onInit();
+    getBookingList();
   }
 }

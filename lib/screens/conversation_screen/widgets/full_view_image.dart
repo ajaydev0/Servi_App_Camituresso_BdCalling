@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 class FullScreenImageViewer extends StatelessWidget {
-  final File image;
+  final String image;
 
   const FullScreenImageViewer({super.key, required this.image});
 
@@ -22,7 +22,7 @@ class FullScreenImageViewer extends StatelessWidget {
           // boundaryMargin: EdgeInsets.all(10),
           minScale: 1.0,
           maxScale: 10.0,
-          child: Image.file(
+          child: Image.network(
             image,
             fit: BoxFit.fill,
             // loadingBuilder: (context, child, loadingProgress) {

@@ -161,20 +161,39 @@ class HomeScreenController extends GetxController {
     }
   }
 
-  ///////////////////////// Recoommended Post List
   RxBool isLoadingRecommended = false.obs;
   List<RecommendedPostModel> recommendedPostList = <RecommendedPostModel>[].obs;
-  getRecommendedPostList() async {
+
+  int currentPage = 1;
+  bool hasMoreData = true;
+
+  Future<void> getRecommendedPostList({bool isLoadMore = false}) async {
+    if (isLoadingRecommended.value) return; // Prevent duplicate requests
+
     try {
       isLoadingRecommended.value = true;
-      var data = await Repository().getRecommendationrPostData();
-      if (data.runtimeType != Null) {
-        recommendedPostList = data;
 
-        update();
+      if (!isLoadMore) {
+        currentPage = 1; // Reset to first page if not loading more
+        recommendedPostList.clear(); // Clear the list for a fresh load
+        hasMoreData = true;
       }
+
+      var data = await Repository().getRecommendationrPostData(
+        page: currentPage,
+        limit: 10,
+      );
+
+      if (data.isNotEmpty) {
+        recommendedPostList.addAll(data);
+        currentPage++; // Increment the page for the next load
+      } else {
+        hasMoreData = false; // No more data to load
+      }
+
+      update();
     } catch (e) {
-      print(e);
+      print("Error fetching recommended posts: $e");
     } finally {
       isLoadingRecommended.value = false;
     }

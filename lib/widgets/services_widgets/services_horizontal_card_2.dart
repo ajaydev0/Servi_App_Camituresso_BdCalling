@@ -48,16 +48,58 @@ class ServicesHorizontalCardTwo extends StatelessWidget {
                     height: AppSize.height(value: 250),
                     width: Get.width,
                   ),
+                  // Positioned(
+                  //   right: AppSize.width(value: 20),
+                  //   top: AppSize.width(value: 20),
+                  //   child: IconButton(
+                  //       style: ButtonStyle(
+                  //           backgroundColor: WidgetStatePropertyAll(
+                  //               Colors.black.withOpacity(.4))),
+                  //       onPressed: () {},
+                  //       icon: const Icon(Icons.bookmark,
+                  //           color: Color(0xffD0A933))),
+                  // ),
+                  ////////////  saved button
                   Positioned(
-                    right: AppSize.width(value: 20),
-                    top: AppSize.width(value: 20),
-                    child: IconButton(
-                        style: ButtonStyle(
-                            backgroundColor: WidgetStatePropertyAll(
-                                Colors.black.withOpacity(.4))),
-                        onPressed: () {},
-                        icon: const Icon(Icons.bookmark,
-                            color: Color(0xffD0A933))),
+                    right: AppSize.width(value: 10),
+                    top: AppSize.width(value: 10),
+                    child: ValueBuilder<bool?>(
+                      initialValue: true,
+                      // initialValue: item.bookmark,
+                      builder: (snapshot, updater) => GestureDetector(
+                        onTap: () async {
+                          if (snapshot != null) {
+                            updater(!snapshot);
+                            // print(item.sId);
+                            // var data =
+                            //     await Repository().addBookmark(id: item.sId);
+                            // print(data);
+
+                            // await controller.getRecommendedPostList();
+                          }
+                        },
+                        child: IconButton(
+                            style: ButtonStyle(
+                                backgroundColor: WidgetStatePropertyAll(
+                                    Colors.black.withOpacity(.4))),
+                            onPressed: null,
+                            icon: Icon(
+                                snapshot == true
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_outline,
+                                color: snapshot == true
+                                    ? Color(0xffD0A933)
+                                    : Colors.white)),
+
+                        //  AppImage(
+                        //   width: AppSize.width(value: 30),
+                        //   height: AppSize.width(value: 30),
+                        //   path: snapshot == true
+                        //       ? AssetsIconsPath.savaDed
+                        //       : AssetsIconsPath.notSavaDed,
+                        // ),
+                      ),
+                    ),
                   ),
 
                   // Positioned(

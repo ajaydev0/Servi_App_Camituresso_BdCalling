@@ -27,6 +27,17 @@ class HomeScreen extends StatelessWidget {
     return GetBuilder(
       init: HomeScreenController(),
       builder: (controller) {
+        ScrollController scrollController = ScrollController();
+
+        // Add scroll listener for pagination
+        scrollController.addListener(() {
+          if (scrollController.position.pixels >=
+                  scrollController.position.maxScrollExtent &&
+              !controller.isLoadingRecommended.value &&
+              controller.hasMoreData) {
+            controller.getRecommendedPostList(isLoadMore: true);
+          }
+        });
         return RefreshIndicator(
           color: AppColors.primary,
           onRefresh: () async {
@@ -195,9 +206,6 @@ class HomeScreen extends StatelessWidget {
                 name: "Recommendation",
                 onTapCall: () {
                   Get.toNamed(AppRoutes.recommendationViewAllScreen);
-                  // Get.toNamed(AppRoutes.listOfViewServicesScreen,
-                  //     arguments: DevCategoryModel(
-                  //         name: "Recommendation", imagePath: "", id: "id10"));
                 },
               ),
 
@@ -217,6 +225,18 @@ class HomeScreen extends StatelessWidget {
                   },
                 ),
               ),
+
+              // Show a loading indicator when fetching more data
+              if (controller.isLoadingRecommended.value)
+                SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child:
+                          CircularProgressIndicator(color: AppColors.primary),
+                    ),
+                  ),
+                ),
 
               const SliverToBoxAdapter(
                 child: Gap(height: 50),
