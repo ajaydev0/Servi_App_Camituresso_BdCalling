@@ -1,12 +1,7 @@
 import 'dart:developer';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:servi_app_camituresso/dev_data/dev_transaction_data_history.dart';
-import 'package:servi_app_camituresso/screens/transaction_history_screen/models/transaction_data_history.dart';
 import 'package:servi_app_camituresso/screens/transaction_history_screen/models/transaction_history_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
-import 'package:servi_app_camituresso/widgets/custom_show_date_picker/custom_show_date_picker.dart';
-import 'package:servi_app_camituresso/widgets/texts/time_date_format.dart';
 
 class TransactionHistoryScreenController extends GetxController {
   bool isLoading = false;
