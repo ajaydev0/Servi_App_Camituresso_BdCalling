@@ -7,6 +7,7 @@ import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_p
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
+import 'package:servi_app_camituresso/screens/request_screen/models/booking_request_data_model.dart';
 import 'package:servi_app_camituresso/screens/saved_screen/model/get_saved_post_model.dart';
 import 'package:servi_app_camituresso/screens/search_screen/model/serach_page_post_model.dart';
 import 'package:servi_app_camituresso/screens/service_by_service_screen/model/service_by_service_model.dart';
@@ -295,6 +296,29 @@ class Repository {
           if (findData["service"].runtimeType != Null) {
             for (var element in findData["service"]) {
               data.add(SearchPagePostModel.fromJson(element));
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print("$e");
+    }
+    return data;
+  }
+
+  Future<List<BookingRequestListModel>> getBookingRequestListData() async {
+    List<BookingRequestListModel> data = <BookingRequestListModel>[];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+          AppApiUrl.bookingRequest,
+          token: AppAuthStorage().getToken());
+
+      if (response != null) {
+        if (response["data"].runtimeType != Null) {
+          final findData = response["data"];
+          if (findData["offers"].runtimeType != Null) {
+            for (var element in findData["offers"]) {
+              data.add(BookingRequestListModel.fromJson(element));
             }
           }
         }
