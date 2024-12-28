@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
-import 'package:servi_app_camituresso/screens/transaction_history_screen/controllers/transaction_history_filter_button.dart';
 import 'package:servi_app_camituresso/screens/transaction_history_screen/controllers/transaction_history_screen_controller.dart';
-import 'package:servi_app_camituresso/screens/transaction_history_screen/controllers/transaction_status_enum.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
@@ -24,33 +22,19 @@ class TransactionHistoryScreen extends StatelessWidget {
             appBar: AppBar(
               centerTitle: true,
               forceMaterialTransparency: true,
-              title: AppText(
-                data: "Change Password",
+              title: const AppText(
+                data: "Transaction History",
                 fontWeight: FontWeight.w600,
               ),
               bottom: PreferredSize(
-                preferredSize: Size.fromHeight(7),
+                preferredSize: const Size.fromHeight(7),
                 child: Container(
-                  margin: EdgeInsets.only(bottom: 5),
+                  margin: const EdgeInsets.only(bottom: 5),
                   width: Get.width,
                   height: 1,
                   color: AppColors.black50,
                 ),
               ),
-              actions: [
-                GestureDetector(
-                  onTap: () {
-                    transactionHistoryFilterButton(controller);
-                  },
-                  child: AppImage(
-                    height: AppSize.width(value: 35),
-                    path: AssetsIconsPath.searchButton,
-                  ),
-                ),
-                Gap(
-                  width: 20,
-                )
-              ],
             ),
             body: ListView.builder(
               itemCount: controller.listOfData.length,
@@ -81,14 +65,8 @@ class TransactionHistoryScreen extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             fontWeight: FontWeight.w500,
                           ),
-                          AppText(
-                            data: "From ${item.form}",
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          SizedBox(height: 3),
-                          AppText(
+                          const SizedBox(height: 3),
+                          const AppText(
                             data: "Transaction ID",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -115,31 +93,7 @@ class TransactionHistoryScreen extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
                           ),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 6.0)),
-                            margin: EdgeInsets.symmetric(vertical: AppSize.width(value: 5.0)),
-                            decoration: BoxDecoration(
-                              color: item.status == TransactionStatusEnum.confirm
-                                  ? AppColors.green.withOpacity(0.2)
-                                  : item.status == TransactionStatusEnum.pending
-                                      ? Color(0xffEA00FF).withOpacity(0.2)
-                                      : AppColors.warning.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(AppSize.width(value: 8.0)),
-                            ),
-                            child: AppText(
-                              data: item.status == TransactionStatusEnum.confirm
-                                  ? "Confirm"
-                                  : item.status == TransactionStatusEnum.pending
-                                      ? "Pending"
-                                      : "Cancel",
-                              color: item.status == TransactionStatusEnum.confirm
-                                  ? AppColors.green
-                                  : item.status == TransactionStatusEnum.pending
-                                      ? Color(0xffA340DD)
-                                      : AppColors.warning,
-                            ),
-                          ),
-                          Gap(height: 5),
+                          const Gap(height: 5),
                           AppText(
                             data: timeDateFormate(item.time),
                             fontSize: 12,

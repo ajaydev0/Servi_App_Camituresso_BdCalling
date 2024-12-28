@@ -1,4 +1,3 @@
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
@@ -14,6 +13,7 @@ import 'package:servi_app_camituresso/screens/service_by_service_screen/model/se
 import 'package:servi_app_camituresso/screens/services_details_screen/models/create_chat_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
+import 'package:servi_app_camituresso/screens/transaction_history_screen/models/transaction_history_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
@@ -494,6 +494,23 @@ class Repository {
       print("Error in getChatMessageListData: $e");
     }
 
+    return null;
+  }
+
+  Future<dynamic> getTransactionHistoryData() async {
+    try {
+      // Api Call
+      var data = await ApiGetServices().apiGetServices(
+        AppApiUrl.transactionHistory,
+      );
+      if (data != null) {
+        return TransactionHistoryModel.fromJson(data["data"]);
+      } else {
+        throw Exception("Failed to load profile data");
+      }
+    } catch (e) {
+      print(e);
+    }
     return null;
   }
 }

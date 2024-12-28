@@ -1,15 +1,40 @@
 import 'dart:developer';
-
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/dev_data/dev_transaction_data_history.dart';
 import 'package:servi_app_camituresso/screens/transaction_history_screen/models/transaction_data_history.dart';
+import 'package:servi_app_camituresso/screens/transaction_history_screen/models/transaction_history_model.dart';
+import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/widgets/custom_show_date_picker/custom_show_date_picker.dart';
 import 'package:servi_app_camituresso/widgets/texts/time_date_format.dart';
 
 class TransactionHistoryScreenController extends GetxController {
-  RxBool isLoading = RxBool(true);
+  RxBool isLoading = false.obs;
+  TransactionHistoryModel transactionHistoryModel = TransactionHistoryModel();
+
+  getTransactionHistoryData()async{
+    try{
+      isLoading.value= true;
+      var response = await Repository().getTransactionHistoryData();
+
+      // check response
+      log(response.success);
+      log(response.data);
+
+      // initialize the model class
+      transactionHistoryModel = response;
+      isLoading.value = false;
+    }catch(e){
+      isLoading.value = false;
+      log(e.toString());
+    }
+  }
+
+
+
+
   RxBool isError = RxBool(true);
-  RxList<TransactionDataHistory> listOfData = RxList();
+  RxList<TransactionDataHistory> listOfData = <TransactionDataHistory>[].obs;
   DateTime toDate = DateTime.now();
   RxString toFormateDate = RxString("");
   DateTime formDate = DateTime.now();
@@ -95,6 +120,7 @@ class TransactionHistoryScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    onInitDataSet();
+    // onInitDataSet();
+
   }
 }
