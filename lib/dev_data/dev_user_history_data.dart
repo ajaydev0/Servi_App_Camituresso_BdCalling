@@ -9,7 +9,7 @@ List<UserHistoryDataModel> devUserHistoryData = [
       userName: "Shanto Hasan",
       userImage: AssetsDevImages.devUser2,
       amount: "150",
-      status: UserHistoryEnum.request,
+      status: UserHistoryEnum.accepted,
       userCategory: "Plumber",),
   UserHistoryDataModel(
       title: "Full House Cleaner",
@@ -25,7 +25,7 @@ List<UserHistoryDataModel> devUserHistoryData = [
       userName: "Shanto Hasan",
       userImage: AssetsDevImages.devUser2,
       amount: "150",
-      status: UserHistoryEnum.complete,
+      status: UserHistoryEnum.accepted,
       userCategory: "Plumber",),
   UserHistoryDataModel(
     title: "Full House Cleaner",
@@ -33,7 +33,7 @@ List<UserHistoryDataModel> devUserHistoryData = [
     userName: "Shanto Hasan",
     userImage: AssetsDevImages.devUser2,
     amount: "150",
-    status: UserHistoryEnum.reject,
+    status: UserHistoryEnum.cancelled,
     userCategory: "Plumber",
   ),
 ];

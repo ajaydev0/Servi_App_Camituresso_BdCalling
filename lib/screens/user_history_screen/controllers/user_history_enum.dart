@@ -1,1 +1,1 @@
-enum UserHistoryEnum { request, pending, complete, reject }
+enum UserHistoryEnum { accepted, pending, upcoming, completed, cancelled }

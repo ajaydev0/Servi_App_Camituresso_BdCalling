@@ -18,6 +18,8 @@ import 'package:servi_app_camituresso/services/api/services/api_get_services.dar
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 
+import '../../screens/user_history_screen/models/booking_request_data_model.dart';
+
 class Repository {
   // Get Notifications List
   Future<List<ChatListModel>> getChatListData() async {
@@ -215,6 +217,26 @@ class Repository {
       print(e);
     }
     return null;
+  }
+  Future<List<UserHistoryListModel>> getUserHistory() async {
+    List<UserHistoryListModel> data = [];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+        AppApiUrl.userHistory,
+        token: AppAuthStorage().getToken(),
+      );
+
+      if (response != null && response["data"] != null && response["data"]["offers"] != null) {
+
+        for (var item in response["data"]["offers"]) {
+          data.add(UserHistoryListModel.fromJson(item));
+        }
+        return data;
+      }
+    } catch (e) {
+      print("Error in getUserHistory: $e");
+    }
+    return data;
   }
 
   // Get Notification

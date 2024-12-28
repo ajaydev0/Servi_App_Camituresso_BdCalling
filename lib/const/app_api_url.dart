@@ -31,6 +31,7 @@ class AppApiUrl {
   static const String privacyPolicyUrl = "$baseUrl/rule/privacy-policy";
   static const String searchPostUrl = "$baseUrl/post";
   static const String bookingRequest = "$baseUrl/offer";
+  static const String userHistory = "$baseUrl/offer/offer-history";
 
   //////////////////////////////////////  chat
   static const String chatList = "$baseUrl/chat";
