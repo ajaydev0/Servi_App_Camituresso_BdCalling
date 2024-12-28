@@ -504,7 +504,7 @@ class Repository {
         AppApiUrl.transactionHistory,
       );
       if (data != null) {
-        return TransactionHistoryModel.fromJson(data["data"]);
+        return TransactionHistoryModel.fromJson(data);
       } else {
         throw Exception("Failed to load profile data");
       }

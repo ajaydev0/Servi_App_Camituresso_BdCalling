@@ -28,6 +28,9 @@ dependencies:
   connectivity_plus: ^6.0.5
   flutter_widget_from_html: ^0.15.3
   socket_io_client: ^2.0.3+1
+  intl: ^0.20.1
+  timezone: ^0.10.0
+  flutter_timezone: ^4.0.0
 
 dev_dependencies:
   flutter_test:

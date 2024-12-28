@@ -33,6 +33,7 @@ class Data {
   String? provider;
   int? price;
   String? createdAt;
+  String? updatedAt;
   String? txid;
   String? payment;
 
@@ -42,6 +43,7 @@ class Data {
         this.provider,
         this.price,
         this.createdAt,
+        this.updatedAt,
         this.txid,
         this.payment});
 
@@ -51,6 +53,7 @@ class Data {
     provider = json['provider'];
     price = json['price'];
     createdAt = json['createdAt'];
+    updatedAt = json['updatedAt'];
     txid = json['txid'];
     payment = json['payment'];
   }
@@ -62,6 +65,7 @@ class Data {
     data['provider'] = provider;
     data['price'] = price;
     data['createdAt'] = createdAt;
+    data['updatedAt'] = updatedAt;
     data['txid'] = txid;
     data['payment'] = payment;
     return data;
