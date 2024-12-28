@@ -32,6 +32,7 @@ class AppApiUrl {
   static const String searchPostUrl = "$baseUrl/post";
   static const String bookingRequest = "$baseUrl/offer";
   static const String transactionHistory = "$baseUrl/offer/transaction-history";
+  static String profileImage({required String url}) => "$domaine$url";
 
   //////////////////////////////////////  chat
   static const String chatList = "$baseUrl/chat";

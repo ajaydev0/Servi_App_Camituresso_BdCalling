@@ -1,17 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/screens/navigation_screen/model/notification_model.dart';
+import 'package:servi_app_camituresso/screens/navigation_screen/model/notification_screen_model.dart';
 import 'package:servi_app_camituresso/screens/navigation_screen/screens/notification_screen.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class NavigationScreenController extends GetxController {
   RxInt selectedIndex = RxInt(0);
-  // var notification = GetNotificationModel(
-  //   data: Data(
-  //     result: [],
-  //     unreadCount: null,
-  //   ),
-  // ).obs;
+  RxList<Notifications> notificationListData = <Notifications>[].obs;
+  RxBool isLoading = false.obs;
 
   changeIndex(int index) {
     selectedIndex.value = index;
@@ -41,13 +39,21 @@ class NavigationScreenController extends GetxController {
 
   // Get Notification Data
   notificationDataGet() async {
-    // var data = await Repository().getNotificationData();
-    // notification.value = data;
+    try{
+      isLoading.value = true;
+      var response = await Repository().getNotificationData();
+      notificationListData.value = response.data.notifications;
+      log('Notification length: ${notificationListData.length}');
+      isLoading.value = false;
+    }catch(e){
+      isLoading.value = true;
+      log('error form notificationDataGet method: $e');
+    }
   }
 
   @override
   void onInit() {
-    // notificationDataGet();
+    notificationDataGet();
     super.onInit();
   }
 }

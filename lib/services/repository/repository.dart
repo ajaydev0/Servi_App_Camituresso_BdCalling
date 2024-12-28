@@ -3,6 +3,7 @@ import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.
 import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
 import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
+import 'package:servi_app_camituresso/screens/navigation_screen/model/notification_screen_model.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
@@ -218,22 +219,22 @@ class Repository {
   }
 
   // Get Notification
-  // Future<dynamic> getNotificationData() async {
-  //   try {
-  //     // Api Call
-  //     var data = await ApiGetServices().apiGetServices(
-  //       AppApiUrl.notificationUrl,
-  //     );
-  //     if (data != null) {
-  //       return GetNotificationModel.fromJson(data);
-  //     } else {
-  //       throw Exception("Failed to load profile data");
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  //   return null;
-  // }
+  Future<dynamic> getNotificationData() async {
+    try {
+      // Api Call
+      var data = await ApiGetServices().apiGetServices(
+        AppApiUrl.notificationUrl,
+      );
+      if (data != null) {
+        return NotificationScreenModel.fromJson(data);
+      } else {
+        throw Exception("Failed to load profile data");
+      }
+    } catch (e) {
+      print('error from getNotificationData method: $e');
+    }
+    return null;
+  }
 
   // Get Recommendation Post
   Future<List<RecommendedPostModel>> getRecommendationrPostData({
