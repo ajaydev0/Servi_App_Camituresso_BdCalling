@@ -111,4 +111,9 @@ class NavigationScreenController extends GetxController {
     appSocketConnect();
     super.onInit();
   }
+
+  @override
+  void onClose(){
+    socket.disconnect();
+  }
 }
