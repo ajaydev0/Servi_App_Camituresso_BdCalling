@@ -52,6 +52,7 @@ class NotificationScreen extends StatelessWidget {
                         ),
                       ),
                       child: ListView.builder(
+                          controller: controller.scrollController,
                           itemCount: _checkData(
                               data: controller.notificationListData.value),
                           itemBuilder: (context, index) {

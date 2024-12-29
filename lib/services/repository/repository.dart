@@ -101,25 +101,25 @@ class Repository {
   }
 
   // Get Notifications List
-  Future<List<BookmarkModel>> getNotificationListData() async {
-    List<BookmarkModel> data = <BookmarkModel>[];
-    try {
-      var response = await ApiGetServices().apiGetServices(
-        AppApiUrl.notificationUrl,
-      );
-
-      if (response != null) {
-        if (response["data"].runtimeType != Null) {
-          for (var element in response["data"]) {
-            data.add(BookmarkModel.fromJson(element));
-          }
-        }
-      }
-      return data;
-    } catch (e) {
-      return data;
-    }
-  }
+  // Future<List<BookmarkModel>> getNotificationListData() async {
+  //   List<BookmarkModel> data = <BookmarkModel>[];
+  //   try {
+  //     var response = await ApiGetServices().apiGetServices(
+  //       AppApiUrl.notificationUrl,
+  //     );
+  //
+  //     if (response != null) {
+  //       if (response["data"].runtimeType != Null) {
+  //         for (var element in response["data"]) {
+  //           data.add(BookmarkModel.fromJson(element));
+  //         }
+  //       }
+  //     }
+  //     return data;
+  //   } catch (e) {
+  //     return data;
+  //   }
+  // }
 
   // Get Saved/Bookmark List
   Future<List<BookmarkModel>> getBookmarkListData() async {
@@ -220,11 +220,11 @@ class Repository {
   }
 
   // Get Notification
-  Future<dynamic> getNotificationData() async {
+  Future<dynamic> getNotificationData({required int page}) async {
     try {
       // Api Call
       var data = await ApiGetServices().apiGetServices(
-        AppApiUrl.notificationUrl,
+        AppApiUrl.notificationUrl(page: page),
       );
       if (data != null) {
         return NotificationScreenModel.fromJson(data);
@@ -238,10 +238,10 @@ class Repository {
   }
 
   // red notificationData
-  Future<dynamic> redNotificationData() async {
+  Future<dynamic> redNotificationData({required int page}) async {
     try {
       // Api Call
-      var data = await ApiPatchServices().apiPatchServices(url: AppApiUrl.notificationUrl);
+      var data = await ApiPatchServices().apiPatchServices(url: AppApiUrl.notificationUrl(page: page));
       if (data != null) {
         return true;
       } else {

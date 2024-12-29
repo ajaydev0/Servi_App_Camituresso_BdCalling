@@ -14,7 +14,7 @@ class AppApiUrl {
   static const String updateProfileUrl = "$baseUrl/user";
   static const String createPostUrl = "$baseUrl/post/create";
   static const String updatePostUrl = "$baseUrl/post/update-post/";
-  static const String notificationUrl = "$baseUrl/notification";
+  static String notificationUrl({required int page})=> "$baseUrl/notification?page=$page";
   static const String getPostUrl = "$baseUrl/post/my-post";
   static const String getServiceDetailsUrl = "$baseUrl/post/";
   static const String createReviewUrl = "$baseUrl/review";

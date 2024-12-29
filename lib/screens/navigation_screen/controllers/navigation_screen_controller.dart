@@ -10,9 +10,16 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class NavigationScreenController extends GetxController {
   late IO.Socket socket;
-  RxInt selectedIndex = RxInt(0);
+  int pageNumber = 1;
+
+  // observable list and variables
   RxList<Notifications> notificationListData = <Notifications>[].obs;
+  RxInt selectedIndex = RxInt(0);
   RxBool isLoading = false.obs;
+  RxBool hasMore = true.obs;
+
+  // controller
+  final scrollController = ScrollController();
 
   changeIndex(int index) {
     selectedIndex.value = index;
@@ -40,18 +47,34 @@ class NavigationScreenController extends GetxController {
     );
   }
 
-  // Get Notification Data
-  notificationDataGet() async {
+  // load notification data
+  loadNotificationData() async {
+    var response = await Repository().getNotificationData(page: pageNumber);
+    if (response.success) {
+      if (response.data.notifications.isNotEmpty) {
+        if (pageNumber == 1) {
+          notificationListData.value = response.data.notifications;
+        } else {
+          notificationListData.addAll(response.data.notifications);
+        }
+        pageNumber++;
+      } else {
+        hasMore.value = false;
+      }
+    }
+  }
+
+  // Get Notification initial Data
+  getNotificationInitialData() async {
     try {
       isLoading.value = true;
-      var response = await Repository().getNotificationData();
-      await Repository().redNotificationData();
-      notificationListData.value = response.data.notifications;
+      await loadNotificationData();
+      await Repository().redNotificationData(page: pageNumber);
       log('Notification length: ${notificationListData.length}');
       isLoading.value = false;
     } catch (e) {
       isLoading.value = true;
-      log('error form notificationDataGet method: $e');
+      log('error form getNotificationInitialData method: $e');
     }
   }
 
@@ -105,15 +128,38 @@ class NavigationScreenController extends GetxController {
     }
   }
 
+  // pagination Logic
+  onInitializeDataLoad() {
+    try {
+      getNotificationInitialData();
+      scrollController.addListener(
+        () {
+          if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent) {
+            hasMore.value =
+                true; // when both are equal then it will be true to access the loadLisData method for check data
+
+            if (hasMore.value) {
+              loadNotificationData();
+            }
+          }
+        },
+      );
+    } catch (e) {
+      log("onInitializeDataLoad error: $e");
+    }
+  }
+
   @override
   void onInit() {
-    notificationDataGet();
+    onInitializeDataLoad();
     appSocketConnect();
     super.onInit();
   }
 
   @override
-  void onClose(){
+  void onClose() {
     socket.disconnect();
+    scrollController.dispose();
   }
 }
