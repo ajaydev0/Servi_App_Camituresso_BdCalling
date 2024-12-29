@@ -1,12 +1,15 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/navigation_screen/model/notification_screen_model.dart';
 import 'package:servi_app_camituresso/screens/navigation_screen/screens/notification_screen.dart';
+import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class NavigationScreenController extends GetxController {
+  late IO.Socket socket;
   RxInt selectedIndex = RxInt(0);
   RxList<Notifications> notificationListData = <Notifications>[].obs;
   RxBool isLoading = false.obs;
@@ -39,21 +42,73 @@ class NavigationScreenController extends GetxController {
 
   // Get Notification Data
   notificationDataGet() async {
-    try{
+    try {
       isLoading.value = true;
       var response = await Repository().getNotificationData();
+      await Repository().redNotificationData();
       notificationListData.value = response.data.notifications;
       log('Notification length: ${notificationListData.length}');
       isLoading.value = false;
-    }catch(e){
+    } catch (e) {
       isLoading.value = true;
       log('error form notificationDataGet method: $e');
+    }
+  }
+
+  // notification socket connection
+  void appSocketConnect() {
+    try {
+      socket = IO.io(
+        AppApiUrl.socketUrl,
+        IO.OptionBuilder()
+            .setTransports(['websocket'])
+            .setReconnectionAttempts(3)
+            .build(),
+      );
+
+      socket.connect();
+
+      socket.onConnect((_) {
+        log('Connected to the socket server');
+      });
+
+      socket.onDisconnect((data) {
+        log("Socket disconnected: $data");
+      });
+
+      socket.onConnectError((data) {
+        log("Socket connection error: $data");
+      });
+
+      socket.onError((data) {
+        log("Socket error: $data");
+      });
+
+      socket.onPing((data) {
+        log("Socket ping: $data");
+      });
+
+      // Listen for notifications and update the list
+      socket.on("getNotification::${AppAuthStorage().getChatID()}", (data) {
+        log("Notification received: $data");
+        try {
+          final notification = Notifications.fromJson(data);
+          log(notification.toString());
+          notificationListData.insert(
+              0, notification); // Add new notification to the top
+        } catch (e) {
+          log("Error processing notification: $e");
+        }
+      });
+    } catch (e) {
+      log("Error during socket connection setup: $e");
     }
   }
 
   @override
   void onInit() {
     notificationDataGet();
+    appSocketConnect();
     super.onInit();
   }
 }

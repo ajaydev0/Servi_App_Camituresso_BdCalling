@@ -33,6 +33,7 @@ class AppApiUrl {
   static const String bookingRequest = "$baseUrl/offer";
   static const String transactionHistory = "$baseUrl/offer/transaction-history";
   static String profileImage({required String url}) => "$domaine$url";
+  static String socketUrl = "http://192.168.10.102:5005";
 
   //////////////////////////////////////  chat
   static const String chatList = "$baseUrl/chat";

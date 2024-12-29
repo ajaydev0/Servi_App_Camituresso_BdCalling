@@ -43,8 +43,7 @@ class Data {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (notifications != null) {
-      data['notifications'] =
-          notifications!.map((v) => v.toJson()).toList();
+      data['notifications'] = notifications!.map((v) => v.toJson()).toList();
     }
     data['unreadCount'] = unreadCount;
     if (meta != null) {
@@ -63,33 +62,26 @@ class Notifications {
   String? screen;
   bool? read;
   String? createdAt;
-  String? updatedAt;
-  int? iV;
 
   Notifications(
       {this.sId,
-        this.text,
-        this.receiver,
-        this.sender,
-        this.referenceId,
-        this.screen,
-        this.read,
-        this.createdAt,
-        this.updatedAt,
-        this.iV});
+      this.text,
+      this.receiver,
+      this.sender,
+      this.referenceId,
+      this.screen,
+      this.read,
+      this.createdAt});
 
   Notifications.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     text = json['text'];
     receiver = json['receiver'];
-    sender =
-    json['sender'] != null ? Sender.fromJson(json['sender']) : null;
+    sender = json['sender'] != null ? Sender.fromJson(json['sender']) : null;
     referenceId = json['referenceId'];
     screen = json['screen'];
     read = json['read'];
     createdAt = json['createdAt'];
-    updatedAt = json['updatedAt'];
-    iV = json['__v'];
   }
 
   Map<String, dynamic> toJson() {
@@ -104,8 +96,6 @@ class Notifications {
     data['screen'] = screen;
     data['read'] = read;
     data['createdAt'] = createdAt;
-    data['updatedAt'] = updatedAt;
-    data['__v'] = iV;
     return data;
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
@@ -43,16 +42,23 @@ class NotificationScreen extends StatelessWidget {
             ),
             Expanded(
               child: Obx(
-                () => ListView.builder(
-                    itemCount:
-                        _checkData(data: controller.notificationListData.value),
-                    itemBuilder: (context, index) {
-                      return buildRowWidget(
-                          isRead: controller.notificationListData[index].read ??
-                              false,
-                          data: controller.notificationListData[index]
-                      );
-                    }),
+                () => Visibility(
+                    visible: !controller.isLoading.value,
+                    replacement: const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    child: ListView.builder(
+                        itemCount: _checkData(
+                            data: controller.notificationListData.value),
+                        itemBuilder: (context, index) {
+                          return buildRowWidget(
+                              isRead:
+                                  controller.notificationListData[index].read ??
+                                      false,
+                              data: controller.notificationListData[index]);
+                        })),
               ),
             )
           ],
@@ -65,13 +71,13 @@ class NotificationScreen extends StatelessWidget {
     return Column(
       children: [
         Container(
-          color: isRead ? AppColors.read : AppColors.white50,
+          color: !isRead ? AppColors.read : AppColors.white50,
           padding: EdgeInsets.symmetric(
               vertical: AppSize.width(value: 20),
               horizontal: AppSize.width(value: 10.0)),
           child: Row(
             children: [
-              if (isRead)
+              if (!isRead)
                 Container(
                   width: AppSize.width(value: 10.0),
                   height: AppSize.width(value: 10.0),
@@ -80,7 +86,7 @@ class NotificationScreen extends StatelessWidget {
                     color: AppColors.blue,
                   ),
                 ),
-              if (isRead)
+              if (!isRead)
                 const Gap(
                   width: 6.0,
                 ),
@@ -114,7 +120,7 @@ class NotificationScreen extends StatelessWidget {
                           )
                         ]))),
                     const Gap(width: 10),
-                    const AppText(data: "2m"),
+                    AppText(data: formatTimeFromUTC(data.createdAt.toString())),
                     const Gap(
                       width: 4.0,
                     )
@@ -144,4 +150,55 @@ int _checkData({dynamic data}) {
     return 0;
   }
   return 0;
+}
+String formatTimeFromUTC(String utcTime) {
+  // Parse the UTC time string into a DateTime object.
+  DateTime parsedDate = DateTime.parse(utcTime);
+
+  // Convert UTC to local time
+  DateTime localDateTime = parsedDate.toLocal();
+
+  // Format the time as "hh:mm a" (12-hour format with AM/PM)
+  // return DateFormat('hh:mm a').format(localDateTime);
+  return timeTextFormat(localDateTime.toIso8601String());
+}
+
+/// notification time conversion
+
+String timeTextFormat(String? formattedString) {
+  try {
+    if (formattedString == null) return "";
+    DateTime dateTime = DateTime.parse(formattedString);
+    final DateTime now = DateTime.now();
+    final Duration difference = now.difference(dateTime);
+
+    if (difference.inDays == 0) {
+      // If the date is today, return the time in hh:mm a format
+      int hour = dateTime.hour;
+      int minute = dateTime.minute;
+      String period = hour >= 12 ? 'pm' : 'am';
+
+      if (hour > 12) {
+        hour -= 12;
+      } else if (hour == 0) {
+        hour = 12;
+      }
+
+      final String minuteStr = minute < 10 ? '0$minute' : '$minute';
+      return '$hour:$minuteStr $period';
+    } else if (difference.inDays == 1) {
+      return '1 day';
+    } else if (difference.inDays < 7) {
+      return '${difference.inDays} days';
+    } else if (difference.inDays < 30) {
+      return '${difference.inDays / 7} week${difference.inDays / 7 > 1 ? 's' : ''}';
+    } else if (difference.inDays < 365) {
+      return '${difference.inDays / 30} month${difference.inDays / 30 > 1 ? 's' : ''}';
+    } else {
+      return '${difference.inDays / 365} year${difference.inDays / 365 > 1 ? 's' : ''} ';
+    }
+  } catch (e) {
+    log("timeTextFormate $e");
+    return "";
+  }
 }

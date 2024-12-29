@@ -16,6 +16,7 @@ import 'package:servi_app_camituresso/screens/services_details_screen/models/ser
 import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
 import 'package:servi_app_camituresso/screens/transaction_history_screen/models/transaction_history_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
+import 'package:servi_app_camituresso/services/api/services/api_patch_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 
@@ -234,6 +235,22 @@ class Repository {
       print('error from getNotificationData method: $e');
     }
     return null;
+  }
+
+  // red notificationData
+  Future<dynamic> redNotificationData() async {
+    try {
+      // Api Call
+      var data = await ApiPatchServices().apiPatchServices(url: AppApiUrl.notificationUrl);
+      if (data != null) {
+        return true;
+      } else {
+        throw Exception("Failed to load profile data");
+      }
+    } catch (e) {
+      print('error from getNotificationData method: $e');
+    }
+    return false;
   }
 
   // Get Recommendation Post
