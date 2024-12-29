@@ -1,4 +1,5 @@
 class MessageListModel {
+  Offer? offer;
   String? chatId;
   String? sender;
   String? text;
@@ -10,7 +11,8 @@ class MessageListModel {
   dynamic iV;
 
   MessageListModel(
-      {this.chatId,
+      {this.offer,
+      this.chatId,
       this.sender,
       this.text,
       this.image,
@@ -21,6 +23,7 @@ class MessageListModel {
       this.iV});
 
   MessageListModel.fromJson(Map<String, dynamic> json) {
+    offer = json['offer'] != null ? new Offer.fromJson(json['offer']) : null;
     chatId = json['chatId'];
     sender = json['sender'];
     text = json['text'];
@@ -32,3 +35,34 @@ class MessageListModel {
     iV = json['__v'];
   }
 }
+
+class Offer {
+  String? price;
+  String? description;
+  String? offerId;
+  String? status;
+
+  Offer({this.price, this.description, this.offerId, this.status});
+
+  Offer.fromJson(Map<String, dynamic> json) {
+    price = json['price'];
+    description = json['description'];
+    offerId = json['offerId'];
+    status = json['status'];
+  }
+}
+
+class ChatUserServiceListModel {
+  String? sId;
+  String? title;
+
+  ChatUserServiceListModel({this.sId, this.title});
+
+  ChatUserServiceListModel.fromJson(Map<String, dynamic> json) {
+    sId = json['_id'];
+    title = json['title'];
+  }
+}
+
+////////////////////// Offer Change Status 
+

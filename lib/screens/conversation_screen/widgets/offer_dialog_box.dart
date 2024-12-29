@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/controllers/conversation_screen_controller.dart';
-import 'package:servi_app_camituresso/screens/home_screen/controllers/home_screen_controller.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/inputs/app_input_widget.dart';
@@ -10,6 +9,7 @@ import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
 conversationOfferDialog(ConversationScreenController controller) {
   Get.dialog(
+    barrierDismissible: false,
     Dialog(
       backgroundColor: AppColors.white50,
       child: Padding(
@@ -18,7 +18,7 @@ conversationOfferDialog(ConversationScreenController controller) {
             vertical: AppSize.width(value: 10.0)),
         child: SingleChildScrollView(
           child: Form(
-            key: controller.sendOffDialogKey,
+            key: controller.key,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +26,7 @@ conversationOfferDialog(ConversationScreenController controller) {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    AppText(
+                    const AppText(
                       data: "Send Offer",
                       fontWeight: FontWeight.w500,
                       fontSize: 20,
@@ -34,76 +34,94 @@ conversationOfferDialog(ConversationScreenController controller) {
                     GestureDetector(
                         onTap: () {
                           Get.closeAllDialogs();
+                          controller.selectedServicesCategory.value =
+                              "Select Service";
                         },
-                        child: Icon(Icons.cancel_outlined))
+                        child: const Icon(Icons.cancel_outlined))
                   ],
                 ),
-                Gap(height: 10),
-                AppText(data: "Select Services"),
-                Gap(height: 10),
-                Container(
-                  decoration: BoxDecoration(
-                      border: Border.all(
-                        color: AppColors.bannerBoxFill,
-                      ),
-                      borderRadius:
-                          BorderRadius.circular(AppSize.width(value: 10))),
-                  child: ExpansionTile(
-                    key: GlobalKey(),
-                    title: AppText(data: "Title"),
-                    // title: AppText(data: controller.selectedServices.value),
-                    // initiallyExpanded: controller.isOpenServicesList.value,
-                    initiallyExpanded: false,
-                    shape: RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.circular(AppSize.width(value: 10.0))),
-                    expansionAnimationStyle: AnimationStyle(
-                      duration: Duration(seconds: 1),
-                      reverseDuration: Duration(seconds: 1),
-                      curve: Curves.ease,
-                    ),
-                    onExpansionChanged: (value) {
-                      // controller.isOpenServicesList.value = value;
-                    },
-                    children: List.generate(
-                      2,
-                      // listOfAppServicesCategory.length,
-                      (index) {
-                        // var item = listOfAppServicesCategory[index];
-                        return GestureDetector(
-                          onTap: () {
-                            // controller.isOpenServicesList.value = false;
-                            // controller.selectedServices.value =
-                            //     item.name ?? "";
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.yellow400,
-                              border: Border(
-                                bottom:
-                                    BorderSide(color: AppColors.bannerBoxFill),
+                const Gap(height: 10),
+                const AppText(data: "Select Services"),
+                const Gap(height: 10),
+                Obx(
+                  () => controller.isLoadingService.value
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ))
+                      : Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: controller.isJobCategoryCheck.value
+                                    ? AppColors.warning
+                                    : AppColors.primary,
                               ),
+                              borderRadius: BorderRadius.circular(
+                                  AppSize.width(value: 10))),
+                          child: ExpansionTile(
+                            key: GlobalKey(),
+                            title: AppText(
+                                data:
+                                    controller.selectedServicesCategory.value),
+                            initiallyExpanded:
+                                controller.isOpenServicesList.value,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    AppSize.width(value: 10.0))),
+                            expansionAnimationStyle: AnimationStyle(
+                              duration: const Duration(seconds: 1),
+                              reverseDuration: const Duration(seconds: 1),
+                              curve: Curves.ease,
                             ),
-                            width: Get.width,
-                            padding: EdgeInsets.symmetric(
-                                vertical: AppSize.width(value: 10),
-                                horizontal: AppSize.width(value: 10)),
-                            child: AppText(data: "Name"),
+                            onExpansionChanged: (value) {
+                              controller.isOpenServicesList.value = value;
+                            },
+                            children: List.generate(
+                              controller.servicesCategoryList.length,
+                              (index) {
+                                var item =
+                                    controller.servicesCategoryList[index];
+                                return GestureDetector(
+                                  onTap: () {
+                                    controller.isOpenServicesList.value = false;
+                                    controller.selectedServicesID.value =
+                                        item.sId ?? "";
+                                    controller.selectedServicesCategory.value =
+                                        item.title ?? "";
+                                    controller.isJobCategoryCheck.value = false;
+                                  },
+                                  child: Container(
+                                    decoration: const BoxDecoration(
+                                      color: AppColors.yellow200,
+                                      border: Border(
+                                        bottom: BorderSide(
+                                            color: AppColors.bannerBoxFill),
+                                      ),
+                                    ),
+                                    width: Get.width,
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: AppSize.width(value: 10),
+                                        horizontal: AppSize.width(value: 10)),
+                                    child: AppText(
+                                      data: item.title ?? "",
+                                      color: AppColors.black900,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                        ),
                 ),
-                Gap(height: 20),
-                AppText(data: "Offer Amount"),
-                Gap(height: 10),
+                const Gap(height: 20),
+                const AppText(data: "Offer Amount"),
+                const Gap(height: 10),
                 AppInputWidget(
-                  // controller: controller.offerAmountTextEditingController,
+                  controller: controller.offerAmount,
                   fillColor: AppColors.white50,
                   border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.bannerBoxFill, width: 1),
+                    borderSide: const BorderSide(
+                        color: AppColors.bannerBoxFill, width: 1),
                     borderRadius:
                         BorderRadius.circular(AppSize.width(value: 10)),
                   ),
@@ -114,23 +132,24 @@ conversationOfferDialog(ConversationScreenController controller) {
                         BorderRadius.circular(AppSize.width(value: 10)),
                   ),
                   keyboardType: TextInputType.phone,
-                  style: TextStyle(color: AppColors.primary, fontSize: 18),
-                  prefix: AppText(
+                  style:
+                      const TextStyle(color: AppColors.primary, fontSize: 18),
+                  prefix: const AppText(
                     data: "  \$ ",
                     fontSize: 18,
                     color: AppColors.primary,
                     textAlign: TextAlign.end,
                   ),
                 ),
-                Gap(height: 20),
-                AppText(data: "Service Details"),
-                Gap(height: 10),
+                const Gap(height: 20),
+                const AppText(data: "Service Details"),
+                const Gap(height: 10),
                 AppInputWidget(
-                  // controller: controller.serviceDetailsTextEditingController,
+                  controller: controller.offerDescription,
                   fillColor: AppColors.white50,
                   border: OutlineInputBorder(
-                    borderSide:
-                        BorderSide(color: AppColors.bannerBoxFill, width: 1),
+                    borderSide: const BorderSide(
+                        color: AppColors.bannerBoxFill, width: 1),
                     borderRadius:
                         BorderRadius.circular(AppSize.width(value: 10)),
                   ),
@@ -145,28 +164,36 @@ conversationOfferDialog(ConversationScreenController controller) {
                   minLines: 5,
                   textInputAction: TextInputAction.newline,
                 ),
-                Gap(height: 30),
-                GestureDetector(
-                  onTap: () {
-                    // controller.sendOfferButton();
-                  },
-                  child: Container(
-                    width: Get.width,
-                    height: AppSize.height(value: 50),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: AppColors.primary,
-                        borderRadius: BorderRadius.circular(
-                          AppSize.width(value: 10),
-                        )),
-                    child: AppText(
-                        data: "Send",
-                        color: AppColors.white50,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500),
+                const Gap(height: 30),
+                Obx(
+                  () => GestureDetector(
+                    onTap: () {
+                      controller.sendOfferButton();
+                    },
+                    child: Container(
+                      width: Get.width,
+                      height: AppSize.height(value: 50),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(
+                            AppSize.width(value: 10),
+                          )),
+                      child: controller.isLoadingSendOfferButton.value
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            )
+                          : const AppText(
+                              data: "Send",
+                              color: AppColors.white50,
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500),
+                    ),
                   ),
                 ),
-                Gap(height: 10),
+                const Gap(height: 10),
               ],
             ),
           ),

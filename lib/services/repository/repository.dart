@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
@@ -186,6 +188,30 @@ class Repository {
     return data;
   }
 
+  // Get Chat Usr Service List
+  Future<List<ChatUserServiceListModel>> getChatUserServiceListData(
+      {userID}) async {
+    List<ChatUserServiceListModel> data = <ChatUserServiceListModel>[];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+        "${AppApiUrl.chatUserServiceListUrl}$userID",
+      );
+
+      if (response != null) {
+        // return data["data"];
+        if (response["data"].runtimeType != Null) {
+          for (var element in response["data"]) {
+            data.add(ChatUserServiceListModel.fromJson(element));
+          }
+        }
+        return data;
+      }
+    } catch (e) {
+      print("$e");
+    }
+    return data;
+  }
+
   // Create Post
   Future<dynamic> createPost({body}) async {
     try {
@@ -336,11 +362,12 @@ class Repository {
     int limit = 20,
   }) async {
     List<BookingRequestListModel> data = <BookingRequestListModel>[];
+    Map<String, dynamic>? queryParameters = {"page": page, "limit": limit};
     try {
       var response = await ApiGetServices().apiGetServices(
-        "${AppApiUrl.bookingRequest}?page=$page&limit=$limit",
-        token: AppAuthStorage().getToken(),
-      );
+          AppApiUrl.bookingRequest,
+          token: AppAuthStorage().getToken(),
+          queryParameters: queryParameters);
 
       if (response != null && response["data"] != null) {
         for (var element in response["data"]["offers"]) {
@@ -464,17 +491,36 @@ class Repository {
   Future<BookingRequestDetailsModel?> getBookingRequestChangeStatus(
       {String? id, String? status}) async {
     try {
+      Map<String, dynamic>? query = {"status": status};
       // Api Call
       var data = await ApiPatchServices().apiPatchServices(
-        url: "${AppApiUrl.bookingRequest}/$id?status=$status",
-        // body: formData,
-        token: AppAuthStorage().getToken(),
-      );
-      // var data = await ApiGetServices().apiGetServices(
-      //   "${AppApiUrl.bookingRequest}/$id?status=$status",
-      // );
+          url: "${AppApiUrl.bookingRequest}/$id",
+          // body: formData,
+          token: AppAuthStorage().getToken(),
+          query: query);
+
+      // if (data["data"].runtimeType != Null) {
+      //   return BookingRequestDetailsModel.fromJson(data["data"]);
+      // }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  // Get Service Details Data
+  Future<MessageListModel?> messageOfferRequestChangeStatus(
+      {String? id, String? status}) async {
+    try {
+      // Api Call
+      var data = await ApiPatchServices().apiPatchServices(
+          url: "${AppApiUrl.sendMessage}/$id/status",
+          // body: formData,
+          token: AppAuthStorage().getToken(),
+          query: {"status": status});
+
       if (data["data"].runtimeType != Null) {
-        return BookingRequestDetailsModel.fromJson(data["data"]);
+        return MessageListModel.fromJson(data["data"]);
       }
     } catch (e) {
       print(e);

@@ -1,41 +1,151 @@
-// ignore_for_file: library_prefixes
-
 import 'dart:developer';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
-import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/app_const.dart';
-import 'package:servi_app_camituresso/const/assets_images_path.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
-import 'package:servi_app_camituresso/screens/conversation_screen/widgets/full_view_image.dart';
-import 'package:servi_app_camituresso/screens/conversation_screen/widgets/message_time_format.dart';
-import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/services/repository/post_repository.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
-import 'package:servi_app_camituresso/utils/app_size.dart';
-import 'package:servi_app_camituresso/utils/gap.dart';
-import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
 import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
-import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class ConversationScreenController extends GetxController {
+  RxList<MessageListModel> listOfMessageData = <MessageListModel>[].obs;
+  RxInt selectedIndex = 0.obs;
+  RxBool isLoadingReject = false.obs;
+  RxBool isLoadingConfirm = false.obs;
+  rejectBookClick(MessageListModel? item, int index) async {
+    // isLoadingReject.value = true;
+
+    // Call API to update the status
+    var response = await Repository()
+        .messageOfferRequestChangeStatus(id: item?.sId, status: "Rejected");
+
+    if (response != null) {
+      listOfMessageData[index] = response;
+
+      // listOfMessageData.insert(index, data);
+      listOfMessageData.refresh(); // This will notify observers of the changes
+    }
+    // } catch (e) {
+    //   print("Error: $e");
+    // } finally {
+    //   // isLoadingReject.value = false;
+    // }
+  }
+
+  confirmBookClick(MessageListModel? item, int index) async {
+    try {
+      // isLoadingConfirm.value = true;
+
+      // Call API to update the status
+      // var data = await Repository()
+      //     .messageOfferRequestChangeStatus(id: item?.sId, status: "Accepted");
+
+      // if (data != null) {
+      // Update the list and explicitly refresh it
+      // listOfMessageData.removeAt(index);
+      // listOfMessageData.insert(index, data);
+      // listOfMessageData[index] = data;
+      listOfMessageData.refresh(); // This will notify observers of the changes
+      update();
+      // }
+    } catch (e) {
+      print("Error: $e");
+    } finally {
+      // isLoadingConfirm.value = false;
+    }
+  }
+
+  RxBool isLoadingSendOfferButton = false.obs;
+  sendOfferButton() {
+    if (selectedServicesCategory.value.toLowerCase() ==
+        "Select Service".toLowerCase()) {
+      isJobCategoryCheck.value = true;
+    } else {
+      isJobCategoryCheck.value = false;
+    }
+    if (key.currentState!.validate() && !isJobCategoryCheck.value) {
+      sendOfferApiCall();
+      print(selectedServicesID.value);
+      print(selectedServicesCategory.value);
+      print(offerAmount.text);
+      print(offerDescription.text);
+    }
+  }
+
+  //// Send Offer Api
+  sendOfferApiCall() async {
+    try {
+      isLoadingSendOfferButton.value = true;
+      Map<String, dynamic> body = {
+        "chatId": argData.sId,
+        "messageType": "offer",
+        "provider": argData.participants?[0].sId,
+        "service": selectedServicesID.value,
+        "offer": {
+          "price": offerAmount.text,
+          "description": offerDescription.text
+        }
+      };
+      // Api Call
+      await ImageRepository().imageUploadWithData2(
+        body: body,
+        url: AppApiUrl.sendMessage,
+      );
+      Get.closeAllDialogs();
+      offerAmount.text = "";
+      offerDescription.text = "";
+      selectedServicesCategory.value = "Select Service";
+    } catch (e) {
+      print("$e");
+    } finally {
+      print("Done");
+      isLoadingSendOfferButton.value = false;
+    }
+  }
+
 //////// Offer
   final TextEditingController offerAmount = TextEditingController();
-  final TextEditingController offerServiceDetails = TextEditingController();
-  RxString selectedService = "".obs;
+  final TextEditingController offerDescription = TextEditingController();
+
+  RxBool isOpenServicesList = false.obs;
+  RxBool isLoadingService = false.obs;
+  RxBool isJobCategoryCheck = RxBool(false);
+  RxString selectedServicesID = "".obs;
+  RxString selectedServicesCategory = "Select Service".obs;
+  RxList<ChatUserServiceListModel> servicesCategoryList =
+      <ChatUserServiceListModel>[].obs;
+  getUserServiceList() async {
+    try {
+      isLoadingService.value = true;
+      var data = await Repository()
+          .getChatUserServiceListData(userID: argData.participants?[0].sId);
+      if (data.runtimeType != Null) {
+        for (var element in data) {
+          servicesCategoryList.add(element);
+        }
+        // servicesCategoryList = data;\
+        servicesCategoryList.refresh();
+        update();
+      }
+    } catch (e) {
+      print(e);
+    } finally {
+      isLoadingService.value = false;
+    }
+  }
 
   //// Socket
   late IO.Socket socket;
   RxBool isLoading = false.obs;
+
   RxBool isLoadingUploadImage = false.obs;
   RxBool isSendingMessage = false.obs;
   late RxBool initDate = false.obs;
-  final GlobalKey sendOffDialogKey = GlobalKey();
+  final GlobalKey<FormState> key = GlobalKey<FormState>();
   final TextEditingController dateTextController = TextEditingController();
   final TextEditingController chatController = TextEditingController();
   final ScrollController scrollController = ScrollController();
@@ -54,16 +164,12 @@ class ConversationScreenController extends GetxController {
   RxBool isLast = false.obs;
 
 //////////////////////////////////// Message List
-  RxList<MessageListModel> listOfMessageData = <MessageListModel>[].obs;
 
   @override
   void onInit() {
     getArguments();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // getUserType();
-
       getUserScreen();
-      // scrollToBottom();
     });
 
     scrollController.addListener(() {
@@ -76,7 +182,7 @@ class ConversationScreenController extends GetxController {
     });
     appSocketConnect();
     getMessageList();
-
+    getUserServiceList();
     super.onInit();
   }
 
@@ -128,7 +234,6 @@ class ConversationScreenController extends GetxController {
         listOfMessageData.addAll(data);
         paginationCount.value += 1;
       } else {
-        // No more data, set hasMore to false
         hasMore.value = false;
       }
     } catch (e) {
@@ -149,53 +254,16 @@ class ConversationScreenController extends GetxController {
       // Api Call
       var data = await ImageRepository().imageUploadWithData2(
         body: body,
-        // imagePath: userLocalImage.value,
         url: AppApiUrl.sendMessage,
       );
       if (data != null) {
         listOfMessageData.insert(listOfMessageData.length, data);
       }
-      //////////// Get List Abr
-      // var messageData =
-      //     await Repository().getChatMessageListData(chatId: argData.sId);
-      // if (messageData.runtimeType != Null) {
-      //   messageList.value = messageData;
-      // }
-      /////////
+
       update();
       chatController.text = "";
     }
   }
-
-  // onlyImageSend() async {
-  //   final pickedFile = await picker.pickImage(source: source);
-  //   if (pickedFile?.path != "") {
-  //     isSendingMessage.value = true;
-  //     Map<String, dynamic> body = {
-  //       "image": picker,
-  //       "chatId": argData.sId,
-  //       "messageType": "image",
-  //     };
-  //     // Api Call
-  //     var data = await ImageRepository().imageUploadWithData2(
-  //       body: body,
-  //       // imagePath: userLocalImage.value,
-  //       url: AppApiUrl.sendMessage,
-  //     );
-  //     if (data != null) {
-  //       listOfMessageData.insert(listOfMessageData.length, data);
-  //     }
-  //     //////////// Get List Abr
-  //     // var messageData =
-  //     //     await Repository().getChatMessageListData(chatId: argData.sId);
-  //     // if (messageData.runtimeType != Null) {
-  //     //   messageList.value = messageData;
-  //     // }
-  //     /////////
-  //     update();
-  //     chatController.text = "";
-  //   }
-  // }
 
   void sendMessage() async {
     try {
@@ -268,139 +336,6 @@ class ConversationScreenController extends GetxController {
       argData = Get.arguments;
     }
   }
-
-  Widget showMessage(MessageListModel item) {
-    if (item.messageType == "text") {
-      // if Text value is no null then Show Text
-      return Column(
-        crossAxisAlignment: item.sender == AppAuthStorage().getChatID()
-            ? CrossAxisAlignment.end
-            : CrossAxisAlignment.start,
-        children: [
-          Container(
-              margin: EdgeInsets.symmetric(vertical: AppSize.height(value: 10)),
-              constraints: BoxConstraints(
-                maxWidth: AppSize.size.width * 0.7,
-              ),
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  color:
-                      //  message["user"] == "professional"
-                      //     ? AppColors.chatBoxColor
-                      //     :
-                      item.sender == AppAuthStorage().getChatID()
-                          ? AppColors.primary
-                          : AppColors.white100,
-                  borderRadius: BorderRadius.only(
-                    topLeft: const Radius.circular(20),
-                    topRight: const Radius.circular(20),
-                    bottomLeft: item.sender == AppAuthStorage().getChatID()
-                        ? const Radius.circular(20)
-                        : const Radius.circular(0),
-                    bottomRight: item.sender == AppAuthStorage().getChatID()
-                        ? const Radius.circular(0)
-                        : const Radius.circular(20),
-                  )),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  AppText(
-                    data: item.text ?? "",
-                    color: AppColors.black900,
-                    fontSize: 16,
-                    textAlign: TextAlign.justify,
-                    height: 1.5,
-                  ),
-                ],
-              )),
-          AppText(
-            data: formatTime(item.createdAt ?? ""),
-            color: AppColors.black900,
-            fontSize: 12,
-          ),
-        ],
-      );
-    } else if (item.messageType == "image") {
-      // if Image value is no null then Show Image
-      return Container(
-        margin: EdgeInsets.symmetric(
-          vertical: AppSize.height(value: 10),
-        ),
-        constraints: BoxConstraints(
-          maxWidth: AppSize.size.width * 0.7,
-          // maxHeight: AppSize.size.height * 0.20
-        ),
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-            color: item.sender == AppAuthStorage().getChatID()
-                ? AppColors.primary
-                : AppColors.white100,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-                bottomLeft: Radius.circular(20))),
-        child: Column(
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.all(
-                Radius.circular(10),
-              ),
-              child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    Get.context!,
-                    MaterialPageRoute(
-                      builder: (_) => FullScreenImageViewer(
-                          image: "${AppApiUrl.domaine}${item.image}"),
-                    ),
-                  );
-                },
-                child: AppImage(
-                  // path: AssetsImagesPath.splash,
-                  url: "${AppApiUrl.domaine}${item.image}",
-                  height: 250,
-                  fit: BoxFit.fitWidth,
-                ),
-                //  Image.file(
-                //   "",
-                //   // message['image'],
-                //   height: 250,
-                //   fit: BoxFit.fitWidth,
-                // ),
-              ),
-            ),
-            const Gap(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                AppText(
-                  data: formatTime(item.createdAt ?? ""),
-                  // data: message["time"],
-                  color: AppColors.black400,
-                  fontSize: 12,
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
-
-    return const SizedBox();
-  }
-
-  // scrollToBottom() {
-  //   if (scrollController.hasClients) {
-  //     scrollController.animateTo(
-  //       // scrollController.position.extentTotal
-  //       //  -
-  //       scrollController.position.maxScrollExtent - AppSize.size.height,
-  //       duration: const Duration(milliseconds: 500),
-  //       curve: Curves.easeInOut,
-  //     );
-  //   }
-  // }
 
   outSideClick() {
     FocusManager.instance.primaryFocus?.unfocus();

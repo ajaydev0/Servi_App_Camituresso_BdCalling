@@ -1,20 +1,17 @@
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/dev_data/dev_request_data.dart';
 import 'package:servi_app_camituresso/screens/request_screen/models/booking_request_data_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class RequestScreenController extends GetxController {
-  rejectBookClick(sID) async {
+  rejectBookClick(String? sID) async {
     try {
       // isLoadingReject.value = true;
       await Repository()
           .getBookingRequestChangeStatus(id: sID, status: "Rejected");
 
-      var context = Get.context;
-      Navigator.pop(context!);
-      getBookingList();
+      Navigator.pop(Get.context!);
+      // getBookingList();
       update();
     } catch (e) {
       print(e);
@@ -23,15 +20,14 @@ class RequestScreenController extends GetxController {
     }
   }
 
-  confirmBookClick(sID) async {
+  confirmBookClick(String? sID) async {
     try {
       // isLoadingConfirm.value = true;
-      await Repository()
+      var data = await Repository()
           .getBookingRequestChangeStatus(id: sID, status: "Accepted");
 
-      var context = Get.context;
-      Navigator.pop(context!);
-      getBookingList();
+      Navigator.pop(Get.context!);
+      await getBookingList();
       update();
     } catch (e) {
       print(e);
@@ -62,7 +58,7 @@ class RequestScreenController extends GetxController {
   RxList<BookingRequestListModel> bookingList = <BookingRequestListModel>[].obs;
 
   int currentPage = 1;
-  final int limit = 5;
+  final int limit = 1000000000000000000;
 
   // Fetch the first page or refresh data
   Future<void> getBookingList({bool isRefresh = false}) async {
