@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/dev_data/dev_user_history_data.dart';
 import 'package:servi_app_camituresso/screens/user_history_screen/models/booking_request_data_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 import '../../../const/app_api_url.dart';
@@ -8,76 +7,78 @@ import '../../../services/api/services/api_get_services.dart';
 import '../../../services/app_storage/app_auth_storage.dart';
 
 class UserHistoryScreenController extends GetxController {
-  // RxBool isLoading = false.obs;
-  // RxBool isError = RxBool(false);
-  // RxBool isLoadingMore = false.obs;
-  // RxBool hasMore = true.obs;
-  //
-  // RxList<GetPostModel> postList = <GetPostModel>[].obs;
-  // int currentPage = 1;
-  // final int limit = 20;
-  //
-  // // Fetch the first page or refresh data
-  // Future<void> getPostAndInList({bool isRefresh = false}) async {
-  //   if (isRefresh) {
-  //     currentPage = 1;
-  //     hasMore.value = true;
-  //     postList.clear();
-  //   }
-  //
-  //   if (isLoading.value || isLoadingMore.value || !hasMore.value) return;
-  //
-  //   try {
-  //     if (isRefresh) {
-  //       isLoading.value = true;
-  //     } else {
-  //       isLoadingMore.value = true;
-  //     }
-  //
-  //     var data =
-  //     await Repository().getPostData(page: currentPage, limit: limit);
-  //
-  //     if (data.isNotEmpty) {
-  //       postList.addAll(data);
-  //       currentPage++;
-  //       if (data.length < limit) {
-  //         hasMore.value = false; // No more data to fetch
-  //       }
-  //     } else {
-  //       hasMore.value = false; // No more data to fetch
-  //     }
-  //   } catch (e) {
-  //     isError.value = true;
-  //     print("Error in getPostAndInList: $e");
-  //   } finally {
-  //     isLoading.value = false;
-  //     isLoadingMore.value = false;
-  //   }
-  // }
-  //
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   getPostAndInList();
-  // }
-  ////////////////////
   RxBool isLoading = RxBool(true);
   RxBool isError = RxBool(false);
+  RxBool isLoadingMore = RxBool(false);
   List<UserHistoryListModel> listOfUserHistory = <UserHistoryListModel>[];
+
+  // Pagination variables
+  int currentPage = 1;
+  static const int itemsPerPage = 10;
+  RxBool hasMoreData = RxBool(true);
 
   Future<void> initializedDataLoad() async {
     try {
       isLoading.value = true;
-      var data = await Repository().getUserHistory();
-      if (data.runtimeType != Null) {
+      currentPage = 1; // Reset to first page
+      listOfUserHistory.clear(); // Clear existing data
+
+      var data = await getUserHistoryPaginated(currentPage);
+      if (data.isNotEmpty) {
         listOfUserHistory = data;
+        hasMoreData.value = data.length >= itemsPerPage;
       }
       isLoading.value = false;
     } catch (e) {
       log("error from request data load function : $e");
       isError.value = true;
+      isLoading.value = false;
     }
     update();
+  }
+
+  Future<void> loadMoreData() async {
+    if (!hasMoreData.value || isLoadingMore.value) return;
+
+    try {
+      isLoadingMore.value = true;
+      currentPage++;
+
+      var data = await getUserHistoryPaginated(currentPage);
+      if (data.isNotEmpty) {
+        listOfUserHistory.addAll(data);
+        hasMoreData.value = data.length >= itemsPerPage;
+      } else {
+        hasMoreData.value = false;
+      }
+    } catch (e) {
+      log("error loading more data: $e");
+      currentPage--; // Revert page increment on error
+    } finally {
+      isLoadingMore.value = false;
+      update();
+    }
+  }
+
+  Future<List<UserHistoryListModel>> getUserHistoryPaginated(int page) async {
+    List<UserHistoryListModel> data = [];
+    try {
+      var response = await ApiGetServices().apiGetServices(
+        "${AppApiUrl.userHistory}?page=$page&per_page=$itemsPerPage",
+        token: AppAuthStorage().getToken(),
+      );
+
+      if (response != null &&
+          response["data"] != null &&
+          response["data"]["offers"] != null) {
+        for (var item in response["data"]["offers"]) {
+          data.add(UserHistoryListModel.fromJson(item));
+        }
+      }
+    } catch (e) {
+      log("Error in getUserHistoryPaginated: $e");
+    }
+    return data;
   }
 
   @override
