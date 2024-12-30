@@ -193,7 +193,7 @@ List<GetPage> appRoutesFile = <GetPage>[
   ///////////  receipt
   GetPage(
     name: AppRoutes.eReceiptScreen,
-    page: () => const EReceiptScreen(),
+    page: () =>  EReceiptScreen(),
     middlewares: [InternetCheckMiddleWare()],
   ),
   //////////////////////////////////////////////////////////////// Aj Raw Code

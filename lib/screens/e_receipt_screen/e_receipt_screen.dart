@@ -6,77 +6,104 @@ import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
+import 'controllers/e_receipt_details_controller.dart';
+
 class EReceiptScreen extends StatelessWidget {
-  const EReceiptScreen({super.key});
+  final EReceiptDetailController controller =
+      Get.put(EReceiptDetailController());
+  EReceiptScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
-      init: EReceiptScreenController(),
-      builder: (controller) {
-        return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const AppText(
-              data: "E-Receipt",
-              fontSize: 18,
-              fontWeight: FontWeight.w600,
-            ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const AppText(
+          data: "E-Receipt",
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: GestureDetector(
+        onTap: () {
+          Get.back(times: 2);
+        },
+        child: Container(
+          margin: EdgeInsets.all(AppSize.width(value: 10)),
+          width: Get.width,
+          height: AppSize.height(value: 50),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(AppSize.width(value: 8.0))),
+          child: AppText(
+            data: "Back To Home",
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            color: AppColors.white50,
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: GestureDetector(
-            onTap: () {
-              Get.back(times: 2);
-            },
-            child: Container(
-              margin: EdgeInsets.all(AppSize.width(value: 10)),
-              width: Get.width,
-              height: AppSize.height(value: 50),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(AppSize.width(value: 8.0))),
-              child: AppText(
-                data: "Back To Home",
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppColors.white50,
-              ),
-            ),
-          ),
-          body: Column(
+        ),
+      ),
+      body: Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (controller.isError.value) {
+          return const Center(child: Text("Error loading data"));
+        } else {
+          final item = controller.detail;
+          final date = controller.getFormattedDate(item.createdAt);
+          final time = controller.getFormattedTime(item.createdAt);
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0)),
-                child: AppText(data: "Booking Details", fontWeight: FontWeight.w700, fontSize: 18),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.width(value: 20.0)),
+                child: const AppText(
+                    data: "Booking Details",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18),
               ),
-              Gap(height: 8),
-              rowBuild(left: "Booking Date", right: "05-05-2024"),
-              rowBuild(left: "Booking Time", right: "10:00 AM"),
-              rowBuild(left: "Client Name", right: "Lionel Messi"),
-              Gap(height: 8),
-              Container(color: AppColors.primary, width: Get.width, height: 1.5),
-              Gap(height: 20),
+              const Gap(height: 8),
+              rowBuild(left: "Booking Date", right: date),
+              rowBuild(left: "Booking Time", right: time),
+              rowBuild(left: "Client Name", right: item.user.name),
+              const Gap(height: 8),
+              Container(
+                  color: AppColors.primary, width: Get.width, height: 1.5),
+              const Gap(height: 20),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0)),
-                child: AppText(data: "Service Details", fontWeight: FontWeight.w700, fontSize: 18),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.width(value: 20.0)),
+                child: const AppText(
+                    data: "Service Details",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18),
               ),
-              Gap(height: 8),
+              const Gap(height: 8),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0), vertical: AppSize.width(value: 5.0)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.width(value: 20.0),
+                    vertical: AppSize.width(value: 5.0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    AppText(
+                    const AppText(
                       data: "Service Status",
                       color: AppColors.black300,
                     ),
                     Container(
                       alignment: Alignment.center,
                       height: Get.width * 0.06,
-                      padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10)),
-                      decoration: BoxDecoration(color: AppColors.green.withOpacity(0.3), borderRadius: BorderRadius.circular(AppSize.width(value: 10))),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: AppSize.width(value: 10)),
+                      decoration: BoxDecoration(
+                          color: AppColors.green.withOpacity(0.3),
+                          borderRadius:
+                              BorderRadius.circular(AppSize.width(value: 10))),
                       child: AppText(
-                        data: "Completed",
+                        data: item.status,
                         fontSize: 14,
                         fontWeight: FontWeight.w400,
                         color: AppColors.green,
@@ -85,49 +112,71 @@ class EReceiptScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              rowBuild(left: "Room Clean", right: "\$250"),
-              rowBuild(left: "Room Wash", right: "\$50"),
-              Gap(height: 8),
-              Container(color: AppColors.primary, width: Get.width, height: 1.5),
-              Gap(height: 8),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0), vertical: AppSize.width(value: 5.0)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.width(value: 20.0),
+                    vertical: AppSize.width(value: 5.0)),
+                child: AppText(
+                  data: item.service.priceBreakdown,
+                  maxLines: null,
+                  overflow: TextOverflow.visible,
+                  fontWeight: FontWeight.w400,
+                  color: AppColors.black500,
+                ),
+              ),
+              // rowBuild(left: item.service.priceBreakdown, right: "\$250"),
+              // rowBuild(left: "Room Wash", right: "\$50"),
+              const Gap(height: 8),
+              Container(
+                  color: AppColors.primary, width: Get.width, height: 1.5),
+              const Gap(height: 8),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.width(value: 20.0),
+                    vertical: AppSize.width(value: 5.0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    AppText(
+                    const AppText(
                       data: "Total",
                       fontWeight: FontWeight.w700,
                       color: AppColors.black700,
                     ),
                     AppText(
-                      data: "\$300",
+                      data: "\$${item.service.price.toString()}",
                       fontWeight: FontWeight.w700,
                       color: AppColors.black700,
                     ),
                   ],
                 ),
               ),
-              Gap(height: 8),
-              Container(color: AppColors.primary, width: Get.width, height: 1.5),
-              Gap(height: 8),
+              const Gap(height: 8),
+              Container(
+                  color: AppColors.primary, width: Get.width, height: 1.5),
+              const Gap(height: 8),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0)),
-                child: AppText(data: "Payment Method", fontWeight: FontWeight.w700, fontSize: 18),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.width(value: 20.0)),
+                child: const AppText(
+                    data: "Payment Method",
+                    fontWeight: FontWeight.w700,
+                    fontSize: 18),
               ),
-              Gap(height: 8),
+              const Gap(height: 8),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0), vertical: AppSize.width(value: 5.0)),
+                padding: EdgeInsets.symmetric(
+                    horizontal: AppSize.width(value: 20.0),
+                    vertical: AppSize.width(value: 5.0)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    AppText(
+                    const AppText(
                       data: "Mercado Pago",
                       fontWeight: FontWeight.w700,
                       color: Color(0xff00BCFF),
                     ),
                     AppText(
-                      data: "\$300",
+                      data: "\$${item.service.price.toString()}",
                       fontWeight: FontWeight.w700,
                       color: AppColors.black700,
                     ),
@@ -135,15 +184,17 @@ class EReceiptScreen extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-        );
-      },
+          );
+        }
+      }),
     );
   }
 
   Padding rowBuild({required String left, required String right}) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20.0), vertical: AppSize.width(value: 5.0)),
+      padding: EdgeInsets.symmetric(
+          horizontal: AppSize.width(value: 20.0),
+          vertical: AppSize.width(value: 5.0)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

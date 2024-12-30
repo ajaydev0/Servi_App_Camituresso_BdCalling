@@ -241,7 +241,7 @@ class UserHistoryScreen extends StatelessWidget {
                                                           onTap: () {
                                                             Get.toNamed(
                                                                 AppRoutes.eReceiptScreen,
-                                                                arguments: item);
+                                                                parameters: {'id': item.sId!});
                                                           },
                                                           child: Container(
                                                             alignment: Alignment.center,

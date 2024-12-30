@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:servi_app_camituresso/screens/user_history_screen/models/booking_request_data_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 import '../../../const/app_api_url.dart';
@@ -12,6 +13,8 @@ class UserHistoryScreenController extends GetxController {
   RxBool isError = RxBool(false);
   RxBool isLoadingMore = RxBool(false);
   List<UserHistoryListModel> listOfUserHistory = <UserHistoryListModel>[];
+
+
 
   // Search functionality
   final searchController = TextEditingController();

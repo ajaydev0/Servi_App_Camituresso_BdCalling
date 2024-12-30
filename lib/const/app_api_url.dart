@@ -32,6 +32,7 @@ class AppApiUrl {
   static const String searchPostUrl = "$baseUrl/post";
   static const String bookingRequest = "$baseUrl/offer";
   static const String userHistory = "$baseUrl/offer/offer-history";
+  static const String userHistoryEReceipt = "$baseUrl/offer";
 
   //////////////////////////////////////  chat
   static const String chatList = "$baseUrl/chat";
