@@ -37,248 +37,252 @@ class UserHistoryScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              body: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                } else if (controller.isError.value) {
-                  return const Center(child: Text("Error loading data"));
-                } else if (controller.filteredList.isEmpty) {
-                  return Center(
-                    child: Text(
-                        controller.searchQuery.value.isEmpty
-                            ? "No data available"
-                            : "No matching results found"
-                    ),
-                  );
-                } else {
-                  return NotificationListener<ScrollNotification>(
-                    onNotification: (ScrollNotification scrollInfo) {
-                      if (scrollInfo is ScrollEndNotification &&
-                          scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent * 0.9) {
-                        controller.loadMoreData();
-                      }
-                      return true;
-                    },
-                    child: CustomScrollView(
-                      slivers: [
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: AppSize.width(value: 16.0),
-                                vertical: AppSize.width(value: 16.0)),
-                            child: AppInputWidgetTwo(
-                              controller: controller.searchController,
-                              hintText: "Search by title",
-                              contentPadding: EdgeInsets.symmetric(
-                                  horizontal: AppSize.width(value: 10.0)),
-                              suffixIcon: Obx(() => GestureDetector(
-                                onTap: () {
-                                  if (controller.searchQuery.value.isNotEmpty) {
-                                    controller.clearSearch();
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    controller.searchQuery.value.isEmpty
-                                        ? Icons.search
-                                        : Icons.clear,
-                                    color: AppColors.black400,
-                                  ),
-                                ),
-                              )),
-                            ),
+              body: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSize.width(value: 16.0),
+                        vertical: AppSize.width(value: 16.0)),
+                    child: AppInputWidgetTwo(
+                      controller: controller.searchController,
+                      hintText: "Search by title",
+                      contentPadding: EdgeInsets.symmetric(
+                          horizontal: AppSize.width(value: 10.0)),
+                      suffixIcon: Obx(() => GestureDetector(
+                        onTap: () {
+                          if (controller.searchQuery.value.isNotEmpty) {
+                            controller.clearSearch();
+                          }
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            controller.searchQuery.value.isEmpty
+                                ? Icons.search
+                                : Icons.clear,
+                            color: AppColors.black400,
                           ),
                         ),
-                        SliverList(
-                          delegate: SliverChildBuilderDelegate(
-                                (context, index) {
-                              if (index == controller.filteredList.length &&
-                                  controller.searchQuery.value.isEmpty) {
-                                return Obx(() => controller.isLoadingMore.value
-                                    ? Container(
-                                  padding: const EdgeInsets.all(16.0),
-                                  alignment: Alignment.center,
-                                  child: const CircularProgressIndicator(),
-                                )
-                                    : const SizedBox.shrink());
-                              }
-                              var item = controller.filteredList[index];
-                              return Container(
-                                margin: EdgeInsets.symmetric(
-                                    vertical: AppSize.width(value: 5.0),
-                                    horizontal: AppSize.width(value: 10.0)),
-                                decoration: BoxDecoration(
-                                    color: AppColors.yellow100.withOpacity(0.8),
-                                    borderRadius: BorderRadius.circular(
-                                        AppSize.width(value: 10.0))),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(
-                                                AppSize.width(value: 10.0)),
-                                            bottomLeft: Radius.circular(
-                                                AppSize.width(value: 10.0))),
-                                        child: AppImage(
-                                          url:
-                                          "${AppApiUrl.domaine}${item.service?.image}",
-                                          height: AppSize.height(value: 170),
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    const Gap(width: 6),
-                                    Expanded(
-                                      flex: 3,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
+                      )),
+                    ),
+                  ),
+                  Expanded(
+                    child: Obx(() {
+                      if (controller.isLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (controller.isError.value) {
+                        return const Center(child: Text("Error loading data"));
+                      } else if (controller.filteredList.isEmpty) {
+                        return Center(
+                          child: Text(
+                              controller.searchQuery.value.isEmpty
+                                  ? "No data available"
+                                  : "No matching results found"
+                          ),
+                        );
+                      } else {
+                        return NotificationListener<ScrollNotification>(
+                          onNotification: (ScrollNotification scrollInfo) {
+                            if (scrollInfo is ScrollEndNotification &&
+                                scrollInfo.metrics.pixels >= scrollInfo.metrics.maxScrollExtent * 0.9) {
+                              controller.loadMoreData();
+                            }
+                            return true;
+                          },
+                          child: CustomScrollView(
+                            slivers: [
+                              SliverList(
+                                delegate: SliverChildBuilderDelegate(
+                                      (context, index) {
+                                    if (index == controller.filteredList.length &&
+                                        controller.searchQuery.value.isEmpty) {
+                                      return Obx(() => controller.isLoadingMore.value
+                                          ? Container(
+                                        padding: const EdgeInsets.all(16.0),
+                                        alignment: Alignment.center,
+                                        child: const CircularProgressIndicator(),
+                                      )
+                                          : const SizedBox.shrink());
+                                    }
+                                    var item = controller.filteredList[index];
+                                    return Container(
+                                      margin: EdgeInsets.symmetric(
+                                          vertical: AppSize.width(value: 5.0),
+                                          horizontal: AppSize.width(value: 10.0)),
+                                      decoration: BoxDecoration(
+                                          color: AppColors.yellow100.withOpacity(0.8),
+                                          borderRadius: BorderRadius.circular(
+                                              AppSize.width(value: 10.0))),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          const Gap(height: 10),
-                                          AppText(
-                                            data: item.service?.title ?? '',
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            color: AppColors.black700,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                          const Gap(height: 4.2),
-                                          AppText(
-                                            data: "\$${item.service?.price?.toString() ?? ''}",
-                                            color: AppColors.primary,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              const Gap(height: 5),
-                                              AppText(
-                                                data: item.provider?.name ?? '',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: AppColors.black400,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 16,
-                                              ),
-                                              const Gap(height: 4.2),
-                                              AppText(
-                                                data: item.service?.category ?? '',
-                                                maxLines: 1,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: AppColors.black400,
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 14,
-                                              )
-                                            ],
-                                          ),
-                                          const Gap(height: 10.0),
-                                          if (item.status ==
-                                              UserHistoryEnum.pending)
-                                            Align(
-                                              child: GestureDetector(
-                                                onTap: () {
-                                                  Get.toNamed(AppRoutes
-                                                      .paymentMethodScreen);
-                                                },
-                                                child: Container(
-                                                  constraints: BoxConstraints(
-                                                      maxWidth: AppSize.width(
-                                                          value: 100)),
-                                                  alignment: Alignment.center,
-                                                  padding: EdgeInsets.all(
-                                                      AppSize.width(value: 5.0)),
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: AppColors.primary),
-                                                    borderRadius:
-                                                    BorderRadius.circular(
-                                                        AppSize.width(
-                                                            value: 5.0)),
-                                                    color: AppColors.primary,
-                                                  ),
-                                                  child: const AppText(
-                                                    data: "Pay Now",
-                                                    color: AppColors.white50,
-                                                  ),
-                                                ),
+                                          Expanded(
+                                            flex: 2,
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(
+                                                      AppSize.width(value: 10.0)),
+                                                  bottomLeft: Radius.circular(
+                                                      AppSize.width(value: 10.0))),
+                                              child: AppImage(
+                                                url:
+                                                "${AppApiUrl.domaine}${item.service?.image}",
+                                                height: AppSize.height(value: 170),
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                          Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  height: Get.width * 0.08,
-                                                  child: AppText(
-                                                    data: item.status ?? '',
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: item.status == 'Accepted'
-                                                        ? AppColors.green
-                                                        : item.status == 'Canceled'
-                                                        ? Colors.red
-                                                        : item.status == 'Upcoming'
-                                                        ? AppColors.primary
-                                                        : item.status == 'Completed'
-                                                        ? AppColors.green
-                                                        : AppColors.gray,
-                                                  ),
+                                          ),
+                                          const Gap(width: 6),
+                                          Expanded(
+                                            flex: 3,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                              children: [
+                                                const Gap(height: 10),
+                                                AppText(
+                                                  data: item.service?.title ?? '',
+                                                  maxLines: 1,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  color: AppColors.black700,
+                                                  fontWeight: FontWeight.w600,
                                                 ),
-                                              ),
-                                              if (item.status == 'Accepted')
-                                                Expanded(
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      Get.toNamed(
-                                                          AppRoutes.eReceiptScreen,
-                                                          arguments: item);
-                                                    },
-                                                    child: Container(
-                                                      alignment: Alignment.center,
-                                                      height: Get.width * 0.08,
-                                                      decoration: BoxDecoration(
-                                                          color: AppColors.primary,
+                                                const Gap(height: 4.2),
+                                                AppText(
+                                                  data: "\$${item.service?.price?.toString() ?? ''}",
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                                  children: [
+                                                    const Gap(height: 5),
+                                                    AppText(
+                                                      data: item.provider?.name ?? '',
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      color: AppColors.black400,
+                                                      fontWeight: FontWeight.w600,
+                                                      fontSize: 16,
+                                                    ),
+                                                    const Gap(height: 4.2),
+                                                    AppText(
+                                                      data: item.service?.category ?? '',
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      color: AppColors.black400,
+                                                      fontWeight: FontWeight.w400,
+                                                      fontSize: 14,
+                                                    )
+                                                  ],
+                                                ),
+                                                const Gap(height: 10.0),
+                                                if (item.status ==
+                                                    UserHistoryEnum.pending)
+                                                  Align(
+                                                    child: GestureDetector(
+                                                      onTap: () {
+                                                        Get.toNamed(AppRoutes
+                                                            .paymentMethodScreen);
+                                                      },
+                                                      child: Container(
+                                                        constraints: BoxConstraints(
+                                                            maxWidth: AppSize.width(
+                                                                value: 100)),
+                                                        alignment: Alignment.center,
+                                                        padding: EdgeInsets.all(
+                                                            AppSize.width(value: 5.0)),
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color: AppColors.primary),
                                                           borderRadius:
                                                           BorderRadius.circular(
                                                               AppSize.width(
-                                                                  value: 5))),
-                                                      child: const AppText(
-                                                        data: "View Receipt",
-                                                        fontSize: 14,
-                                                        fontWeight: FontWeight.w400,
-                                                        color: AppColors.white50,
+                                                                  value: 5.0)),
+                                                          color: AppColors.primary,
+                                                        ),
+                                                        child: const AppText(
+                                                          data: "Pay Now",
+                                                          color: AppColors.white50,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: [
+                                                    Expanded(
+                                                      child: Container(
+                                                        alignment: Alignment.center,
+                                                        height: Get.width * 0.08,
+                                                        child: AppText(
+                                                          data: item.status ?? '',
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w400,
+                                                          color: item.status == 'Accepted'
+                                                              ? AppColors.green
+                                                              : item.status == 'Canceled'
+                                                              ? Colors.red
+                                                              : item.status == 'Upcoming'
+                                                              ? AppColors.primary
+                                                              : item.status == 'Completed'
+                                                              ? AppColors.green
+                                                              : AppColors.gray,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    if (item.status == 'Accepted')
+                                                      Expanded(
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            Get.toNamed(
+                                                                AppRoutes.eReceiptScreen,
+                                                                arguments: item);
+                                                          },
+                                                          child: Container(
+                                                            alignment: Alignment.center,
+                                                            height: Get.width * 0.08,
+                                                            decoration: BoxDecoration(
+                                                                color: AppColors.primary,
+                                                                borderRadius:
+                                                                BorderRadius.circular(
+                                                                    AppSize.width(
+                                                                        value: 5))),
+                                                            child: const AppText(
+                                                              data: "View Receipt",
+                                                              fontSize: 14,
+                                                              fontWeight: FontWeight.w400,
+                                                              color: AppColors.white50,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    const Gap(width: 12),
+                                                  ],
                                                 ),
-                                              const Gap(width: 12),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
+                                    );
+                                  },
+                                  childCount: controller.filteredList.length +
+                                      (controller.searchQuery.value.isEmpty ? 1 : 0),
                                 ),
-                              );
-                            },
-                            childCount: controller.filteredList.length +
-                                (controller.searchQuery.value.isEmpty ? 1 : 0),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              }));
+                        );
+                      }
+                    }),
+                  ),
+                ],
+              ));
         });
   }
 }
