@@ -50,21 +50,21 @@ class ServicesHorizontalCard extends StatelessWidget {
                     height: AppSize.height(value: 250),
                     width: Get.width,
                   ),
-                  Positioned(
-                    right: AppSize.width(value: 20),
-                    top: AppSize.width(value: 20),
-                    child: GestureDetector(
-                      onTap: onTap,
-                      child: AppImage(
-                          width: AppSize.width(value: 30),
-                          height: AppSize.width(value: 30),
-                          path:
-                              // item.isSaved
-                              //     ? AssetsIconsPath.savaDed
-                              //     :
-                              AssetsIconsPath.notSavaDed),
-                    ),
-                  )
+                  // Positioned(
+                  //   right: AppSize.width(value: 20),
+                  //   top: AppSize.width(value: 20),
+                  //   child: GestureDetector(
+                  //     onTap: onTap,
+                  //     child: AppImage(
+                  //         width: AppSize.width(value: 30),
+                  //         height: AppSize.width(value: 30),
+                  //         path:
+                  //             // item.isSaved
+                  //             //     ? AssetsIconsPath.savaDed
+                  //             //     :
+                  //             AssetsIconsPath.notSavaDed),
+                  //   ),
+                  // )
                 ],
               ),
             ),

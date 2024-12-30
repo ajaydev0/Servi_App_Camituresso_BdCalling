@@ -22,6 +22,7 @@ import 'package:servi_app_camituresso/screens/error_screen/error_screen.dart';
 import 'package:servi_app_camituresso/screens/list_off_view_services/list_of_view_services.dart';
 import 'package:servi_app_camituresso/screens/navigation_screen/navigation_screen.dart';
 import 'package:servi_app_camituresso/screens/payment_method_screen/payment_method_screen.dart';
+import 'package:servi_app_camituresso/screens/payment_webview_screen/payment_webview_screen.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/popular_view_all.dart';
 import 'package:servi_app_camituresso/screens/privacy_and_policy_screen/privacy_and_policy_screen.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/profile_screen.dart';
@@ -220,6 +221,11 @@ List<GetPage> appRoutesFile = <GetPage>[
   GetPage(
     name: AppRoutes.clientsDetailsScreen,
     page: () => const ClientsDetailsScreen(),
+    middlewares: [InternetCheckMiddleWare()],
+  ),
+  GetPage(
+    name: AppRoutes.paymentWebviewScreen,
+    page: () => const PaymentWebviewScreen(),
     middlewares: [InternetCheckMiddleWare()],
   ),
 ];

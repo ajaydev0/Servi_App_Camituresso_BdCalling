@@ -11,6 +11,7 @@ class ServiceDetailsModel {
   bool? adult;
   dynamic rating;
   dynamic totalRating;
+  bool? isBookmark;
   List<Reviews>? reviews;
 
   ServiceDetailsModel(
@@ -26,6 +27,7 @@ class ServiceDetailsModel {
       this.adult,
       this.rating,
       this.totalRating,
+      this.isBookmark,
       this.reviews});
 
   ServiceDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -41,6 +43,7 @@ class ServiceDetailsModel {
     adult = json['adult'];
     rating = json['rating'];
     totalRating = json['totalRating'];
+    isBookmark = json['isBookmark'];
     if (json['reviews'] != null) {
       reviews = <Reviews>[];
       json['reviews'].forEach((v) {

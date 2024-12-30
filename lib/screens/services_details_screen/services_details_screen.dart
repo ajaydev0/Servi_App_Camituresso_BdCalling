@@ -1,16 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/app_const.dart';
-import 'package:servi_app_camituresso/const/assets_dev_images.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
 import 'package:servi_app_camituresso/const/assets_images_path.dart';
-import 'package:servi_app_camituresso/models/chat_or_conversations/chat_data_model.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/widgets/services_add_edit_review.dart';
-import 'package:servi_app_camituresso/screens/services_details_screen/widgets/services_details_delete_dialog_warning.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/controllers/services_details_screen_controller.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/widgets/services_review_delete_dialog_warning.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/widgets/glass_mor_Phish_item.dart';
@@ -120,32 +118,80 @@ class ServicesDetailsScreen extends StatelessWidget {
                                               path: AssetsIconsPath.backButton,
                                             ),
                                           ),
-                                          ValueBuilder<bool?>(
-                                            initialValue: true,
-                                            builder: (snapshot, updater) =>
-                                                GestureDetector(
-                                              onTap: () async {
-                                                if (snapshot != null) {
-                                                  updater(!snapshot);
-                                                }
-                                              },
-                                              child: IconButton(
-                                                  style: ButtonStyle(
-                                                      backgroundColor:
-                                                          WidgetStatePropertyAll(
-                                                              Colors.black
-                                                                  .withOpacity(
-                                                                      .4))),
-                                                  onPressed: null,
-                                                  icon: Icon(
-                                                      snapshot == true
-                                                          ? Icons.bookmark
-                                                          : Icons
-                                                              .bookmark_outline,
-                                                      color: snapshot == true
-                                                          ? Color(0xffD0A933)
-                                                          : Colors.white)),
-                                            ),
+                                          Obx(
+                                            () => controller
+                                                    .isLoadingBookmark.value
+                                                ? IconButton(
+                                                    style: ButtonStyle(
+                                                        backgroundColor:
+                                                            WidgetStatePropertyAll(
+                                                                Colors.black
+                                                                    .withOpacity(
+                                                                        .4))),
+                                                    onPressed: null,
+                                                    icon:
+                                                        const CupertinoActivityIndicator(
+                                                      color: Colors.white,
+                                                    ),
+                                                  )
+
+                                                // const Center(
+                                                //     child:
+                                                //         CircularProgressIndicator(
+                                                //       color: Colors.black,
+                                                //     ),
+                                                //   )
+                                                : GestureDetector(
+                                                    onTap: () async {
+                                                      try {
+                                                        controller
+                                                            .isLoadingBookmark
+                                                            .value = true;
+                                                        var data = await Repository()
+                                                            .addBookmark(
+                                                                id: controller
+                                                                    .serviceDetails
+                                                                    .sId);
+                                                        if (data != null) {
+                                                          if (controller
+                                                              .bookmark.value) {
+                                                            controller.bookmark
+                                                                .value = false;
+                                                          } else {
+                                                            controller.bookmark
+                                                                .value = true;
+                                                          }
+                                                        }
+                                                      } catch (e) {
+                                                        print(e);
+                                                      } finally {
+                                                        controller
+                                                            .isLoadingBookmark
+                                                            .value = false;
+                                                      }
+                                                    },
+                                                    child: IconButton(
+                                                        style: ButtonStyle(
+                                                            backgroundColor:
+                                                                WidgetStatePropertyAll(Colors
+                                                                    .black
+                                                                    .withOpacity(
+                                                                        .4))),
+                                                        onPressed: null,
+                                                        icon: Icon(
+                                                            controller.bookmark
+                                                                    .value
+                                                                ? Icons.bookmark
+                                                                : Icons
+                                                                    .bookmark_outline,
+                                                            color: controller
+                                                                    .bookmark
+                                                                    .value
+                                                                ? const Color(
+                                                                    0xffD0A933)
+                                                                : Colors
+                                                                    .white)),
+                                                  ),
                                           ),
                                         ],
                                       ),

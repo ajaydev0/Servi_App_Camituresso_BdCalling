@@ -1,16 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:isolate';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/dev_data/dev_list_of_services_data.dart';
-import 'package:servi_app_camituresso/models/dev_services_model/dev_services_model.dart';
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
-import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 

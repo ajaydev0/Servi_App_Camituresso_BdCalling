@@ -1,12 +1,10 @@
-import 'dart:developer';
-
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/screens/chat_screen/model/chat_list_model.dart';
 import 'package:servi_app_camituresso/screens/clients_details_screen/model/booking_request_details_model.dart';
 import 'package:servi_app_camituresso/screens/conversation_screen/model/message_list_model.dart';
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
 import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
+import 'package:servi_app_camituresso/screens/navigation_screen/model/notification_screen_model.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
@@ -17,6 +15,7 @@ import 'package:servi_app_camituresso/screens/service_by_service_screen/model/se
 import 'package:servi_app_camituresso/screens/services_details_screen/models/create_chat_model.dart';
 import 'package:servi_app_camituresso/screens/services_details_screen/models/service_details_model.dart';
 import 'package:servi_app_camituresso/screens/services_screen/model/category_model.dart';
+import 'package:servi_app_camituresso/screens/transaction_history_screen/models/transaction_history_model.dart';
 import 'package:servi_app_camituresso/services/api/services/api_get_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_patch_services.dart';
 import 'package:servi_app_camituresso/services/api/services/api_post_services.dart';
@@ -103,25 +102,25 @@ class Repository {
   }
 
   // Get Notifications List
-  Future<List<BookmarkModel>> getNotificationListData() async {
-    List<BookmarkModel> data = <BookmarkModel>[];
-    try {
-      var response = await ApiGetServices().apiGetServices(
-        AppApiUrl.notificationUrl,
-      );
-
-      if (response != null) {
-        if (response["data"].runtimeType != Null) {
-          for (var element in response["data"]) {
-            data.add(BookmarkModel.fromJson(element));
-          }
-        }
-      }
-      return data;
-    } catch (e) {
-      return data;
-    }
-  }
+  // Future<List<BookmarkModel>> getNotificationListData() async {
+  //   List<BookmarkModel> data = <BookmarkModel>[];
+  //   try {
+  //     var response = await ApiGetServices().apiGetServices(
+  //       AppApiUrl.notificationUrl,
+  //     );
+  //
+  //     if (response != null) {
+  //       if (response["data"].runtimeType != Null) {
+  //         for (var element in response["data"]) {
+  //           data.add(BookmarkModel.fromJson(element));
+  //         }
+  //       }
+  //     }
+  //     return data;
+  //   } catch (e) {
+  //     return data;
+  //   }
+  // }
 
   // Get Saved/Bookmark List
   Future<List<BookmarkModel>> getBookmarkListData() async {
@@ -246,22 +245,39 @@ class Repository {
   }
 
   // Get Notification
-  // Future<dynamic> getNotificationData() async {
-  //   try {
-  //     // Api Call
-  //     var data = await ApiGetServices().apiGetServices(
-  //       AppApiUrl.notificationUrl,
-  //     );
-  //     if (data != null) {
-  //       return GetNotificationModel.fromJson(data);
-  //     } else {
-  //       throw Exception("Failed to load profile data");
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  //   return null;
-  // }
+  Future<dynamic> getNotificationData({required int page}) async {
+    try {
+      // Api Call
+      var data = await ApiGetServices().apiGetServices(
+        AppApiUrl.notificationUrl(page: page),
+      );
+      if (data != null) {
+        return NotificationScreenModel.fromJson(data);
+      } else {
+        throw Exception("Failed to load profile data");
+      }
+    } catch (e) {
+      print('error from getNotificationData method: $e');
+    }
+    return null;
+  }
+
+  // red notificationData
+  Future<dynamic> redNotificationData({required int page}) async {
+    try {
+      // Api Call
+      var data = await ApiPatchServices()
+          .apiPatchServices(url: AppApiUrl.notificationUrl(page: page));
+      if (data != null) {
+        return true;
+      } else {
+        throw Exception("Failed to load profile data");
+      }
+    } catch (e) {
+      print('error from getNotificationData method: $e');
+    }
+    return false;
+  }
 
   // Get Recommendation Post
   Future<List<RecommendedPostModel>> getRecommendationrPostData({
@@ -365,12 +381,13 @@ class Repository {
     Map<String, dynamic>? queryParameters = {"page": page, "limit": limit};
     try {
       var response = await ApiGetServices().apiGetServices(
-          AppApiUrl.bookingRequest,
-          token: AppAuthStorage().getToken(),
-          queryParameters: queryParameters);
+        AppApiUrl.bookingRequest,
+        token: AppAuthStorage().getToken(),
+        // queryParameters: queryParameters
+      );
 
       if (response != null && response["data"] != null) {
-        for (var element in response["data"]["offers"]) {
+        for (var element in response["data"]) {
           data.add(BookingRequestListModel.fromJson(element));
         }
       }
@@ -488,7 +505,7 @@ class Repository {
   }
 
   // Get Service Details Data
-  Future<BookingRequestDetailsModel?> getBookingRequestChangeStatus(
+  Future<dynamic> getBookingRequestChangeStatus(
       {String? id, String? status}) async {
     try {
       Map<String, dynamic>? query = {"status": status};
@@ -499,9 +516,10 @@ class Repository {
           token: AppAuthStorage().getToken(),
           query: query);
 
-      // if (data["data"].runtimeType != Null) {
-      //   return BookingRequestDetailsModel.fromJson(data["data"]);
-      // }
+      if (data["data"].runtimeType != Null) {
+        return data;
+        // return BookingRequestDetailsModel.fromJson(data["data"]);
+      }
     } catch (e) {
       print(e);
     }
@@ -603,6 +621,23 @@ class Repository {
       print("Error in getChatMessageListData: $e");
     }
 
+    return null;
+  }
+
+  Future<dynamic> getTransactionHistoryData() async {
+    try {
+      // Api Call
+      var data = await ApiGetServices().apiGetServices(
+        AppApiUrl.transactionHistory,
+      );
+      if (data != null) {
+        return TransactionHistoryModel.fromJson(data);
+      } else {
+        throw Exception("Failed to load profile data");
+      }
+    } catch (e) {
+      print(e);
+    }
     return null;
   }
 }

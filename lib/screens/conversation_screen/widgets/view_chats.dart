@@ -217,157 +217,136 @@ Widget showMessage(
       ),
     );
   } else if (item.messageType == "offer") {
+    RxBool isLoadingReject = false.obs;
+    RxBool isLoadingConfirm = false.obs;
+    RxBool isPending = false.obs;
+    if (item.offer?.status == "Upcoming") {
+      isPending.value = true;
+    } else {
+      isPending.value = false;
+    }
+
     // if Image value is no null then Show Image
-    return Container(
-      margin: EdgeInsets.symmetric(
-        vertical: AppSize.height(value: 10),
-      ),
-      constraints: BoxConstraints(
-        maxWidth: AppSize.size.width * 0.7,
-        // maxHeight: AppSize.size.height * 0.20
-      ),
-      padding: const EdgeInsets.all(15),
-      decoration: BoxDecoration(
-          color: item.sender == AppAuthStorage().getChatID()
-              ? const Color(0xffE9D7A1)
-              : AppColors.white100,
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20))),
-      child: Column(
-        children: [
-          const AppText(
-            data: "Offer Request",
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
-          const Gap(height: 20),
-          Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), color: Colors.green),
-            height: 40,
-            // width: AppSize.size.width,
-            child: AppText(
-              data: "\$${item.offer?.price}",
-              fontWeight: FontWeight.w600,
-              color: Colors.white,
-              fontSize: 20,
-            ),
-          ),
-          const Gap(height: 20),
-          if (item.offer?.status == "Accepted" ||
-              item.offer?.status == "Rejected")
-            AppText(
-              data: item.offer?.status ?? "",
+    return Obx(
+      () => Container(
+        margin: EdgeInsets.symmetric(
+          vertical: AppSize.height(value: 10),
+        ),
+        constraints: BoxConstraints(
+          maxWidth: AppSize.size.width * 0.7,
+          // maxHeight: AppSize.size.height * 0.20
+        ),
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+            color: item.sender == AppAuthStorage().getChatID()
+                ? const Color(0xffE9D7A1)
+                : AppColors.white100,
+            borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
+                bottomLeft: Radius.circular(20))),
+        child: Column(
+          children: [
+            const AppText(
+              data: "Offer Request",
               fontWeight: FontWeight.w600,
               color: Colors.black,
             ),
-          if (item.offer?.status == "Upcoming")
-            Row(
-              children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      var data = await Repository()
-                          .messageOfferRequestChangeStatus(
-                              id: item.sId, status: "Rejected");
-
-                      if (data != null) {
-                        print("➡️➡️➡️ Clicked $index");
-                        // controller.listOfMessageData.value.removeAt(index);
-                        controller.listOfMessageData[index] = data;
-
-                        controller.update();
-                      }
-                    },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: AppSize.width(value: 5.0),
-                          vertical: AppSize.width(value: 10.0)),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.primary),
-                          borderRadius:
-                              BorderRadius.circular(AppSize.width(value: 5.0))),
-                      child: isload.value
-                          ? const CupertinoActivityIndicator(
-                              color: Colors.black,
-                            )
-                          : const AppText(
-                              data: "Reject",
+            const Gap(height: 20),
+            Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10), color: Colors.green),
+              height: 40,
+              // width: AppSize.size.width,
+              child: AppText(
+                data: "\$${item.offer?.price}",
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+            const Gap(height: 20),
+            isPending.value
+                ? Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            controller.rejectBookClick(
+                                item, isPending, isLoadingReject);
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: AppSize.width(value: 5.0),
+                                vertical: AppSize.width(value: 10.0)),
+                            decoration: BoxDecoration(
+                                border: Border.all(color: AppColors.primary),
+                                borderRadius: BorderRadius.circular(
+                                    AppSize.width(value: 5.0))),
+                            child: isLoadingReject.value
+                                ? const CupertinoActivityIndicator(
+                                    color: Colors.black,
+                                  )
+                                : const AppText(
+                                    data: "Reject",
+                                    color: AppColors.primary,
+                                  ),
+                          ),
+                        ),
+                      ),
+                      const Gap(width: 10),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () async {
+                            controller.confirmBookClick(
+                                item, isPending, isLoadingConfirm);
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            padding: EdgeInsets.symmetric(
+                                horizontal: AppSize.width(value: 5.0),
+                                vertical: AppSize.width(value: 10.0)),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: AppColors.primary),
+                              borderRadius: BorderRadius.circular(
+                                  AppSize.width(value: 5.0)),
                               color: AppColors.primary,
                             ),
-                    ),
-                  ),
-                ),
-                const Gap(width: 10),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () async {
-                      controller.rejectBookClick(item, index);
-                      //   var data = await Repository()
-                      //       .messageOfferRequestChangeStatus(
-                      //           id: item.sId, status: "Accepted");
-
-                      //   if (data != null) {
-                      //     // listOfMessageData.removeAt(index);
-                      //     print("➡️➡️➡️ Clicked $index");
-
-                      //     // Update the list and explicitly refresh it
-                      //     // controller.listOfMessageData.removeAt(index);
-                      //     // await listOfMessageData.refresh();
-                      //     controller.listOfMessageData.removeAt(index);
-
-                      //     controller.listOfMessageData.insert(index, data);
-                      //     // controller.update();
-
-                      //     // listOfMessageData.insert(index, data);
-                      //     controller.listOfMessageData
-                      //         .refresh(); // This will notify observers of the changes
-                      //   }
-                      //   // controller.rejectBookClick(item, index);
-                    },
-                    // onTap: () {
-                    //   // controller.confirmBookClick(item, index);
-                    //   // Get.toNamed(AppRoutes
-                    //   //     .paymentMethodScreen);
-                    // },
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: AppSize.width(value: 5.0),
-                          vertical: AppSize.width(value: 10.0)),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.primary),
-                        borderRadius:
-                            BorderRadius.circular(AppSize.width(value: 5.0)),
-                        color: AppColors.primary,
+                            child: isLoadingConfirm.value
+                                ? const CupertinoActivityIndicator(
+                                    color: Colors.white,
+                                  )
+                                : const AppText(
+                                    data: "Accept",
+                                    color: AppColors.white50,
+                                  ),
+                          ),
+                        ),
                       ),
-                      child: const AppText(
-                        data: "Accept",
-                        color: AppColors.white50,
-                      ),
-                    ),
+                      const Gap(width: 10),
+                    ],
+                  )
+                : AppText(
+                    data: item.offer?.status ?? "",
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
                   ),
+            const Gap(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                AppText(
+                  data: formatTime(item.createdAt ?? ""),
+                  // data: message["time"],
+                  color: AppColors.black400,
+                  fontSize: 12,
                 ),
-                const Gap(width: 10),
               ],
             ),
-          const Gap(height: 10),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AppText(
-                data: formatTime(item.createdAt ?? ""),
-                // data: message["time"],
-                color: AppColors.black400,
-                fontSize: 12,
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

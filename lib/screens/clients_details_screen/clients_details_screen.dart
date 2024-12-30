@@ -1,10 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
-import 'package:servi_app_camituresso/const/assets_images_path.dart';
 import 'package:servi_app_camituresso/screens/clients_details_screen/controllers/clients_details_screen_controller.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
@@ -19,24 +18,24 @@ class ClientsDetailsScreen extends StatelessWidget {
     return GetBuilder(
         init: ClientsDetailsScreenController(),
         builder: (controller) {
-          return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: const AppText(
-                data: "Clients Details",
-                fontWeight: FontWeight.w600,
-              ),
-              bottom: PreferredSize(
-                preferredSize: const Size.fromHeight(2),
-                child: Container(
-                  width: Get.width,
-                  height: 1,
-                  color: AppColors.black50,
+          return Obx(
+            () => Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: const AppText(
+                  data: "Clients Details",
+                  fontWeight: FontWeight.w600,
+                ),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(2),
+                  child: Container(
+                    width: Get.width,
+                    height: 1,
+                    color: AppColors.black50,
+                  ),
                 ),
               ),
-            ),
-            body: Obx(
-              () => controller.isLoading.value
+              body: controller.isLoading.value
                   ? const Center(
                       child: CircularProgressIndicator(
                       color: AppColors.primary,
@@ -67,30 +66,22 @@ class ClientsDetailsScreen extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           ),
                           const Gap(height: 10),
-                          GestureDetector(
-                            onTap: () {
-                              // Get.toNamed(
-                              //     AppRoutes.conversationScreen,
-                              //     arguments: controller.item);
-                              // Get.toNamed(
-                              //   AppRoutes.conversationScreen,
-                              //   arguments: ChatDataModel(
-                              //     name: controller.item?.user.name ?? "",
-                              //     imageUrl: controller.item?.user.image ??
-                              //         AssetsDevImages.devUser,
-                              //     isSender: false,
-                              //     massage: "test message",
-                              //     readeMessage: false,
-                              //     time: DateTime(2024, 8, 19, 11),
-                              //   ),
-                              // );
-                            },
-                            child: AppImage(
-                              path: AssetsIconsPath.chatFill,
-                              width: AppSize.width(value: 25),
-                              height: AppSize.width(value: 25),
-                            ),
-                          ),
+                          controller.isLoadingForChat.value
+                              ? const Center(
+                                  child: CupertinoActivityIndicator(
+                                    color: Colors.black,
+                                  ),
+                                )
+                              : GestureDetector(
+                                  onTap: () async {
+                                    controller.clickOnMessageButton();
+                                  },
+                                  child: AppImage(
+                                    path: AssetsIconsPath.chatFill,
+                                    width: AppSize.width(value: 25),
+                                    height: AppSize.width(value: 25),
+                                  ),
+                                ),
                           const Gap(height: 10),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -313,54 +304,126 @@ class ClientsDetailsScreen extends StatelessWidget {
                             ],
                           ),
                           const Gap(height: 50),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                alignment: Alignment.center,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 8.0, horizontal: 30),
-                                decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: AppColors.black400),
-                                    borderRadius: BorderRadius.circular(
-                                        AppSize.width(value: 20.0))),
-                                child: const AppText(
-                                  data: "Reject",
-                                  color: AppColors.black500,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20,
-                                ),
-                              ),
-                              const Gap(width: 10),
-                              GestureDetector(
-                                onTap: () {
-                                  print(controller.itemDetails.status);
-                                  // Get.toNamed(
-                                  //     AppRoutes.paymentMethodScreen);
-                                },
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 8.0, horizontal: 30),
-                                  decoration: BoxDecoration(
-                                    border:
-                                        Border.all(color: AppColors.primary),
-                                    borderRadius: BorderRadius.circular(
-                                        AppSize.width(value: 20.0)),
-                                    color: AppColors.primary,
+                          // if (controller.itemDetails.status != "Upcoming")
+
+                          controller.isPending.value
+                              ? Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        print(controller.itemDetails.status);
+                                        controller.rejectBookClick(
+                                            controller.itemDetails);
+                                        // Get.toNamed(
+                                        //     AppRoutes.paymentMethodScreen);
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 30),
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: AppColors.black400),
+                                            borderRadius: BorderRadius.circular(
+                                                AppSize.width(value: 20.0))),
+                                        child: controller.isLoadingReject.value
+                                            ? const CupertinoActivityIndicator(
+                                                color: Colors.black,
+                                              )
+                                            : const AppText(
+                                                data: "Reject",
+                                                color: AppColors.black500,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 20,
+                                              ),
+                                      ),
+                                    ),
+                                    const Gap(width: 10),
+                                    GestureDetector(
+                                      onTap: () {
+                                        print(controller.itemDetails.status);
+                                        controller.confirmBookClick(
+                                            controller.itemDetails);
+                                        // Get.toNamed(
+                                        //     AppRoutes.paymentMethodScreen);
+                                      },
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0, horizontal: 30),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: AppColors.primary),
+                                          borderRadius: BorderRadius.circular(
+                                              AppSize.width(value: 20.0)),
+                                          color: AppColors.primary,
+                                        ),
+                                        child: controller.isLoadingConfirm.value
+                                            ? const CupertinoActivityIndicator(
+                                                color: Colors.white,
+                                              )
+                                            : const AppText(
+                                                data: "Accept",
+                                                color: AppColors.white50,
+                                                fontWeight: FontWeight.w500,
+                                                fontSize: 20,
+                                              ),
+                                      ),
+                                    ),
+                                    const Gap(width: 10),
+                                  ],
+                                )
+                              : Center(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    constraints: BoxConstraints(
+                                        minWidth: AppSize.width(value: 120),
+                                        maxWidth: AppSize.width(value: 150),
+                                        minHeight: AppSize.width(value: 40)),
+                                    decoration: BoxDecoration(
+                                      color: controller.itemDetails.status ==
+                                              "Completed"
+                                          ? AppColors.green.withOpacity(0.45)
+                                          : controller.itemDetails.status ==
+                                                  "Accepted"
+                                              ? AppColors.yellow50
+                                              : controller.itemDetails.status ==
+                                                      "Rejected"
+                                                  ? AppColors.warning
+                                                      .withOpacity(0.2)
+                                                  : AppColors.blue,
+                                      borderRadius: BorderRadius.circular(
+                                        AppSize.width(value: 20.0),
+                                      ),
+                                    ),
+                                    child: AppText(
+                                      data: controller.itemDetails.status ?? "",
+                                      // data: controller.itemDetails.status ==
+                                      //         "Accepted"
+                                      //     ? "Ongoing"
+                                      //     : controller.itemDetails.status ==
+                                      //             "Rejected"
+                                      //         ? "Rejected"
+                                      //         : controller.itemDetails.status ==
+                                      //                 "Completed"
+                                      //             ? "Completed"
+                                      //             : "",
+                                      color: controller.itemDetails.status ==
+                                              "Completed"
+                                          ? AppColors.green
+                                          : controller.itemDetails.status ==
+                                                  "Accepted"
+                                              ? AppColors.yellow500
+                                              : controller.itemDetails.status ==
+                                                      "Rejected"
+                                                  ? AppColors.warning
+                                                  : AppColors.black100,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20,
+                                    ),
                                   ),
-                                  child: const AppText(
-                                    data: "Accept",
-                                    color: AppColors.white50,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 20,
-                                  ),
                                 ),
-                              ),
-                              const Gap(width: 10),
-                            ],
-                          ),
                         ],
                       ),
                     ),

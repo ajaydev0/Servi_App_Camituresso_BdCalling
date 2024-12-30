@@ -14,48 +14,42 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class ConversationScreenController extends GetxController {
   RxList<MessageListModel> listOfMessageData = <MessageListModel>[].obs;
   RxInt selectedIndex = 0.obs;
-  RxBool isLoadingReject = false.obs;
-  RxBool isLoadingConfirm = false.obs;
-  rejectBookClick(MessageListModel? item, int index) async {
-    // isLoadingReject.value = true;
 
-    // Call API to update the status
-    var response = await Repository()
-        .messageOfferRequestChangeStatus(id: item?.sId, status: "Rejected");
+  rejectBookClick(
+      MessageListModel item, RxBool isPending, RxBool isLoadingReject) async {
+    try {
+      isLoadingReject.value = true;
 
-    if (response != null) {
-      listOfMessageData[index] = response;
+      var data = await Repository()
+          .messageOfferRequestChangeStatus(id: item.sId, status: "Rejected");
 
-      // listOfMessageData.insert(index, data);
-      listOfMessageData.refresh(); // This will notify observers of the changes
+      if (data != null) {
+        item.offer?.status = "Rejected";
+        isPending.value = false;
+      }
+    } catch (e) {
+      print("Error On Reject Method $e");
+    } finally {
+      isLoadingReject.value = false;
     }
-    // } catch (e) {
-    //   print("Error: $e");
-    // } finally {
-    //   // isLoadingReject.value = false;
-    // }
   }
 
-  confirmBookClick(MessageListModel? item, int index) async {
+  confirmBookClick(
+      MessageListModel item, RxBool isPending, RxBool isLoadingConfirm) async {
     try {
-      // isLoadingConfirm.value = true;
+      isLoadingConfirm.value = true;
 
-      // Call API to update the status
-      // var data = await Repository()
-      //     .messageOfferRequestChangeStatus(id: item?.sId, status: "Accepted");
+      var data = await Repository()
+          .messageOfferRequestChangeStatus(id: item.sId, status: "Accepted");
 
-      // if (data != null) {
-      // Update the list and explicitly refresh it
-      // listOfMessageData.removeAt(index);
-      // listOfMessageData.insert(index, data);
-      // listOfMessageData[index] = data;
-      listOfMessageData.refresh(); // This will notify observers of the changes
-      update();
-      // }
+      if (data != null) {
+        isPending.value = false;
+        item.offer?.status = "Accepted";
+      }
     } catch (e) {
-      print("Error: $e");
+      print("Error On Reject Method $e");
     } finally {
-      // isLoadingConfirm.value = false;
+      isLoadingConfirm.value = false;
     }
   }
 
@@ -69,10 +63,6 @@ class ConversationScreenController extends GetxController {
     }
     if (key.currentState!.validate() && !isJobCategoryCheck.value) {
       sendOfferApiCall();
-      print(selectedServicesID.value);
-      print(selectedServicesCategory.value);
-      print(offerAmount.text);
-      print(offerDescription.text);
     }
   }
 
@@ -102,7 +92,6 @@ class ConversationScreenController extends GetxController {
     } catch (e) {
       print("$e");
     } finally {
-      print("Done");
       isLoadingSendOfferButton.value = false;
     }
   }
@@ -357,7 +346,6 @@ class ConversationScreenController extends GetxController {
       if (pickedFile != null) {
         isLoadingUploadImage.value = true;
         Map<String, dynamic> body = {
-          // "image": File(pickedFile.path),
           "chatId": argData.sId,
           "messageType": "image",
         };

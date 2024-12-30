@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
+import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
+import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/screens/payment_method_screen/controllers/payment_method_screen_controller.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
@@ -32,10 +35,17 @@ class PaymentMethodScreen extends StatelessWidget {
                     controller.payOnCash.value = true;
                   },
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20)),
-                    padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10), vertical: AppSize.width(value: 10.0)),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: AppSize.width(value: 20)),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSize.width(value: 10),
+                        vertical: AppSize.width(value: 10.0)),
                     decoration: BoxDecoration(
-                        border: Border.all(color: controller.payOnCash.value ? AppColors.primary : AppColors.black100, width: 2),
+                        border: Border.all(
+                            color: controller.payOnCash.value
+                                ? AppColors.primary
+                                : AppColors.black100,
+                            width: 2),
                         borderRadius: BorderRadius.circular(
                           AppSize.width(value: 10),
                         )),
@@ -48,7 +58,9 @@ class PaymentMethodScreen extends StatelessWidget {
                               path: AssetsIconsPath.paymentMethodCard,
                               width: AppSize.width(value: 20),
                               height: AppSize.width(value: 20),
-                              iconColor: controller.payOnCash.value ? AppColors.primary : AppColors.black100,
+                              iconColor: controller.payOnCash.value
+                                  ? AppColors.primary
+                                  : AppColors.black100,
                             ),
                             Gap(width: 10),
                             AppText(data: "Cash")
@@ -62,8 +74,14 @@ class PaymentMethodScreen extends StatelessWidget {
                               height: AppSize.width(value: 20.0),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: controller.payOnCash.value ? AppColors.primary : AppColors.white50,
-                                border: Border.all(color: controller.payOnCash.value ? AppColors.primary : AppColors.black100, width: 3),
+                                color: controller.payOnCash.value
+                                    ? AppColors.primary
+                                    : AppColors.white50,
+                                border: Border.all(
+                                    color: controller.payOnCash.value
+                                        ? AppColors.primary
+                                        : AppColors.black100,
+                                    width: 3),
                               ),
                             )
                           ],
@@ -82,10 +100,17 @@ class PaymentMethodScreen extends StatelessWidget {
                     controller.payOnCash.value = false;
                   },
                   child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: AppSize.width(value: 20)),
-                    padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 10), vertical: AppSize.width(value: 10.0)),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: AppSize.width(value: 20)),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSize.width(value: 10),
+                        vertical: AppSize.width(value: 10.0)),
                     decoration: BoxDecoration(
-                        border: Border.all(color: controller.payOnCash.value ? AppColors.black100 : AppColors.primary, width: 2),
+                        border: Border.all(
+                            color: controller.payOnCash.value
+                                ? AppColors.black100
+                                : AppColors.primary,
+                            width: 2),
                         borderRadius: BorderRadius.circular(
                           AppSize.width(value: 10),
                         )),
@@ -98,7 +123,9 @@ class PaymentMethodScreen extends StatelessWidget {
                               path: AssetsIconsPath.paymentMethodCard,
                               width: AppSize.width(value: 20),
                               height: AppSize.width(value: 20),
-                              iconColor: controller.payOnCash.value ? AppColors.black100 : AppColors.primary,
+                              iconColor: controller.payOnCash.value
+                                  ? AppColors.black100
+                                  : AppColors.primary,
                             ),
                             Gap(width: 10),
                             AppText(data: "Add new card")
@@ -112,8 +139,14 @@ class PaymentMethodScreen extends StatelessWidget {
                               height: AppSize.width(value: 20.0),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: controller.payOnCash.value ? AppColors.white50 : AppColors.primary,
-                                border: Border.all(color: controller.payOnCash.value ? AppColors.black100 : AppColors.primary, width: 3),
+                                color: controller.payOnCash.value
+                                    ? AppColors.white50
+                                    : AppColors.primary,
+                                border: Border.all(
+                                    color: controller.payOnCash.value
+                                        ? AppColors.black100
+                                        : AppColors.primary,
+                                    width: 3),
                               ),
                             )
                           ],
@@ -125,18 +158,24 @@ class PaymentMethodScreen extends StatelessWidget {
               ],
             ),
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
           floatingActionButton: GestureDetector(
             onTap: () {
-              Get.back(times: 2);
+              // Get.back(times: 2);
+              Get.toNamed(AppRoutes.paymentWebviewScreen,
+                  arguments: AppConst.mercadoPago);
             },
             child: Container(
               margin: EdgeInsets.all(AppSize.width(value: 10)),
               width: Get.width,
               height: AppSize.height(value: 50),
               alignment: Alignment.center,
-              decoration: BoxDecoration(color: AppColors.primary, borderRadius: BorderRadius.circular(AppSize.width(value: 8.0))),
-              child: AppText(
+              decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius:
+                      BorderRadius.circular(AppSize.width(value: 8.0))),
+              child: const AppText(
                 data: "Continue",
                 fontSize: 18,
                 fontWeight: FontWeight.w700,

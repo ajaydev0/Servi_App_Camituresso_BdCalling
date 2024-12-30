@@ -1,40 +1,61 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/screens/request_screen/models/booking_request_data_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 
 class RequestScreenController extends GetxController {
-  rejectBookClick(String? sID) async {
+  rejectBookClick(BookingRequestListModel item, RxBool isPending,
+      RxBool isLoadingReject) async {
     try {
-      // isLoadingReject.value = true;
-      await Repository()
-          .getBookingRequestChangeStatus(id: sID, status: "Rejected");
-
-      Navigator.pop(Get.context!);
-      // getBookingList();
-      update();
-    } catch (e) {
-      print(e);
-    } finally {
-      // isLoadingReject.value = false;
-    }
-  }
-
-  confirmBookClick(String? sID) async {
-    try {
-      // isLoadingConfirm.value = true;
+      isLoadingReject.value = true;
       var data = await Repository()
-          .getBookingRequestChangeStatus(id: sID, status: "Accepted");
+          .getBookingRequestChangeStatus(id: item.sId, status: "Rejected");
 
-      Navigator.pop(Get.context!);
-      await getBookingList();
-      update();
+      if (data != null) {
+        item.status = "Rejected";
+        isPending.value = false;
+      }
     } catch (e) {
-      print(e);
+      print("Error On Reject Method $e");
     } finally {
-      // isLoadingConfirm.value = false;
+      isLoadingReject.value = false;
     }
   }
+
+  confirmBookClick(BookingRequestListModel item, RxBool isPending,
+      RxBool isLoadingConfirm) async {
+    try {
+      isLoadingConfirm.value = true;
+
+      var data = await Repository()
+          .getBookingRequestChangeStatus(id: item.sId, status: "Accepted");
+
+      if (data != null) {
+        item.status = "Accepted";
+        isPending.value = false;
+      }
+    } catch (e) {
+      print("Error On Reject Method $e");
+    } finally {
+      isLoadingConfirm.value = false;
+    }
+  }
+
+  // confirmBookClick(BookingRequestListModel item, RxBool isPending,
+  //     RxBool isLoadingReject) async {
+  //   try {
+  //     // isLoadingConfirm.value = true;
+  //     var data = await Repository()
+  //         .getBookingRequestChangeStatus(id: sID, status: "Accepted");
+
+  //     Navigator.pop(Get.context!);
+  //     await getBookingList();
+  //     update();
+  //   } catch (e) {
+  //     print(e);
+  //   } finally {
+  //     // isLoadingConfirm.value = false;
+  //   }
+  // }
 
   // getBookingList() async {
   //   try {
@@ -58,48 +79,34 @@ class RequestScreenController extends GetxController {
   RxList<BookingRequestListModel> bookingList = <BookingRequestListModel>[].obs;
 
   int currentPage = 1;
-  final int limit = 1000000000000000000;
+  final int limit = 5;
 
   // Fetch the first page or refresh data
   Future<void> getBookingList({bool isRefresh = false}) async {
-    if (isRefresh) {
-      currentPage = 1;
-      hasMore.value = true;
-      bookingList.clear();
-    }
-
-    if (isLoading.value || isLoadingMore.value || !hasMore.value) return;
-
     try {
-      isLoading.value = isRefresh;
-      isLoadingMore.value = !isRefresh;
-
+      isLoading.value = true;
       var data = await Repository().getBookingRequestListData(
         page: currentPage,
         limit: limit,
       );
 
       if (data.isNotEmpty) {
-        bookingList.addAll(data);
+        bookingList.value = data;
         currentPage++;
         if (data.length < limit) {
           hasMore.value = false; // No more data to fetch
         }
-      } else {
-        hasMore.value = false; // No more data to fetch
       }
     } catch (e) {
-      isError.value = true;
-      print("Error in getRecommendedPostAndInList: $e");
+      print("Error in get Request List: $e");
     } finally {
       isLoading.value = false;
-      isLoadingMore.value = false;
     }
   }
 
   @override
   void onInit() {
-    super.onInit();
     getBookingList();
+    super.onInit();
   }
 }

@@ -1,11 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/screens/request_screen/controllers/request_screen_controller.dart';
-import 'package:servi_app_camituresso/screens/request_screen/widget/confirm_dialog_box.dart';
-import 'package:servi_app_camituresso/screens/request_screen/widget/rejected_dialog_box.dart';
+import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
@@ -25,16 +25,16 @@ class RequestScreen extends StatelessWidget {
           onRefresh: () async {
             await controller.getBookingList();
           },
-          child: Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: const AppText(
-                data: "Booking Request",
-                fontWeight: FontWeight.w700,
+          child: Obx(
+            () => Scaffold(
+              appBar: AppBar(
+                centerTitle: true,
+                title: const AppText(
+                  data: "Booking Request",
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            body: Obx(
-              () => controller.isLoading.value
+              body: controller.isLoading.value
                   ? const Center(
                       child: CircularProgressIndicator(
                         color: AppColors.primary,
@@ -44,6 +44,15 @@ class RequestScreen extends StatelessWidget {
                       itemCount: controller.bookingList.length,
                       itemBuilder: (context, index) {
                         var item = controller.bookingList[index];
+                        RxBool isLoadingReject = false.obs;
+                        RxBool isLoadingConfirm = false.obs;
+                        RxBool isPending = false.obs;
+
+                        if (item.status == "Upcoming") {
+                          isPending.value = true;
+                        } else {
+                          isPending.value = false;
+                        }
                         return GestureDetector(
                           onTap: () {
                             // print(controller.bookingList);
@@ -121,126 +130,169 @@ class RequestScreen extends StatelessWidget {
                                           ],
                                         ),
                                         const Gap(height: 20.0),
-                                        if (item.status == "Upcoming")
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    rejectedDialog(
-                                                        item.sId, controller);
-                                                  },
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    padding: EdgeInsets.all(
-                                                        AppSize.width(
-                                                            value: 5.0)),
-                                                    decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: AppColors
-                                                                .primary),
-                                                        borderRadius:
-                                                            BorderRadius.circular(
-                                                                AppSize.width(
-                                                                    value:
-                                                                        5.0))),
-                                                    child: const AppText(
-                                                      data: "Reject",
-                                                      color: AppColors.primary,
+                                        Obx(
+                                          () => isPending.value
+                                              ? Row(
+                                                  children: [
+                                                    Expanded(
+                                                      child: GestureDetector(
+                                                        onTap: () async {
+                                                          controller
+                                                              .rejectBookClick(
+                                                                  item,
+                                                                  isPending,
+                                                                  isLoadingReject);
+                                                        },
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  AppSize.width(
+                                                                      value:
+                                                                          5.0)),
+                                                          decoration: BoxDecoration(
+                                                              border: Border.all(
+                                                                  color: AppColors
+                                                                      .primary),
+                                                              borderRadius: BorderRadius
+                                                                  .circular(AppSize
+                                                                      .width(
+                                                                          value:
+                                                                              5.0))),
+                                                          child: isLoadingReject
+                                                                  .value
+                                                              ? const CupertinoActivityIndicator(
+                                                                  color: Colors
+                                                                      .black,
+                                                                )
+                                                              : const AppText(
+                                                                  data:
+                                                                      "Reject",
+                                                                  color: AppColors
+                                                                      .primary,
+                                                                ),
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const Gap(width: 10),
-                                              Expanded(
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    confirmDialog(
-                                                        item.sId, controller);
-                                                    // Get.toNamed(AppRoutes
-                                                    //     .paymentMethodScreen);
-                                                  },
+                                                    const Gap(width: 10),
+                                                    Expanded(
+                                                      child: GestureDetector(
+                                                        onTap: () async {
+                                                          controller
+                                                              .confirmBookClick(
+                                                                  item,
+                                                                  isPending,
+                                                                  isLoadingConfirm);
+                                                        },
+                                                        child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  AppSize.width(
+                                                                      value:
+                                                                          5.0)),
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            border: Border.all(
+                                                                color: AppColors
+                                                                    .primary),
+                                                            borderRadius: BorderRadius
+                                                                .circular(AppSize
+                                                                    .width(
+                                                                        value:
+                                                                            5.0)),
+                                                            color: AppColors
+                                                                .primary,
+                                                          ),
+                                                          child: isLoadingConfirm
+                                                                  .value
+                                                              ? const CupertinoActivityIndicator(
+                                                                  color: Colors
+                                                                      .white,
+                                                                )
+                                                              : const AppText(
+                                                                  data:
+                                                                      "Accept",
+                                                                  color: AppColors
+                                                                      .white50,
+                                                                ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const Gap(width: 10),
+                                                  ],
+                                                )
+                                              : Center(
                                                   child: Container(
                                                     alignment: Alignment.center,
-                                                    padding: EdgeInsets.all(
-                                                        AppSize.width(
-                                                            value: 5.0)),
+                                                    constraints: BoxConstraints(
+                                                        minWidth: AppSize.width(
+                                                            value: 120),
+                                                        maxWidth: AppSize.width(
+                                                            value: 125),
+                                                        minHeight:
+                                                            AppSize.width(
+                                                                value: 25)),
                                                     decoration: BoxDecoration(
-                                                      border: Border.all(
-                                                          color: AppColors
-                                                              .primary),
+                                                      color: item.status ==
+                                                              "Completed"
+                                                          ? AppColors.green
+                                                              .withOpacity(0.45)
+                                                          : item.status ==
+                                                                  "Accepted"
+                                                              ? AppColors
+                                                                  .yellow50
+                                                              : item.status ==
+                                                                      "Rejected"
+                                                                  ? AppColors
+                                                                      .warning
+                                                                      .withOpacity(
+                                                                          0.2)
+                                                                  : AppColors
+                                                                      .black100,
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              AppSize.width(
-                                                                  value: 5.0)),
-                                                      color: AppColors.primary,
+                                                        AppSize.width(
+                                                            value: 20.0),
+                                                      ),
                                                     ),
-                                                    child: const AppText(
-                                                      data: "Accept",
-                                                      color: AppColors.white50,
+                                                    child: AppText(
+                                                      data: item.status ==
+                                                              "Accepted"
+                                                          ? "Ongoing"
+                                                          : item.status ==
+                                                                  "Rejected"
+                                                              ? "Rejected"
+                                                              : item.status ==
+                                                                      "Completed"
+                                                                  ? "Completed"
+                                                                  : "",
+                                                      color: item.status ==
+                                                              "Completed"
+                                                          ? AppColors.green
+                                                          : item.status ==
+                                                                  "Accepted"
+                                                              ? AppColors
+                                                                  .yellow500
+                                                              : item.status ==
+                                                                      "Rejected"
+                                                                  ? AppColors
+                                                                      .warning
+                                                                  : AppColors
+                                                                      .black100,
+                                                      fontWeight:
+                                                          FontWeight.w600,
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              const Gap(width: 10),
-                                            ],
-                                          ),
+                                        ),
+
                                         // Gap(height: 10),
-                                        if (item.status == "Accepted" ||
-                                            item.status == "Completed" ||
-                                            item.status == "Rejected")
-                                          Center(
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              constraints: BoxConstraints(
-                                                  minWidth:
-                                                      AppSize.width(value: 120),
-                                                  maxWidth:
-                                                      AppSize.width(value: 125),
-                                                  minHeight:
-                                                      AppSize.width(value: 25)),
-                                              decoration: BoxDecoration(
-                                                color: item.status ==
-                                                        "Completed"
-                                                    ? AppColors.green
-                                                        .withOpacity(0.45)
-                                                    : item.status == "Accepted"
-                                                        ? AppColors.yellow50
-                                                        : item.status ==
-                                                                "Rejected"
-                                                            ? AppColors.warning
-                                                                .withOpacity(
-                                                                    0.2)
-                                                            : AppColors
-                                                                .black100,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                  AppSize.width(value: 20.0),
-                                                ),
-                                              ),
-                                              child: AppText(
-                                                data: item.status == "Accepted"
-                                                    ? "Ongoing"
-                                                    : item.status == "Rejected"
-                                                        ? "Rejected"
-                                                        : item.status ==
-                                                                "Completed"
-                                                            ? "Completed"
-                                                            : "",
-                                                color: item.status ==
-                                                        "Completed"
-                                                    ? AppColors.green
-                                                    : item.status == "Accepted"
-                                                        ? AppColors.yellow500
-                                                        : item.status ==
-                                                                "Rejected"
-                                                            ? AppColors.warning
-                                                            : AppColors
-                                                                .black100,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
+                                        // if (item.status == "Accepted" ||
+                                        //     item.status == "Completed" ||
+                                        //     item.status == "Rejected")
                                       ],
                                     ),
                                   ),

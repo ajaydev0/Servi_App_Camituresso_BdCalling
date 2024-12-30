@@ -14,7 +14,8 @@ class AppApiUrl {
   static const String updateProfileUrl = "$baseUrl/user";
   static const String createPostUrl = "$baseUrl/post/create";
   static const String updatePostUrl = "$baseUrl/post/update-post/";
-  static const String notificationUrl = "$baseUrl/notification";
+  static String notificationUrl({required int page}) =>
+      "$baseUrl/notification?page=$page";
   static const String getPostUrl = "$baseUrl/post/my-post";
   static const String getServiceDetailsUrl = "$baseUrl/post/";
   static const String createReviewUrl = "$baseUrl/review";
@@ -32,6 +33,9 @@ class AppApiUrl {
   static const String searchPostUrl = "$baseUrl/post";
   static const String bookingRequest = "$baseUrl/offer";
   static const String chatUserServiceListUrl = "$baseUrl/post/user-service/";
+  static const String transactionHistory = "$baseUrl/offer/transaction-history";
+  static String profileImage({required String url}) => "$domaine$url";
+  static String socketUrl = "http://192.168.10.102:5005";
 
   //////////////////////////////////////  chat
   static const String chatList = "$baseUrl/chat";

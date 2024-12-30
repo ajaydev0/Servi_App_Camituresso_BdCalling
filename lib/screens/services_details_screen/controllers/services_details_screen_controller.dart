@@ -8,7 +8,9 @@ import 'package:servi_app_camituresso/services/repository/repository.dart';
 import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
 
 class ServicesDetailsScreenController extends GetxController {
+  RxBool bookmark = false.obs;
   RxBool isLoadingReview = false.obs;
+  RxBool isLoadingBookmark = false.obs;
   RxBool isLoadingForChat = false.obs;
   RxBool isLoading = false.obs;
   TextEditingController reviewController = TextEditingController();
@@ -123,6 +125,11 @@ class ServicesDetailsScreenController extends GetxController {
   void onInit() async {
     print("❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️ ${Get.arguments}");
     await getServiceDetailsData();
+    if (serviceDetails.isBookmark == true) {
+      bookmark.value = true;
+    } else {
+      bookmark.value = false;
+    }
     super.onInit();
   }
 }

@@ -95,14 +95,7 @@ class SearchScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           // Show loading indicator for pagination if it's the last index and more data is being fetched
                           if (index == controller.postList.length) {
-                            return const Center(
-                              child: Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: CircularProgressIndicator(
-                                  color: Colors.black,
-                                ),
-                              ),
-                            );
+                            return const SizedBox();
                           }
 
                           // Render post item
