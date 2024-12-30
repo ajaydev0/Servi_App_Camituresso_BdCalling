@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 import 'package:servi_app_camituresso/screens/user_history_screen/models/booking_request_data_model.dart';
 import 'package:servi_app_camituresso/services/repository/repository.dart';
 import '../../../const/app_api_url.dart';
@@ -12,16 +13,31 @@ class UserHistoryScreenController extends GetxController {
   RxBool isLoadingMore = RxBool(false);
   List<UserHistoryListModel> listOfUserHistory = <UserHistoryListModel>[];
 
+  // Search functionality
+  final searchController = TextEditingController();
+  RxString searchQuery = RxString('');
+
   // Pagination variables
   int currentPage = 1;
   static const int itemsPerPage = 10;
   RxBool hasMoreData = RxBool(true);
 
+  // Computed property for filtered list
+  List<UserHistoryListModel> get filteredList {
+    if (searchQuery.value.isEmpty) {
+      return listOfUserHistory;
+    }
+    return listOfUserHistory.where((item) {
+      final title = item.service?.title?.toLowerCase() ?? '';
+      return title.contains(searchQuery.value.toLowerCase());
+    }).toList();
+  }
+
   Future<void> initializedDataLoad() async {
     try {
       isLoading.value = true;
-      currentPage = 1; // Reset to first page
-      listOfUserHistory.clear(); // Clear existing data
+      currentPage = 1;
+      listOfUserHistory.clear();
 
       var data = await getUserHistoryPaginated(currentPage);
       if (data.isNotEmpty) {
@@ -38,7 +54,7 @@ class UserHistoryScreenController extends GetxController {
   }
 
   Future<void> loadMoreData() async {
-    if (!hasMoreData.value || isLoadingMore.value) return;
+    if (!hasMoreData.value || isLoadingMore.value || searchQuery.value.isNotEmpty) return;
 
     try {
       isLoadingMore.value = true;
@@ -53,11 +69,16 @@ class UserHistoryScreenController extends GetxController {
       }
     } catch (e) {
       log("error loading more data: $e");
-      currentPage--; // Revert page increment on error
+      currentPage--;
     } finally {
       isLoadingMore.value = false;
       update();
     }
+  }
+
+  void onSearchChanged(String value) {
+    searchQuery.value = value;
+    update();
   }
 
   Future<List<UserHistoryListModel>> getUserHistoryPaginated(int page) async {
@@ -84,6 +105,21 @@ class UserHistoryScreenController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    searchController.addListener(() {
+      onSearchChanged(searchController.text);
+    });
     initializedDataLoad();
+  }
+
+  @override
+  void onClose() {
+    searchController.dispose();
+    super.onClose();
+  }
+
+  void clearSearch() {
+    searchController.clear();
+    searchQuery.value = '';
+    update();
   }
 }
