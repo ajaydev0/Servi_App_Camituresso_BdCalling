@@ -57,9 +57,14 @@ class TransactionHistoryScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 var item = controller.listOfData[index];
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: AppSize.width(value: 8.0), vertical: AppSize.width(value: 5.0)),
+                  margin: EdgeInsets.symmetric(
+                      horizontal: AppSize.width(value: 8.0),
+                      vertical: AppSize.width(value: 5.0)),
                   padding: EdgeInsets.all(AppSize.width(value: 8)),
-                  decoration: BoxDecoration(border: Border.all(color: AppColors.black100), borderRadius: BorderRadius.circular(AppSize.width(value: 8.0))),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.black100),
+                      borderRadius:
+                          BorderRadius.circular(AppSize.width(value: 8.0))),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -116,15 +121,19 @@ class TransactionHistoryScreen extends StatelessWidget {
                             fontSize: 18,
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: AppSize.width(value: 6.0)),
-                            margin: EdgeInsets.symmetric(vertical: AppSize.width(value: 5.0)),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: AppSize.width(value: 6.0)),
+                            margin: EdgeInsets.symmetric(
+                                vertical: AppSize.width(value: 5.0)),
                             decoration: BoxDecoration(
-                              color: item.status == TransactionStatusEnum.confirm
+                              color: item.status ==
+                                      TransactionStatusEnum.confirm
                                   ? AppColors.green.withOpacity(0.2)
                                   : item.status == TransactionStatusEnum.pending
                                       ? Color(0xffEA00FF).withOpacity(0.2)
                                       : AppColors.warning.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(AppSize.width(value: 8.0)),
+                              borderRadius: BorderRadius.circular(
+                                  AppSize.width(value: 8.0)),
                             ),
                             child: AppText(
                               data: item.status == TransactionStatusEnum.confirm
@@ -132,7 +141,8 @@ class TransactionHistoryScreen extends StatelessWidget {
                                   : item.status == TransactionStatusEnum.pending
                                       ? "Pending"
                                       : "Cancel",
-                              color: item.status == TransactionStatusEnum.confirm
+                              color: item.status ==
+                                      TransactionStatusEnum.confirm
                                   ? AppColors.green
                                   : item.status == TransactionStatusEnum.pending
                                       ? Color(0xffA340DD)

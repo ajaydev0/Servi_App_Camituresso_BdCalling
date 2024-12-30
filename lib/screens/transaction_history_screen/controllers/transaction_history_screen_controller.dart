@@ -15,7 +15,13 @@ class TransactionHistoryScreenController extends GetxController {
   DateTime formDate = DateTime.now();
   RxString formFormateDate = RxString("");
 
-  List<String> listOfPeriod = ["Today", "This week", "This month", "Previous month", "This year"];
+  List<String> listOfPeriod = [
+    "Today",
+    "This week",
+    "This month",
+    "Previous month",
+    "This year"
+  ];
   RxString selectedPeriod = RxString("");
   clickPeriod(String value) {
     try {
@@ -51,7 +57,8 @@ class TransactionHistoryScreenController extends GetxController {
 
   toDatePickFunction() async {
     try {
-      var pickedData = await customShowDatePicker(context: Get.context!, lastDate: DateTime.now());
+      var pickedData = await customShowDatePicker(
+          context: Get.context!, lastDate: DateTime.now());
       if (pickedData != null) {
         toFormateDate.value = timeDateFormate(pickedData);
         toDate = pickedData;
