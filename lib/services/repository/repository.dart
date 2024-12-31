@@ -5,6 +5,7 @@ import 'package:servi_app_camituresso/screens/conversation_screen/model/message_
 import 'package:servi_app_camituresso/screens/home_screen/model/bannar_model.dart';
 import 'package:servi_app_camituresso/screens/list_off_view_services/model/get_post_model.dart';
 import 'package:servi_app_camituresso/screens/navigation_screen/model/notification_screen_model.dart';
+import 'package:servi_app_camituresso/screens/payment_method_screen/model/payment_create_model.dart';
 import 'package:servi_app_camituresso/screens/popular_view_all/model/get_popular_post_model.dart';
 import 'package:servi_app_camituresso/screens/profile_screen/models/profile_screen_model.dart';
 import 'package:servi_app_camituresso/screens/recommendation_view_all/model/get_recommended_post_model.dart';
@@ -638,6 +639,29 @@ class Repository {
     } catch (e) {
       print(e);
     }
+    return null;
+  }
+
+///////////////////////////////////////////// Payment Create
+  Future<PaymentCreateModel?> createPayment(
+    Map<String, dynamic> body,
+  ) async {
+    try {
+      var response = await ApiPostServices().apiPostServices(
+        url: AppApiUrl.createPaymentUrl,
+        token: AppAuthStorage().getToken(),
+        body: body,
+      );
+
+      if (response != null) {
+        if (response != null) {
+          return PaymentCreateModel.fromJson(response);
+        }
+      }
+    } catch (e) {
+      print("Error in getChatMessageListData: $e");
+    }
+
     return null;
   }
 }

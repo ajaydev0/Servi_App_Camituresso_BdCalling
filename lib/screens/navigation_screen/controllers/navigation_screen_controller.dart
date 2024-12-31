@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
+import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/screens/navigation_screen/model/notification_screen_model.dart';
 import 'package:servi_app_camituresso/screens/navigation_screen/screens/notification_screen.dart';
 import 'package:servi_app_camituresso/services/app_storage/app_auth_storage.dart';
@@ -82,7 +83,7 @@ class NavigationScreenController extends GetxController {
   void appSocketConnect() {
     try {
       socket = IO.io(
-        AppApiUrl.socketUrl,
+        AppConst.soketUrl,
         IO.OptionBuilder()
             .setTransports(['websocket'])
             .setReconnectionAttempts(3)

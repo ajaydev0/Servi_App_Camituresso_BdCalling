@@ -35,7 +35,9 @@ class AppApiUrl {
   static const String chatUserServiceListUrl = "$baseUrl/post/user-service/";
   static const String transactionHistory = "$baseUrl/offer/transaction-history";
   static String profileImage({required String url}) => "$domaine$url";
-  static String socketUrl = "http://192.168.10.102:5005";
+
+  static const String userHistory = "$baseUrl/offer/offer-history";
+  static const String createPaymentUrl = "$baseUrl/payment/create-payment";
 
   //////////////////////////////////////  chat
   static const String chatList = "$baseUrl/chat";

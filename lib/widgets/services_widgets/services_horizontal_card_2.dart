@@ -44,7 +44,7 @@ class ServicesHorizontalCardTwo extends StatelessWidget {
               child: Stack(
                 children: [
                   AppImage(
-                    url: "${AppApiUrl.domaine}${item.image}",
+                    url: (AppApiUrl.domaine ?? '') + (item.image ?? ''),
                     height: AppSize.height(value: 250),
                     width: Get.width,
                   ),

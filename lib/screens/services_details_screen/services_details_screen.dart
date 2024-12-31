@@ -52,7 +52,8 @@ class ServicesDetailsScreen extends StatelessWidget {
                       // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> button <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
                       floatingActionButton: GestureDetector(
                         onTap: () {
-                          Get.toNamed(AppRoutes.paymentMethodScreen);
+                          Get.toNamed(AppRoutes.paymentMethodScreen,
+                              arguments: controller.serviceDetails.price);
                         },
                         child: Container(
                           margin: EdgeInsets.all(AppSize.width(value: 10)),

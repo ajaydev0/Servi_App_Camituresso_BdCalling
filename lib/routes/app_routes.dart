@@ -33,5 +33,4 @@ class AppRoutes {
   static const savedScreen = "/saved-screen";
   static const serviceByServiceScreen = "/service-by-service-screen";
   static const clientsDetailsScreen = "/clients-details-screen";
-  static const paymentWebviewScreen = "/payment-webview-screen";
 }

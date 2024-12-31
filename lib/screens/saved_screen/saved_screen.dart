@@ -3,13 +3,11 @@ import 'package:get/get.dart';
 import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
-import 'package:servi_app_camituresso/const/assets_images_path.dart';
 import 'package:servi_app_camituresso/routes/app_routes.dart';
 import 'package:servi_app_camituresso/screens/saved_screen/controllers/saved_screen_controller.dart';
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
-import 'package:servi_app_camituresso/widgets/services_widgets/services_horizontal_card_2.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
 class SavedScreen extends StatelessWidget {

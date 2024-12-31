@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:servi_app_camituresso/const/app_api_url.dart';
 import 'package:servi_app_camituresso/const/app_colors.dart';
 import 'package:servi_app_camituresso/const/app_const.dart';
 import 'package:servi_app_camituresso/const/assets_icons_path.dart';
@@ -10,6 +9,7 @@ import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
 import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
 
 class PaymentMethodScreen extends StatelessWidget {
   const PaymentMethodScreen({super.key});
@@ -22,7 +22,7 @@ class PaymentMethodScreen extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: AppText(
+            title: const AppText(
               data: "Payment Methods",
               fontWeight: FontWeight.w600,
             ),
@@ -163,8 +163,9 @@ class PaymentMethodScreen extends StatelessWidget {
           floatingActionButton: GestureDetector(
             onTap: () {
               // Get.back(times: 2);
-              Get.toNamed(AppRoutes.paymentWebviewScreen,
-                  arguments: AppConst.mercadoPago);
+              // Get.toNamed(AppRoutes.paymentWebviewScreen,
+              //     arguments: AppConst.mercadoPago);
+              controller.flutterTab(context);
             },
             child: Container(
               margin: EdgeInsets.all(AppSize.width(value: 10)),

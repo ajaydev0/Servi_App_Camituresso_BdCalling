@@ -18,20 +18,18 @@ class AppImage extends StatelessWidget {
     this.filePath,
     this.iconColor,
   });
-  // >>>>>>>>>>>>>>>>>>>>>> parameter accept this data  <<<<<<<<<<<<<<<<<<<<<<
+
   final String? path;
   final String? filePath;
   final String? url;
   final BoxFit? fit;
-  final double?
-      width; // >>>>>>>>>>>>>>>>>>>>>> width and height provide by default size when parameter not provide <<<<<<<<<<<<<<<<<<<<<<
+  final double? width;
   final double? height;
   final Color color;
   final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
-    // >>>>>>>>>>>>>>>>>>>>>> file image is first <<<<<<<<<<<<<<<<<<<<<<
     if (filePath != null) {
       return Image.file(
         File(filePath!),
@@ -39,61 +37,29 @@ class AppImage extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) {
-          log("error form file image : $error");
-          return Container(
-            width: width,
-            height: height,
-            color: AppColors.yellow100,
-          );
+          log("File image load error: $error");
+          return _placeholder();
         },
       );
     }
 
-    // >>>>>>>>>>>>>>>>>>>>>> second network image  <<<<<<<<<<<<<<<<<<<<<<
     if (url != null) {
       return Image.network(
         url!,
         width: width,
         height: height,
         fit: fit,
-        // >>>>>>>>>>>>>>>>>>>>>> when failed load image  <<<<<<<<<<<<<<<<<<<<<<
         errorBuilder: (context, error, stackTrace) {
-          log(error.toString());
-          return Container(
-            width: width,
-            height: height,
-            decoration: const BoxDecoration(
-              color: AppColors.yellow100,
-              // image: DecorationImage(
-              //     image: AssetImage(AssetsImagesPath.nullImage),
-              //     fit: BoxFit.fill)
-            ),
-          );
+          log("Network image load error: $error");
+          return _placeholder();
         },
-        // >>>>>>>>>>>>>>>>>>>>>> when image is loading <<<<<<<<<<<<<<<<<<<<<<
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) return child;
-          return Container(
-            width: width,
-            height: height,
-            alignment: Alignment.center,
-            color: AppColors.yellow100,
-            child: const Padding(
-              padding: EdgeInsets.all(20),
-              child: SizedBox(
-                width: 50,
-                height: 50,
-                child: CircularProgressIndicator(
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          );
+          return _loadingPlaceholder();
         },
       );
     }
 
-    // >>>>>>>>>>>>>>>>>>>>>> thread local image or assets <<<<<<<<<<<<<<<<<<<<<<
     if (path != null) {
       return Image.asset(
         path!,
@@ -101,22 +67,39 @@ class AppImage extends StatelessWidget {
         height: height,
         fit: fit,
         color: iconColor,
-        // >>>>>>>>>>>>>>>>>>>>>> when load fail image  <<<<<<<<<<<<<<<<<<<<<<
         errorBuilder: (context, error, stackTrace) {
-          log(error.toString());
-          return Container(
-            width: width,
-            height: height,
-            color: AppColors.yellow100,
-          );
+          log("Asset image load error: $error");
+          return _placeholder();
         },
       );
     }
-    // >>>>>>>>>>>>>>>>>>>>>>by default widget return  <<<<<<<<<<<<<<<<<<<<<<
+
+    return _placeholder();
+  }
+
+  Widget _placeholder() {
     return Container(
       width: width,
       height: height,
-      color: color,
+      color: AppColors.yellow100,
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.image_not_supported,
+        color: Colors.grey,
+        size: width != null && height != null ? (width! * 0.5) : 50,
+      ),
+    );
+  }
+
+  Widget _loadingPlaceholder() {
+    return Container(
+      width: width,
+      height: height,
+      alignment: Alignment.center,
+      color: AppColors.yellow100,
+      child: const CircularProgressIndicator(
+        color: Colors.black,
+      ),
     );
   }
 }

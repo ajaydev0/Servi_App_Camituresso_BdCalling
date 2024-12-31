@@ -32,6 +32,7 @@ dependencies:
   timezone: ^0.10.0
   flutter_timezone: ^4.0.0
   webview_flutter: ^4.4.1
+  flutter_custom_tabs: ^2.1.0
 
 dev_dependencies:
   flutter_test:

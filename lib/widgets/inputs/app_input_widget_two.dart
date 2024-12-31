@@ -79,8 +79,10 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
       shadowColor: widget.elevationColor,
       borderOnForeground: false,
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(AppSize.width(value: widget.borderRadius ?? 8.0)),
+      borderRadius: BorderRadius.circular(
+          AppSize.width(value: widget.borderRadius ?? 8.0)),
       child: TextFormField(
+        cursorColor: AppColors.primary,
         onChanged: widget.onChanged,
         onTap: widget.onTap,
         onFieldSubmitted: widget.onFieldSubmitted,
@@ -112,7 +114,9 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
           }
           if (widget.isPassWord && widget.isPassWordSecondValidation) {
             if (widget.isPassWordSecondValidationController != null) {
-              if (value.toLowerCase() != widget.isPassWordSecondValidationController!.text.toLowerCase()) {
+              if (value.toLowerCase() !=
+                  widget.isPassWordSecondValidationController!.text
+                      .toLowerCase()) {
                 return "Both passwords most match";
               } else {
                 return null;
@@ -127,10 +131,15 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
         obscureText: widget.isPassWord && isShowPassWord,
         obscuringCharacter: "*",
         textAlignVertical: widget.textAlignVertical ?? TextAlignVertical.center,
-        style: widget.style ?? const TextStyle(height: 2, fontFamily: AppConst.fontFamily1, fontWeight: FontWeight.w500),
+        style: widget.style ??
+            const TextStyle(
+                height: 2,
+                fontFamily: AppConst.fontFamily1,
+                fontWeight: FontWeight.w500),
         decoration: InputDecoration(
           errorStyle: TextStyle(backgroundColor: AppColors.white50),
-          contentPadding: widget.contentPadding ?? EdgeInsets.all(AppSize.width(value: 10.0)),
+          contentPadding: widget.contentPadding ??
+              EdgeInsets.all(AppSize.width(value: 10.0)),
           filled: widget.filled,
           fillColor: widget.fillColor ?? AppColors.white50.withOpacity(0.3),
           prefixIcon: widget.prefix,
@@ -149,20 +158,49 @@ class _AppInputWidgetTwoState extends State<AppInputWidgetTwo> {
                           isShowPassWord = !isShowPassWord;
                         });
                       },
-                      icon: isShowPassWord ? const Icon(Icons.visibility) : const Icon(Icons.visibility_off)),
+                      icon: isShowPassWord
+                          ? const Icon(Icons.visibility)
+                          : const Icon(Icons.visibility_off)),
                 )
               : widget.suffixIcon,
           hintText: widget.hintText,
-          hintStyle: Theme.of(context).textTheme.titleSmall?.copyWith(color: AppColors.black300),
-          prefixIconConstraints: widget.prefixIconConstraints ?? BoxConstraints(maxWidth: AppSize.width(value: 40), maxHeight: AppSize.width(value: 40)),
-          suffixIconConstraints: widget.suffixIconConstraints ?? BoxConstraints(maxWidth: AppSize.width(value: 40), maxHeight: AppSize.width(value: 40)),
-          border: widget.border ?? OutlineInputBorder(borderSide: BorderSide(color: AppColors.yellow200), borderRadius: BorderRadius.circular(AppSize.width(value: widget.borderRadius ?? 8.0))),
-          enabledBorder: widget.border ?? OutlineInputBorder(borderSide: BorderSide(color: AppColors.yellow200), borderRadius: BorderRadius.circular(AppSize.width(value: widget.borderRadius ?? 8.0))),
-          focusedBorder: widget.border ?? OutlineInputBorder(borderSide: BorderSide(color: AppColors.yellow200), borderRadius: BorderRadius.circular(AppSize.width(value: widget.borderRadius ?? 8.0))),
-          errorBorder:
-              widget.errBorder ?? OutlineInputBorder(borderSide: BorderSide(color: AppColors.yellow200), borderRadius: BorderRadius.circular(AppSize.width(value: widget.borderRadius ?? 8.0))),
-          focusedErrorBorder:
-              widget.errBorder ?? OutlineInputBorder(borderSide: BorderSide(color: AppColors.yellow200), borderRadius: BorderRadius.circular(AppSize.width(value: widget.borderRadius ?? 8.0))),
+          hintStyle: Theme.of(context)
+              .textTheme
+              .titleSmall
+              ?.copyWith(color: AppColors.black300),
+          prefixIconConstraints: widget.prefixIconConstraints ??
+              BoxConstraints(
+                  maxWidth: AppSize.width(value: 40),
+                  maxHeight: AppSize.width(value: 40)),
+          suffixIconConstraints: widget.suffixIconConstraints ??
+              BoxConstraints(
+                  maxWidth: AppSize.width(value: 40),
+                  maxHeight: AppSize.width(value: 40)),
+          border: widget.border ??
+              OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.yellow200),
+                  borderRadius: BorderRadius.circular(
+                      AppSize.width(value: widget.borderRadius ?? 8.0))),
+          enabledBorder: widget.border ??
+              OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.yellow200),
+                  borderRadius: BorderRadius.circular(
+                      AppSize.width(value: widget.borderRadius ?? 8.0))),
+          focusedBorder: widget.border ??
+              OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.yellow200),
+                  borderRadius: BorderRadius.circular(
+                      AppSize.width(value: widget.borderRadius ?? 8.0))),
+          errorBorder: widget.errBorder ??
+              OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.yellow200),
+                  borderRadius: BorderRadius.circular(
+                      AppSize.width(value: widget.borderRadius ?? 8.0))),
+          focusedErrorBorder: widget.errBorder ??
+              OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.yellow200),
+                  borderRadius: BorderRadius.circular(
+                      AppSize.width(value: widget.borderRadius ?? 8.0))),
         ),
       ),
     );

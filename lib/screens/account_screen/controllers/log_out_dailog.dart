@@ -9,6 +9,8 @@ import 'package:servi_app_camituresso/widgets/texts/app_text.dart';
 
 logOutDialog() {
   Get.dialog(Dialog(
+    insetPadding: const EdgeInsets.symmetric(horizontal: 20),
+    backgroundColor: Colors.white,
     child: Padding(
       padding: EdgeInsets.all(
         AppSize.width(value: 10),
@@ -16,21 +18,21 @@ logOutDialog() {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Gap(height: 10),
-          AppText(
+          const Gap(height: 10),
+          const AppText(
             data: "Log out",
             fontWeight: FontWeight.bold,
             fontSize: 20,
             color: AppColors.black900,
           ),
-          Gap(height: 30),
-          AppText(
+          const Gap(height: 30),
+          const AppText(
             data:
                 "Are you sure you want to log out? You'll need to login again to use the app.",
             textAlign: TextAlign.center,
             height: 1.5,
           ),
-          Gap(height: 30),
+          const Gap(height: 30),
           Row(
             children: [
               Expanded(
@@ -81,7 +83,7 @@ logOutDialog() {
                         borderRadius: BorderRadius.circular(
                           AppSize.width(value: 8.0),
                         )),
-                    child: AppText(
+                    child: const AppText(
                       data: "Log out",
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -92,7 +94,7 @@ logOutDialog() {
               ),
             ],
           ),
-          Gap(height: 20),
+          const Gap(height: 20),
         ],
       ),
     ),
