@@ -115,8 +115,10 @@ class ClientsDetailsScreen extends StatelessWidget {
                                     // Gap(width: 10),
                                     IconButton(
                                         onPressed: () {
-                                          controller.copyToClipboard(context,
-                                              controller.itemDetails.offerId);
+                                          controller.copyToClipboard(
+                                              context,
+                                              controller.itemDetails.offerId ??
+                                                  "");
                                         },
                                         tooltip: 'Copy to Clipboard',
                                         icon: const Icon(
@@ -392,7 +394,7 @@ class ClientsDetailsScreen extends StatelessWidget {
                                                       "Rejected"
                                                   ? AppColors.warning
                                                       .withOpacity(0.2)
-                                                  : AppColors.blue,
+                                                  : Colors.white,
                                       borderRadius: BorderRadius.circular(
                                         AppSize.width(value: 20.0),
                                       ),

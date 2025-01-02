@@ -23,7 +23,12 @@ class ServicesHorizontalCardTwo extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
+        if (item.adult) {
+          Get.toNamed(AppRoutes.eighteenPlusWarningScreen, arguments: item);
+        } else {
+          Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
+        }
+        // Get.toNamed(AppRoutes.servicesDetailsScreen, arguments: item.sId);
       },
       child: Container(
         // height: AppSize.height(value: 200),

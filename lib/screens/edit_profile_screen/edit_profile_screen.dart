@@ -7,7 +7,6 @@ import 'package:servi_app_camituresso/screens/edit_profile_screen/controllers/ed
 import 'package:servi_app_camituresso/utils/app_size.dart';
 import 'package:servi_app_camituresso/utils/gap.dart';
 import 'package:servi_app_camituresso/widgets/app_image/app_image.dart';
-import 'package:servi_app_camituresso/widgets/app_image/app_image_circular.dart';
 import 'package:servi_app_camituresso/widgets/app_snack_bar/app_snack_bar.dart';
 import 'package:servi_app_camituresso/widgets/image_user_pic/image_user_pi.dart';
 import 'package:servi_app_camituresso/widgets/inputs/app_input_widget_three.dart';
